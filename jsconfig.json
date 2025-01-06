@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./*"],
+    }
+  },
+  "include": ["**/*.js", "**/*.jsx"],
+  "exclude": []
+}
+
+/*
+Next.js layout
+root/
+|-- src/                         # Add src/ to align with your existing project
+|   |-- app/                     # For server-side routing (Next.js 13+)
+|   |-- public/                  # For static assets like images
+|   |-- components/              # Move your reusable components here
+|   |-- pages/                   # If using the pages router
+|       |-- api/                 # API routes (similar to your server endpoints)
+|   |-- store/                   # Your Redux store
+|   |-- styles/                  # Centralized styles (e.g., global.css)
+|   |-- theme/                   # Keep your Material-UI theme here
+|   |-- app/layout.tsx           # App-wide layout in the app/ directory
+|   |-- app/page.tsx             # The default root page
+|-- .env.local                   # Environment variables
+|-- next.config.js               # Next.js configuration
+|-- package.json                 # Dependencies
+*/

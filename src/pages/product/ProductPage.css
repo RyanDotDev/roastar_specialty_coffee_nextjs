@@ -1,0 +1,393 @@
+/* ProductPage.jsx */
+.product-page-background {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* If product not found */
+.pnf-container {
+  text-align: center;
+  color: white;
+}
+
+.pnf-container p {
+  margin-top: 6em;
+  font-size: 3em;
+  letter-spacing: 1.5px;
+  font-weight: 500;
+  letter-spacing: 2px;
+}
+
+.product-page-container h5 {
+  position: relative;
+  cursor: pointer;
+  color: white;
+  margin-top: 7em;
+  display: inline-block;
+}
+
+.product-page-container a {
+  text-decoration: none;
+  padding-left: 0.5rem;
+}
+
+.product-content {
+  padding: 5em 8em;
+}
+
+.product-content h1 {
+  color: white;
+}
+
+.product-content .product-img {
+  margin-top: 2em;
+  width: 60%;
+}
+
+.product-main {
+  display: flex;
+  gap: 50px;
+}
+
+.product-details {
+  padding-top: 4rem;
+}
+
+.product-details .product-desc {
+  letter-spacing: 1px;
+  color: white;
+  font-weight: 300;
+  font-size: 1rem;
+}
+
+.product-details h2 {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1.5px;
+  margin-top: 1rem;
+  color: white;
+  font-weight: 600;
+}
+
+.product-details h3 {
+  margin-top: 1.5rem;
+}
+
+.product-quantity {
+  justify-content: center;
+  color: white;
+  border-radius: 5px;
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0px;
+  background: none;
+  border: 2px solid white;
+  width: 10.7em;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.product-quantity button {
+  color: white;
+  width: 60px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 1rem;
+  transition: 
+    background 300ms,
+    color 300ms;
+}
+
+.product-quantity button:hover {
+  color: black;
+  background: white;
+  transition: 
+    background 300ms,
+    color 300ms;
+}
+
+.product-quantity button:active {
+  color: black;
+  background: rgb(237, 237, 237);
+}
+
+.product-quantity p {
+  margin-top: 0.8em;
+  margin-right: 1.4em;
+  margin-left: 1.4em;
+  font-variant-numeric: tabular-nums;
+}
+
+.product-coffee-grind {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.product-coffee-grind .single-variant {
+  grid-template-columns: 1fr;
+}
+
+.variant-dropdown {
+  width: 100%;
+}
+
+.variant-full-width {
+  grid-column: span 2;
+}
+
+.variant-half-width {
+  grid-column: span 1;
+}
+
+.product-coffee-grind select {
+  appearance: none;
+  /* url for transparent white arrow */
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAyMC4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiDQoJIHZpZXdCb3g9IjAgMCA0LjkgMTAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDQuOSAxMDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4NCgkuc3Qwe2ZpbGw6I2ZmZmZmZjt9DQo8L3N0eWxlPg0KPHRpdGxlPmFycm93czwvdGl0bGU+DQo8cG9seWdvbiBjbGFzcz0ic3QwIiBwb2ludHM9IjEuNCw0LjcgMi41LDMuMiAzLjUsNC43ICIvPg0KPHBvbHlnb24gY2xhc3M9InN0MCIgcG9pbnRzPSIzLjUsNS4zIDIuNSw2LjggMS40LDUuMyAiLz4NCjwvc3ZnPg==) no-repeat 100% 50%;
+  cursor: pointer;
+  height: 3.3rem;
+  padding-left: 1rem;
+  letter-spacing: 1.5px;
+  font-weight: 500;
+  font-size: 0.8rem;
+  width: 100%;
+  color: white;
+  border: 2px solid white;
+  border-radius: 5px;
+  transition: 
+    background 300ms, 
+    border 300ms,
+    color 300ms;
+  &:before {
+    transition: 
+      background 300ms,
+      border 300ms 
+      color 300ms;
+  }
+  &:hover {
+    background: url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ljk1IDEwIj48ZGVmcz48c3R5bGU+LmNscy0ye2ZpbGw6IzQ0NDt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmFycm93czwvdGl0bGU+PHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjEuNDEgNC42NyAyLjQ4IDMuMTggMy41NCA0LjY3IDEuNDEgNC42NyIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIzLjU0IDUuMzMgMi40OCA2LjgyIDEuNDEgNS4zMyAzLjU0IDUuMzMiLz48L3N2Zz4=) no-repeat 100% 50%, white;
+    border: 2px solid white;
+    color: black;
+  }
+}
+
+.product-coffee-grind select:first-child {
+  grid-column: span 2;
+  width: 100%;
+}
+
+.product-coffee-grind select:nth-child(3) {
+  grid-column: span 2;
+  width: 100%;
+}
+
+/* If product is sold out */
+.product-coffee-grind select:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.product-coffee-grind select:hover:disabled {
+  opacity: 0.7;
+  color: white;
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAyMC4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiDQoJIHZpZXdCb3g9IjAgMCA0LjkgMTAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDQuOSAxMDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4NCgkuc3Qwe2ZpbGw6I2ZmZmZmZjt9DQo8L3N0eWxlPg0KPHRpdGxlPmFycm93czwvdGl0bGU+DQo8cG9seWdvbiBjbGFzcz0ic3QwIiBwb2ludHM9IjEuNCw0LjcgMi41LDMuMiAzLjUsNC43ICIvPg0KPHBvbHlnb24gY2xhc3M9InN0MCIgcG9pbnRzPSIzLjUsNS4zIDIuNSw2LjggMS40LDUuMyAiLz4NCjwvc3ZnPg==) no-repeat 100% 50%;
+}
+
+
+.add-to-cart {
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: white;
+  margin-top: 1rem;
+  width: 35vw;
+  padding: 1rem;
+  border-radius: 5px;
+  border: 2px solid white;
+  background: none;
+  transition: 
+    background 300ms, 
+    border 300ms,
+    color 300ms;
+  &:before {
+    transition: 
+      background 300ms, 
+      border 300ms,
+      color 300ms;
+  }
+  &:hover {
+    background: white;
+    border: 2px solid white;
+    color: black;
+  }
+}
+
+/* If product is sold out */
+.add-to-cart:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.add-to-cart:hover:disabled {
+  opacity: 0.7;
+  color: white;
+  background: none;
+}
+
+/* Delivery Information */
+.product-delivery-info {
+  margin-top: 1.5rem;
+  letter-spacing: 1px;
+  font-weight: 300;
+  font-size: 1rem;
+}
+
+/* Related products section */
+.product-content .related-product-title {
+  letter-spacing: 1.5px;
+  color: white;
+  margin-top: 4em;
+}
+
+.related-product-list {
+  margin: 1em -4.5em;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 250px);
+  justify-content: space-around;
+  row-gap: 20px;
+  padding: 1.5em;
+  column-gap: 2%;
+}
+
+.related-product-list a {
+  color: black;
+  text-decoration: none;
+}
+
+.related-product-card {
+  text-align: center;
+  width: 15em;
+  padding-bottom: 1em;
+  transform: scale(1);
+  filter: brightness(1);
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background: transparent;
+  transition: 
+    transform 300ms;
+}
+
+.related-product-card h3 {
+  margin-right: 0.8em;
+  margin-left: 0.8em;
+  font-size: 1em;
+  color: white;
+}
+
+.related-product-card:hover {
+  border-radius: 5px;
+  transform: scale(1.1);
+  transition: 
+    transform 300ms;
+}
+
+.related-product-card img {
+  filter: brightness(1);
+  transition: filter 300ms;
+}
+
+.related-product-card div {
+  border: 2px solid transparent;
+  border-radius: 5px;
+  height: 18.5em;
+  position: absolute;
+  top: -2em;
+  right: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 300ms, border 300ms;
+}
+
+.related-product-card div:hover {
+  border: 2px solid hsla(0, 0%, 100%, 0.10);
+  opacity: 1;
+  transition:
+    border 300ms,
+    opacity 300ms;
+}
+
+.related-product-card button {
+  cursor: pointer;
+  position: relative;
+  border-radius: 5px;
+  letter-spacing: 1.5px;
+  border: none;
+  padding: 1em;
+  font-size: 0.6em;
+  color: white;
+  margin-top: 7em;
+  background: black;
+}
+
+
+@media all and (max-width: 1000px) {
+  .product-content {
+    text-align: center;
+    padding: 5em 2em;
+  }
+
+  .product-content h1{
+    text-align: center;
+  }
+
+  .product-main {
+    display: block;
+    text-align: center;
+  }
+
+  .product-details {
+    margin: 0;
+    text-align: justify;
+  }
+
+  .product-details h2 {
+    text-align: center;
+  }
+  
+  .product-details h3 {
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .product-quantity {
+    justify-content: center;
+    margin: 2rem auto;
+    width: 179px;
+  }
+
+  .product-coffee-grind select {
+    margin-top: -0.5rem;
+  }
+
+  .add-to-cart {
+    width: 100%;
+  }
+
+  .related-product-list {
+    margin: 3em auto;
+    padding: 0;
+    padding-left: 1em;
+  }
+}
+
+@media all and (max-width: 500px) {
+  .product-main .product-img {
+    width: 100%;
+  }
+}

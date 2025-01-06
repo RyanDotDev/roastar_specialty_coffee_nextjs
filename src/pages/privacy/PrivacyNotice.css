@@ -1,0 +1,30 @@
+.privacy-notice-container {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.privacy-notice-container .footer {
+  position: relative;
+  top: 6.5rem;
+}
+
+.privacy-notice-header {
+  background: var(--main-green);
+  text-align: center;
+  padding-top: 3em;
+  height: 250px;
+  gap: 20px;
+  position: relative;
+  box-shadow: 1px 1px 10px 1px hsl(0, 0%, 73%);
+}
+
+.privacy-notice-header h1 {
+  padding-top: 1.5em;
+  font-size: 3rem;
+  font-weight: 600;
+  color: white;
+  letter-spacing: 2px;
+}
+  
