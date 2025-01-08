@@ -1,20 +1,23 @@
+"use client"
 import React from 'react'
 import InstagramIcon  from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
-import { Link, useLocation } from 'next/link'
+import Link from 'next/link'
 import { Copyright } from 'lucide-react'
-/* import '../App.css' */
+import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 
 const Footer = () => {
-  const active = useLocation().pathname;
+  const { pathname } = usePathname;
 
   return (
     <footer className='footer'>
       <div className='footer-container'>
         <div className='footer-address'>
-          <img
+          <Image
             src='/logo/Logo ROASTAR-white.webp'
+            alt='Roastar Footer Image'
             height={80}
             width={180}
           />
@@ -29,7 +32,7 @@ const Footer = () => {
         </div>
         <div className='socials'>
           <p>
-            <Link to='https://www.instagram.com/roastar.coffee/'>
+            <Link href='https://www.instagram.com/roastar.coffee/'>
               <InstagramIcon
                 className='insta'
                 style={{fontSize: '2rem'}}
@@ -37,7 +40,7 @@ const Footer = () => {
            </Link>
           </p>
           <p>
-            <Link to='https://www.facebook.com/roastarcoffeeuk'>
+            <Link href='https://www.facebook.com/roastarcoffeeuk'>
               <FacebookIcon
                 className='facebook'
                 style={{
@@ -50,42 +53,37 @@ const Footer = () => {
           </p>
         </div>
         <div className='footer-nav'>
-          <div className={`footer-links ${active === '/AboutUs' ? 'active-footer' : ''}`}>
-            <Link
-              reloadDocument 
-              to={'/AboutUs'}
+          <div className={`footer-links ${pathname === '/about' ? 'active-footer' : ''}`}>
+            <Link 
+              href='/about'
             >
               ABOUT US
             </Link>
           </div>
-          <div className={`footer-links ${active === '/ContactUs' ? 'active-footer' : ''}`}>
+          <div className={`footer-links ${pathname === '/contact' ? 'active-footer' : ''}`}>
             <Link 
-              reloadDocument 
-              to={'/ContactUs'} 
+              href='/contact'
             >
               CONTACT US
             </Link>
           </div>
-          <div className={`footer-links ${active === '/Careers' ? 'active-footer' : ''}`}>
-            <Link 
-              reloadDocument 
-              to={'/Careers'} 
+          <div className={`footer-links ${pathname === '/careers' ? 'active-footer' : ''}`}>
+            <Link  
+              href={'/careers'} 
             >
               CAREERS
             </Link>
           </div>
-          <div className={`footer-links ${active === '/Shop' ? 'active-footer' : ''}`}>
+          <div className={`footer-links ${pathname === '/shop' ? 'active-footer' : ''}`}>
             <Link 
-              reloadDocument 
-              to={'/Shop'} 
+              href={'/shop'} 
             >
               SHOP
             </Link>
           </div>
-          <div className={`footer-links ${active === '/PrivacyNotice' ? 'active-footer' : ''}`}>
-            <Link 
-              reloadDocument 
-              to={'/PrivacyNotice'} 
+          <div className={`footer-links ${pathname === '/privacy' ? 'active-footer' : ''}`}>
+            <Link  
+              href={'/privacy'} 
             >
               PRIVACY NOTICE
             </Link>

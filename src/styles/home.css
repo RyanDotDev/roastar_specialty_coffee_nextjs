@@ -1,0 +1,958 @@
+.home-container {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* Banner.jsx */
+.banner {
+  width: 100%;
+  height: 300px;
+}
+
+/* slider one selectors */
+.slider-one-image {
+  margin-inline: auto ;
+  margin: auto;
+  left: 0;
+  right: 0;
+  width: 500px;
+  margin-top: 10rem;
+}
+
+.slider-one-text {
+  letter-spacing: 1.5px;
+  color: white;
+  margin-inline: auto ;
+  margin: auto;
+  left: 0;
+  right: 0;
+  width: 280px;
+  margin-top: 21rem;
+}
+
+.slider-one {
+  -webkit-filter: brightness(0.9);
+  filter: brightness(0.9);
+}
+
+/* Slider two selectors */
+.slider-two-header {
+  text-align: center;
+  font-size: 4rem;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  color: var(--main-beige);
+  margin-inline: auto ;
+  margin: auto;
+  left: 0;
+  right: 0;
+  margin-top: 10rem;
+}
+
+.slider-two-text {
+  text-align: center;
+  width: 420px;
+  letter-spacing: 1.5px;
+  font-weight: 400;
+  color: white;
+  margin-inline: auto ;
+  margin: auto;
+  left: 0;
+  right: 0;
+  margin-top: 19rem;
+}
+
+.slider-two {
+  -webkit-filter: brightness(0.8);
+  filter: brightness(0.8);
+}
+
+/* slider three selectors */
+.slider-three-header {
+  text-align: center;
+  font-size: 4rem;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  color: var(--main-beige);
+  margin-inline: auto ;
+  margin: auto;
+  left: 0;
+  right: 0;
+  margin-top: 10rem;
+}
+
+.slider-three-text {
+  text-align: center;
+  letter-spacing: 1.5px;
+  font-weight: 400;
+  color: white;
+  margin-inline: auto ;
+  margin: auto;
+  left: 0;
+  right: 0;
+  margin-top: 19rem;
+}
+
+.slider-three {
+  -webkit-filter: brightness(0.9);
+  filter: brightness(0.9);
+}
+
+/* Pagination */
+.pagination {
+  position: relative;
+  top: 24rem;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+}
+
+.dot {
+  transition: background 0.3s;
+}
+
+.dot.active-slide {
+  background: var(--main-green);
+}
+
+/* For HomeContainer.jsx and BELOW */
+.home-container {
+  position: relative;
+  margin-top: 30em; 
+  width: 100%;
+}
+
+/* For Links.jsx Only */
+.links-container {
+  color: black;
+  text-align: center;
+  height: 30em;
+}
+
+.links-container h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: var(--main-green);
+}
+
+.links-container p {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+.link-images {
+  margin-top: 3em;
+  gap: 20px;
+  justify-content: center;
+  display: flex;
+}
+
+.image-one, .image-two, .image-three {
+  cursor: pointer;
+  height: 300px;
+  width: 300px;
+  filter: brightness(0.8);
+  border-radius: 5px;
+  transform: scale(1);
+  transition: 
+    transform 500ms, 
+    filter 500ms,
+    box-shadow 500ms;
+  box-shadow: none;
+}
+
+.image-one img, .image-two img, .image-three img {
+  margin-bottom: -2.2em;
+}
+
+.link-images img {
+  border: 2px solid var(--main-beige);
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.link-images a {
+  text-decoration: none;
+}
+
+.image-one:hover, .image-two:hover, .image-three:hover {
+  transform: scale(1.05);
+  filter: brightness(1);
+  border-radius: 5px;
+  transition:
+    transform 500ms, 
+    filter 500ms,
+    box-shadow 500ms;
+  box-shadow: 2px 2px 10px 2px rgb(118, 118, 118);
+}
+
+.image-one p {
+  position: relative;
+  font-size: 1.875rem;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  top: -5.3em;
+  color: white;
+  z-index: 2;
+}
+
+.image-two p {
+  position: relative;
+  font-size: 1.875rem;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  top: -5.3em;
+  color: white;
+  z-index: 2;
+}
+
+.image-three p {
+  position: relative;
+  font-size: 1.875rem;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  top: -5.3em;
+  color: white;
+  z-index: 2;
+}
+
+/* Pop-up selectors for Delivery link */
+/* backdrop */ 
+.backdrop {
+  background: white;
+  position: fixed;
+  display: block;
+  width: 100%;
+  height: 100%;
+  top: 0em;
+  left: 0em;
+  z-index: 102;
+  text-align: right;
+}
+
+.backdrop, html:has(.no-scroll) {
+  overflow: hidden;
+}
+
+.close {
+  margin-top: 1em;
+  margin-right: 1em;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.close:active {
+  background: hsl(0, 0%, 0%, 5%);
+  border-radius: 50%;
+}
+
+/* content inside of Backdrop.jsx */
+.delivery {
+  text-align: center;
+  display: block;
+}
+
+.delivery-text h2 {
+  color: black;
+  font-weight: 500;
+  font-size: 2rem;
+  letter-spacing: 1.5px;
+}
+
+.delivery-text h3 {
+  letter-spacing: 1.5px;
+  margin-top: 2rem;
+  color: black;
+  font-weight: 400;
+  font-size: 1.5rem;
+}
+
+.delivery-link {
+  margin-top: 6rem;
+  gap: 3em;
+  display: inline-flex;
+}
+
+.delivery-link img {
+  border: none;
+}
+
+.deliveroo {
+  background: white;
+  border-radius: 45px;
+  height: 12.5rem;
+  width: 12.5rem;
+  box-shadow: 3px 3px 10px 3px hsl(0, 0%, 21%, 30%);
+}
+
+.deliveroo:active {
+  transform: scale(0.98);
+}
+
+.deliveroo img {
+  width: 200px;
+  height: 180px;
+  margin-bottom: 1em;
+}
+
+.uber-eats {
+  border-radius: 45px;
+  height: 12.5rem;
+  width: 12.5rem;
+  box-shadow: 3px 3px 10px 3px hsl(0, 0%, 21%, 30%);
+}
+
+.uber-eats:active {
+  transform: scale(0.98);
+}
+
+.desc-container {
+  background-image: linear-gradient(white, var(--main-beige));
+  height: 47em;
+}
+
+.desc-content {
+  padding: 5em;
+  display: flex;
+}
+
+.desc-content img {
+  position: relative;
+  top: 3em;
+  object-fit: cover;
+  box-shadow: 2px 2px 10px 2px hsl(0, 0%, 0%, 30%);
+}
+
+.desc-text {
+  padding-top: 3em;
+  margin-right: 200px;
+}
+
+.desc-text h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: var(--main-green);
+}
+
+.desc-text p {
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  font-weight: 300;
+  padding-top: 2em;
+}
+
+.desc-text h4 {
+  padding-top: 2em;
+}
+
+.about-us-link a {
+  color: black;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 500ms;
+  letter-spacing: 1.5px;
+  text-decoration: none;
+  font-size: 1.3em;
+  position: relative;
+  transition: all 0.3s;
+  &:before {
+    content: "";
+    width: 0;
+    height: 3.2px;
+    position: absolute;
+    bottom: -10px;
+    right: 0;
+    background-color: black;
+    transition: all 0.3s;
+  }
+  &:hover {
+    &:before {
+      width: 100%;
+      left: 0;
+      background-color: var(--main-green);
+    }
+  }
+}
+
+.about-us-link a:hover {
+  color: var(--main-green);
+}
+
+/* For Specialty.jsx */
+.specialty-container {
+  margin-top: 0em;
+  text-align: center;
+  height: 70em;
+  background: var(--main-beige);
+}
+
+.specialty-content {
+  position: relative;
+  padding-top: 2rem;
+}
+
+.specialty-text {
+  position: relative;
+  top: 5em;
+  z-index: 10;
+}
+
+.specialty-text h1 {
+  color: var(--main-beige);
+  text-align: center;
+  font-weight: 200;
+  font-size: 4rem;
+  position: relative;
+  top: 0.5em;
+}
+
+.specialty-text p {
+  font-size: 1.3rem;
+  width: 25%;
+}
+
+.specialty-text .left-text {
+  color: white;
+  position: absolute;
+  top: 8em;
+  margin-left: 7vw;
+}
+
+.specialty-text .right-text {
+  color: white;
+  position: absolute;
+  top: 25em;
+  right: 0;
+  margin-right: 4.5em;
+}
+
+.specialty-content img {
+  filter: blur(1px);
+  width: 90%;
+  object-fit: cover;
+}
+
+/* For MenuAd.jsx */
+.menu-container {
+  background: var(--main-beige);
+}
+
+.menu-container img {
+  object-fit: cover;
+  filter: brightness(0.7);
+}
+
+.menu-content {
+  position: relative;
+  top: -44rem;
+  text-align: center;
+}
+
+.menu-text {
+  position: absolute;
+  margin-top: -7rem;
+}
+
+.menu-text h3 {
+  font-size: 3rem;
+  letter-spacing: 1.5px;
+  font-weight: 500;
+  color: var(--main-beige);
+}
+
+.menu-text p {
+  padding-top: 2em;
+  margin-right: 3em;
+  margin-left: 3em;
+  color: white;
+  font-size: 2rem;
+  font-weight: 200;
+}
+
+.menu-link {
+  padding-top: 3em;
+}
+
+.menu-link a {
+  color: black;
+  text-decoration: none;
+}
+
+.menu-link button {
+  color: black;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  letter-spacing: 1.5px;
+  background: white;
+  box-shadow: 2px 2px 10px 2px white;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 20px;
+  padding-right: 3rem;
+  padding-left: 3rem;
+  transition: 
+    color 300ms,
+    background 300ms,
+    box-shadow 300ms;
+}
+
+.menu-link button:active {
+  transform: scale(0.99);
+}
+
+.menu-link button:hover {
+  color: white;
+  background: var(--btn-green);
+  box-shadow: 2px 2px 10px 2px var(--main-green);
+  transition: 
+    color 300ms,
+    background 300ms,
+    box-shadow 300ms;
+}
+
+/* For Points.jsx */
+.points-container {
+  background-image: linear-gradient(var(--main-beige), var(--main-green));
+  padding-top: 3rem;
+  margin-top: 0rem;
+  height: 70rem;
+}
+
+.points-title {
+  font-size: 40px;
+  padding-bottom: 1em;
+  position: relative;
+  overflow: hidden;
+}
+
+.points-title h2 {
+  letter-spacing: 1.5px !important;
+  text-wrap: nowrap;
+  font-weight: 600;
+  color: var(--main-green);
+  position: relative;
+  text-align: right;
+  -moz-transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  transform: translateX(-100%);
+  -moz-animation: slide 10s linear infinite;
+  -webkit-animation: slide 10s linear infinite;
+  animation: slide 10s linear infinite;
+}
+
+@keyframes slide {
+  from {
+    -moz-transform: translateX(-100%);
+    -webkit-transform: translateX(-100%);
+    transform: translate(-100%);
+  }
+  to {
+    -moz-transfomr: translateX(82%);
+    -webkit-transform: translateX(82%);
+    transform: translateX(82%);
+  }
+}
+
+.points-banner {
+  text-align: center;
+  padding-top: 2em;
+  padding-bottom: 3em;
+}
+
+.points-banner img {
+  border: 10px solid hsl(0, 0%, 96%);
+  border-radius: 50%;
+  box-shadow: 2px 2px 10px 2px hsl(0, 0%, 0%, 30%);
+}
+
+.points-content {
+  /* background: white; */
+  text-align: center;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 6em;
+  padding-top: 0em;
+  padding-bottom: 7em;
+  /* box-shadow: 2px 2px 10px 2px hsl(0, 0%, 0%, 10%); */
+}
+
+.points-image {
+  margin-left: 3em;
+}
+
+.points-image img {
+  box-shadow: 2px 2px 10px 2px hsl(0, 0%, 0%, 30%);
+  margin-right: 3em;
+}
+
+.points-text {
+  padding-top: 3em;
+  margin-right: 20%;
+  margin-left: 20%;
+}
+
+.points-text h3 {
+  font-size: 30px;
+  font-weight: 300;
+  color: var(--main-green);
+}
+
+.points-text p {
+  padding-top: 1em;
+  font-size: 24px;
+  font-weight: 200;
+}
+
+/* For FeaturedShop.jsx */ 
+.fs-container {
+  padding-top: 2em;
+  height: 700px;
+}
+
+.fs-content {
+  background: white;
+  padding: 6vw;
+  padding-top: 6em;
+  padding-bottom: 6em;
+  display: inline-flex;
+  flex-direction: row;
+  gap: 8em;
+}
+
+.fs-image img {
+  width: 600px;
+  box-shadow: 2px 2px 10px 2px hsl(0, 0%, 0%, 50%);
+}
+
+.fs-text {
+  text-align: left;
+  padding-top: 6em;
+}
+
+.fs-text h3 {
+  color: var(--main-green);
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+}
+
+.fs-text p {
+  letter-spacing: 1px;
+  padding-top: 2em;
+  font-size: 1.1rem;
+  font-weight: 300;
+}
+
+.fs-text h4 {
+  text-align: left;
+  padding-top: 2em;
+  padding-left: 0em;
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .backdrop {
+    background: var(--main-black);
+  }
+
+  .close {
+    color: white;
+  }
+
+  .delivery-text h2 {
+    color: white;
+  }
+  
+  .delivery-text h3 {
+    color: white;
+  }
+  
+}
+
+@media all and (max-width: 1250px) {
+  .desc-text {
+    margin-right: 100px;
+  }
+
+  .fs-content {
+    gap: 5em;
+    padding-right: 3vw;
+    padding-left: 3vw;
+  }
+}
+
+@media all and (max-width: 1000px) {
+  .link-images {
+    display:inline-flex;
+    flex-direction: column;
+  }
+
+  .image-one, .image-two, .image-three {
+    filter: brightness(1);
+    transition: 
+      transform 500ms, 
+      filter 500ms,
+      box-shadow 500ms;
+  }
+
+  .image-one:hover, .image-two:hover, .image-three:hover {
+    filter: brightness(1);
+    transition: 
+      transform 500ms, 
+      filter 500ms,
+      box-shadow 500ms;
+  }
+
+  .desc-container {
+    text-align: center;
+    margin-top: 35em;
+    height: 70em;
+  }
+
+  .desc-content {
+    text-align: center;
+    display: block;
+    padding: 2em;
+    padding-top: 6em;
+  }
+
+  .desc-content img {
+    margin-top: 3em;
+    position: relative;
+  }
+
+  .desc-text {
+    margin-right: 0px;
+  }
+
+  .specialty-container {
+    height: 100%;
+    padding-bottom: 7rem;
+  }
+
+  .specialty-content img {
+    object-fit: cover;
+  }
+
+  .specialty-text .right-text {
+    position: absolute;
+    top: 25em;
+    right: 0;
+    margin-right: 3.5em;
+  }
+
+  .menu-container {
+    margin-top: 0em;
+  }
+
+  .menu-text {
+    position: absolute;
+  }
+
+  .menu-text p {
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+  }
+
+  .points-container {
+    margin-top: 0rem;
+    padding-top: 3rem;
+  }
+
+  .points-content {
+    text-align: center;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    padding-top: 5rem;
+    gap: 3em;
+    width: 100vw;
+  }
+
+  .points-banner {
+    text-align: center;
+    padding-top: 2em;
+    padding-bottom: 0em;
+  }
+
+  .points-image {
+    margin-left: 0em;
+  }
+
+  .points-image img {
+    box-shadow: 2px 2px 10px 2px hsl(0, 0%, 0%, 30%);
+    margin-right: 0em;
+  }
+
+  .points-text {
+    padding-right: 2em;
+    padding-left: 2em;
+    padding-bottom: 4em;
+    margin-right: 10%;
+    margin-left: 10%;
+  }
+
+  .fs-container {
+    margin-top: 0em;
+    height: 400px;
+  }
+
+  .fs-content {
+    text-align: center;
+    background: white;
+    padding: 0em;
+    padding-top: 0em;
+    padding-bottom: 0em;
+    display: block;
+    padding: 2em;
+    gap: 8em;
+  }
+
+  .fs-text {
+    text-align: center;
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+
+  .fs-text h4 {
+    text-align: center;
+    padding-left: 0em;
+  }
+
+  .fs-image img {
+    margin-top: 4em;
+    width: 600px;
+    height: 500px;
+    object-fit: cover;
+  }
+}
+
+@media all and (max-width: 800px) {
+  .desc-container {
+    height: 62em;
+  }
+
+  .desc-content {
+    text-align: center;
+    display: block;
+    padding-right: 2em;
+  }
+
+  .desc-content img {
+    margin-top: 5em;
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+  }
+
+  .points-container {
+    height: 100%;
+    padding-bottom: 10rem;
+  }
+
+  .points-title {
+    padding-top: 0em;
+  }
+
+  .fs-container {
+    position: relative;
+  }
+
+  .fs-content {
+    text-align: center;
+    background: white;
+    padding: 0em;
+    padding-top: 0em;
+    padding-bottom: 0em;
+    display: block;
+    padding: 0em;
+    gap: 8em;
+  }
+
+  .fs-image img {
+    object-fit: cover;
+  }
+}
+
+@media all and (max-width: 600px) {
+  .delivery-text h3 {
+    margin-top: 2rem;
+    font-weight: 400;
+    font-size: 1.5rem;
+  }
+
+  .delivery-link {
+    align-items: center;
+    margin-top: 3em;
+    gap: 2em;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .desc-content img {
+    width: 300px;
+    height: 300px;
+  }
+
+  .menu-content {
+    position: relative;
+    top: -45em;
+    text-align: center;
+  }
+
+  .fs-container {
+    position: relative;
+  }
+
+  .fs-image img {
+    margin-top: 4em;
+    width: 90%;
+    object-fit: cover;
+  }
+}
+
+@media all and (max-width: 596px) {
+  .specialty-content h1 {
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+  }
+}
+
+@media all and (max-width: 580px) {
+  .slider-two-header {
+    text-align: center;
+    font-size: 10.5vw;
+    margin-inline: auto ;
+    margin: auto;
+    left: 0;
+    right: 0;
+    margin-top: 10rem;
+  }
+
+  .slider-three-header {
+    text-align: center;
+    font-size: 10.5vw;
+    margin-inline: auto ;
+    margin: auto;
+    left: 0;
+    right: 0;
+    margin-top: 10rem;
+  }
+}
+
+@media all and (max-width: 400px) {
+  .home-container {
+    position: relative;
+  }  
+}

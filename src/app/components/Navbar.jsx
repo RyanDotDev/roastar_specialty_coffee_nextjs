@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Badge } from '@mui/material'
-import { Link } from 'next/link'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { ShoppingCart } from 'lucide-react'
 import { AnimatePresence } from 'framer-motion'
 import Cart from './Cart.jsx'
@@ -10,88 +11,70 @@ import { useSelector } from 'react-redux'
 
 // Array that features all nav-links required. Will return in .map component
 const navigation = [ 
-  {_id:101, title: 'HOME', href: '/'},
-  {_id:102, title: 'ABOUT US', href: '/AboutUs'},
-  {_id:103, title: 'SHOP', href: '/Shop'},
-  {_id:104, title: 'MENU', href: '/Menu'},
-  {_id:105, title: 'CONTACT US', href: '/ContactUs'},
+  { _id:101, title: 'HOME', href: '/' },
+  { _id:102, title: 'ABOUT US', href: '/about' },
+  { _id:103, title: 'SHOP', href: '/shop' },
+  { _id:104, title: 'MENU', href: '/menu' },
+  { _id:105, title: 'CONTACT US', href: '/contact' },
 ];
 
 const Navbar = () => {
-    const { pathname } = useLocation();
-    const active = useLocation().pathname; // returns current location and url
-    const [colour, setColour] = useState(false); // changes the state of colour upon scrolling
-    const [cartOpen, setCartOpen] = useState(false) // Opens and closes cart
+  // cart management
+  const cart = useSelector((state) => state.cart)
 
-    // cart management
-    const cart = useSelector((state) => state.cart)
+  const { pathname } = usePathname();
+  const [colourOnScroll, setColourOnScroll] = useState(false); // changes the state of colour upon scrolling
+  const [cartOpen, setCartOpen] = useState(false) // Opens and closes cart
 
-    const close = () => setCartOpen(false);
-    const open = () => setCartOpen(true)
+  const close = () => setCartOpen(false);
+  const open = () => setCartOpen(true)
 
-    useEffect(() => {
-      close();
+  // colourOnScroll logic
+  const changeColourOnScroll = () => {
+    const scrollThresholds = {
+      '/': 650,
+      '/about': 1,
+      '/shop': 1,
+      '/menu': 0,
+      '/contact': 1,
+      '/careers': 180,
+      '/privacy': 1,
+      '/product/:handle': 1,
+    };
 
-      const changeColour = () => {
-        const isHome = matchPath("/", pathname)
-        const isAboutUs = matchPath("/AboutUs", pathname)
-        const isShop = matchPath("/Shop", pathname)
-        const isMenu = matchPath("/Menu", pathname)
-        const isContactUs = matchPath("/ContactUs", pathname)
-        const isCareers = matchPath("/Careers", pathname)
-        const isPrivacyNotice = matchPath("/PrivacyNotice", pathname)
-        const isProductPage = matchPath("/product/:handle", pathname)
+    const threshold = scrollThresholds[pathname] || 0;
+    setColourOnScroll(threshold)
+  }
 
-          if (isHome && window.scrollY >= 650) {
-            setColour(true)
-        } else if (isAboutUs && window.scrollY >= 1) {
-            setColour(true)
-        } else if (isShop && window.scrollY >= 1) {
-            setColour(true)
-        } else if (isContactUs && window.scrollY >= 1) {
-            setColour(true)
-        } else if (isMenu && window.scrollY >= 0) {
-            setColour(true)
-        } else if (isCareers && window.scrollY >= 180) {
-            setColour(true)
-        } else if (isPrivacyNotice && window.scrollY >= 1) {
-            setColour(true)
-        } else if (isProductPage && window.scrollY >= 1) {
-            setColour(true)
-        } else {
-            setColour(false)
-        }
-      }; 
+  useEffect(() => {
+    close();    
       
-      // invoke once to check in case page is already scrolled down when rendering
-      changeColour();
-      window.addEventListener('scroll', changeColour);
+    changeColourOnScroll(); // Invoke on scroll mount
+    window.addEventListener('scroll', changeColourOnScroll);
 
-      return () => {
-        window.removeEventListener('scroll', changeColour)
-      }
-    }, [pathname])
+    return () => {
+      window.removeEventListener('scroll', changeColourOnScroll)
+    }
+  }, [pathname])
     
   return (
-    <div className={`${colour ? 'navbar navbarbg' : 'navbar'}`}>
+    <div className={`${colourOnScroll ? 'navbar navbarbg' : 'navbar'}`}>
       <div className="nav-container">
         <Logo />
+        {/* ON MOBILE/TABLET ONLY */}
         <MobileNav />
         <div className='item-container'>
-          <ul className={`nav-list ${colour ? 'nav-list-white nav-list-black' : 'nav-list-white'}`}>
+          <ul className={`nav-list ${colourOnScroll ? 'nav-list-white nav-list-black' : 'nav-list-white'}`}>
             {
               navigation.map((item) => (
                 <Link 
-                  reloadDocument
-                  to={item?.href} 
+                  href={item?.href} 
                   key={item._id}
-                  className={({ isActive }) => 
-                    `${isActive && colour ? 'active-green' : 'active-beige'}`
-                  }
+                  className={`${pathname === item?.href && colourOnScroll ? 'active-green' : 'active-beige'}`}
                 >
                   <li className={`mobile ${
-                    active === item?.href 
-                      ? colour 
+                    pathname === item?.href 
+                      ? colourOnScroll
                         ? 'nav-list-black active-beige active-green' 
                         : 'nav-list-black active-beige'
                       : 'nav-list-black'
@@ -122,7 +105,7 @@ const Navbar = () => {
               }}
             >
               <button 
-                className={`cart-btn ${colour ? 'cart-white cart-black' : 'cart-white'}` }
+                className={`cart-btn ${colourOnScroll ? 'cart-white cart-black' : 'cart-white'}` }
                 onClick={() => cartOpen ? close() : open()}
               >
                 <ShoppingCart

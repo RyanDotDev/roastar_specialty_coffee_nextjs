@@ -1,14 +1,16 @@
+"use client"
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Link } from 'next/link'
+import Link from 'next/link'
 import { clearCart, removeFromCart, updateQuantity } from '../../store/state'
 import { motion } from 'framer-motion'
-import Backdrop from '../assets/popups/cart/Backdrop'
+import Backdrop from '@/lib/utils/popups/cart/Backdrop'
 import { Minus, Plus, X } from 'lucide-react'
 import DeleteIcon from '@mui/icons-material/Delete';
-import { cartAnimate } from '../assets/popups/cart/animation'
-import { createCart } from '../../../server/api/shopify/checkout.mjs'
+import { cartAnimate } from '@/lib/utils/popups/cart/animation'
+import { createCheckout } from '@/pages/api/shopify/checkout.js'
 import CartSlider from './CartSlider'
+import Image from 'next/image'
 
 const Cart = ({ handleClose }) => {
   // Cart state and dispatch() here
@@ -28,7 +30,7 @@ const Cart = ({ handleClose }) => {
       }));
       console.log("Line items sent to Shopify:", lineItems);
 
-      const checkoutUrl = await createCart(lineItems);
+      const checkoutUrl = await createCheckout(lineItems);
 
       if (checkoutUrl) {
         console.log("redirecting to checkout URL", checkoutUrl)
@@ -92,7 +94,7 @@ const Cart = ({ handleClose }) => {
               {cart.length === 0 ? (
                 <div className='cart-is-empty'>
                   <p className=''>YOUR CART IS EMPTY</p>
-                  <Link to='/Shop' reloadDocument><button className='continue'>CONTINUE SHOPPING</button></Link>
+                  <Link href='/Shop'><button className='continue'>CONTINUE SHOPPING</button></Link>
                   <CartSlider />
                 </div>
               ) : (
@@ -101,12 +103,12 @@ const Cart = ({ handleClose }) => {
                     {cart.map((item) => (
                       <div className='cart-item-container' key={item.id}>
                         <div className='cart-image'>
-                          <Link to={`/product/${item.handle}`} reloadDocument>
-                            <img src={item.image} alt={item.title} width={100} loading='lazy'/>
+                          <Link href={`/product/${item.handle}`}>
+                            <Image src={item.image} alt={item.title} width={100} loading='lazy'/>
                           </Link>
                         </div>
                         <div className='cart-title'>
-                          <Link to={`/product/${item.handle}`} style={{ textDecoration: 'none', color: 'black' }} reloadDocument>
+                          <Link href={`/product/${item.handle}`} style={{ textDecoration: 'none', color: 'black' }}>
                             <h5 className='cart-title'>{item.title}</h5>
                           </Link>
                         </div>
@@ -140,7 +142,7 @@ const Cart = ({ handleClose }) => {
                       {loading ? 'CHECKOUT' : 'Processing...'}
                     </button>
                     {/* CONTINUE SHOPPING BUTTON */}
-                    <Link to='/Shop' reloadDocument>
+                    <Link href='/Shop'>
                       <button className='continue'>
                         CONTINUE SHOPPING
                       </button>

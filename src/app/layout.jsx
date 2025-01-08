@@ -5,8 +5,9 @@ import { theme } from '../theme/theme.js';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import cartReducer from '../store/state.js'
-import './globals.css';
 import Navbar from './components/Navbar.jsx';
+import Footer from './components/Footer.jsx';
+import './globals.css';
 
 const store = configureStore({
   reducer: { cart: cartReducer },
@@ -20,6 +21,7 @@ export default function RootLayout({ children }) {
           <ThemeProvider theme={theme}>
             <header><Navbar /></header>
             <main>{children}</main>
+            <footo><Footer /></footo>
           </ThemeProvider>
         </Provider>
       </body>

@@ -4,7 +4,19 @@
     "baseUrl": "./",
     "paths": {
       "@/*": [
-        "./*"
+        /* '/src/*'' paths */
+        "./src/*",
+        "./src/lib/*", 
+        "./src/pages/*",
+        "./src/store/*", 
+        "./src/styles/*", 
+        "./src/theme/*", 
+        /* '/src/app/*' paths */
+        "./src/app/*",
+        "./src/app/components/*",
+        "src/lib/api/*",
+        "./src/app/utils/*",
+        "./src/app/pages/*",
       ]
     },
     "target": "ES2017",
@@ -32,12 +44,13 @@
   "include": [
     "**/*.js",
     "**/*.jsx",
-    "src/layout.tsx",
-    "src/page.tsx",
+    "src/layout.jsx",
+    "src/page.jsx",
     ".next/types/**/*.ts"
-  ],
+, "src/lib/api/shopify/route.js", "src/lib/api/shopify/products.js" , "next.config.mjs", "next.config.mjs" ],
   "exclude": []
 }
+
 /*
 Next.js layout
 root/
