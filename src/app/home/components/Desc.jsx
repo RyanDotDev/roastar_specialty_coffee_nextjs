@@ -13,7 +13,7 @@ const Desc = () => {
               <br></br><br></br>
             </p>
             <h4 className='about-us-link'>
-              <Link href='/AboutUs'>
+              <Link href='/about'>
                 CLICK FOR MORE
               </Link>
             </h4>

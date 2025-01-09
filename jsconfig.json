@@ -13,8 +13,7 @@
         "./src/theme/*", 
         /* '/src/app/*' paths */
         "./src/app/*",
-        "./src/app/components/*",
-        "src/lib/api/*",
+        "./src/lib/api/*",
         "./src/app/utils/*",
         "./src/app/pages/*",
       ]

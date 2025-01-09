@@ -1,5 +1,6 @@
 /* ProductPage.jsx */
 .product-page-background {
+  background: var(--main-green);
   display: flex;
   flex-direction: column;
   min-height: 100%;
@@ -7,6 +8,7 @@
 
 /* If product not found */
 .pnf-container {
+  height: 50rem;
   text-align: center;
   color: white;
 }

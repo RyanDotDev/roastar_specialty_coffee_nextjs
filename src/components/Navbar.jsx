@@ -19,44 +19,47 @@ const navigation = [
 ];
 
 const Navbar = () => {
-  // cart management
   const cart = useSelector((state) => state.cart)
-
-  const { pathname } = usePathname();
+  const pathname = usePathname();
   const [colourOnScroll, setColourOnScroll] = useState(false); // changes the state of colour upon scrolling
   const [cartOpen, setCartOpen] = useState(false) // Opens and closes cart
+  const [mounted, setMounted] = useState(false);
 
   const close = () => setCartOpen(false);
   const open = () => setCartOpen(true)
 
-  // colourOnScroll logic
-  const changeColourOnScroll = () => {
-    const scrollThresholds = {
-      '/': 650,
-      '/about': 1,
-      '/shop': 1,
-      '/menu': 0,
-      '/contact': 1,
-      '/careers': 180,
-      '/privacy': 1,
-      '/product/:handle': 1,
-    };
-
-    const threshold = scrollThresholds[pathname] || 0;
-    setColourOnScroll(threshold)
-  }
-
   useEffect(() => {
-    close();    
-      
-    changeColourOnScroll(); // Invoke on scroll mount
+    close();   
+
+    const changeColourOnScroll = () => {
+      const scrollThresholds = {
+        '/': 650,
+        '/about': 1,
+        '/shop': 1,
+        '/menu': 0,
+        '/contact': 1,
+        '/careers': 180,
+        '/privacy': 1,
+        '/product/:handle': 1,
+      };
+      const threshold = scrollThresholds[pathname] || 0;
+      setColourOnScroll(window.scrollY >= threshold)
+    }
+    
+    changeColourOnScroll();
     window.addEventListener('scroll', changeColourOnScroll);
 
     return () => {
-      window.removeEventListener('scroll', changeColourOnScroll)
+      window.removeEventListener('scroll', changeColourOnScroll);
     }
   }, [pathname])
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
     
+  if (!mounted) return null
+  
   return (
     <div className={`${colourOnScroll ? 'navbar navbarbg' : 'navbar'}`}>
       <div className="nav-container">
@@ -70,7 +73,7 @@ const Navbar = () => {
                 <Link 
                   href={item?.href} 
                   key={item._id}
-                  className={`${pathname === item?.href && colourOnScroll ? 'active-green' : 'active-beige'}`}
+                  className={`${item?.href === pathname && colourOnScroll ? 'active-green' : 'active-beige'}`}
                 >
                   <li className={`mobile ${
                     pathname === item?.href 
@@ -81,6 +84,7 @@ const Navbar = () => {
                     }`}
                   > 
                     {item?.title}
+                    <span className={`${pathname === item?.href && colourOnScroll ? 'active-green' : 'active-beige'}`}/>
                   </li>
                 </Link>
               ))

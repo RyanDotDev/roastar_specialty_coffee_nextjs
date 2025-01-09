@@ -1,8 +1,6 @@
 import { fetchShopifyData } from "@/lib/api/shopify/route";
 
-export default async function fetchProducts(req, res) {
-  const { handle } = req.query;
-  const variables = { handle }
+export default async function fetchRelatedProducts(req, res) {
   try {
     const query = `
       {
@@ -12,8 +10,6 @@ export default async function fetchProducts(req, res) {
               id
               title
               handle
-              totalInventory
-              descriptionHtml
               images(first: 1) {
                 edges {
                   node {
@@ -26,7 +22,6 @@ export default async function fetchProducts(req, res) {
                   node {
                     priceV2 {
                       amount
-                      currencyCode
                     }
                   }
                 }
@@ -36,14 +31,14 @@ export default async function fetchProducts(req, res) {
         }
       }
     `;
-
-    const data = await fetchShopifyData(query, variables);
+  
+    const data = await fetchShopifyData(query);
     if (!data || !data.products || !data?.products?.edges) {
       throw new Error("Invalid response from Shopify");
     }
     res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
     res.status(200).json({ products: data?.products?.edges });
-  } catch (error) {
+  } catch(error) {
     console.error("Error in API route:", error);
     res.status(500).json({ error: "Failed to fetch products" });
   }

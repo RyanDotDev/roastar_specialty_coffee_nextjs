@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react'
 /* import Loader from '../pages/Shop/components/Loader'; */
 import { Pagination, Autoplay } from 'swiper/modules';
@@ -12,7 +13,7 @@ const CartSlider = () => {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const response = await fetch('/api/shopify/products');
+        const response = await fetch('/api/shopify/cart-slider')
         if (!response.ok) throw new Error('Failed to fetch products'); // Check the data structure here
         const data = await response.json()
         setProducts(data.products || [])
@@ -25,9 +26,8 @@ const CartSlider = () => {
 
     getProducts();
   }, [])
-
+  
   if (loading) return 
-  if (!products.length) return <p>No products available</p>;
 
   return (
     <div className='cart-slider'>
@@ -46,10 +46,11 @@ const CartSlider = () => {
           >
             <Link href={`/product/${node.handle}`} style={{ textDecoration: 'none', color: 'black' }}>
               {node.images.edges.length > 0 && (
-                <img 
+                <Image 
                   src={node.images.edges[0].node.src}
                   alt={node.title}
                   width={150}
+                  height={130}
                   className='cart-slide'
                   loading={index < 2 ? 'eager' : 'lazy'}
                 />

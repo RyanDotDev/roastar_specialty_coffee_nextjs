@@ -4,9 +4,9 @@ import { ThemeProvider } from '@mui/material/styles';
 import { theme } from '../theme/theme.js';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import cartReducer from '../store/state.js'
-import Navbar from './components/Navbar.jsx';
-import Footer from './components/Footer.jsx';
+import cartReducer from '@/store/state.js'
+import Navbar from '@/components/Navbar.jsx';
+import Footer from '@/components/Footer.jsx';
 import './globals.css';
 
 const store = configureStore({
@@ -15,13 +15,13 @@ const store = configureStore({
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" style={{ background: 'white' }}>
       <body>
         <Provider store={store}>
           <ThemeProvider theme={theme}>
             <header><Navbar /></header>
             <main>{children}</main>
-            <footo><Footer /></footo>
+            <footer><Footer /></footer>
           </ThemeProvider>
         </Provider>
       </body>

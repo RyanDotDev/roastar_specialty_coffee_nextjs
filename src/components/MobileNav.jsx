@@ -1,39 +1,34 @@
 import React, { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation';
-import MobileMenu from '../../lib/utils/popups/mobilemenu/MobileMenu';
+import MobileMenu from '@/utils/popups/mobilemenu/MobileMenu';
 import { AnimatePresence } from 'framer-motion';
 
 const MobileNav = () => {
     const [colourOnScroll, setColourOnScroll] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
-    const { pathname } = usePathname();
+    const pathname = usePathname();
 
     // arrow functions for opening and closing menu
     const close = () => setMenuOpen(false);
     const open = () => setMenuOpen(true);
 
-    // Function for changing colour upon scroll depending on page
-    const changeColourOnScroll = () => {
-      const scrollThresholds = {
-        '/': 650,
-        '/about': 1,
-        '/shop': 1,
-        '/menu': 0,
-        '/contact': 0,
-        '/careers': 180,
-        '/privacy': 1,
-        '/product/:handle': 1,
-      }
-
-      const threshold = scrollThresholds[pathname] || 0;
-      setColourOnScroll(threshold)
-    };
-
     useEffect(() => {
       // Called to open and close hamburger menu
       close();
-
-      // call event listener and return the removal of event
+      const changeColourOnScroll = () => {
+        const scrollThresholds = {
+          '/': 650,
+          '/about': 1,
+          '/shop': 1,
+          '/menu': 0,
+          '/contact': 1,
+          '/careers': 180,
+          '/privacy': 1,
+          '/product/:handle': 1,
+        };
+        const threshold = scrollThresholds[pathname] || 0;
+        setColourOnScroll(window.scrollY >= threshold)
+      }
       changeColourOnScroll();
       window.addEventListener('scroll', changeColourOnScroll);
 

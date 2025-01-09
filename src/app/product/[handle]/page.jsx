@@ -1,18 +1,18 @@
+"use client"
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import Link from 'next/link';
+import Image from 'next/image'
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '../../store/state';
-import { fetchProduct, fetchRelatedProducts } from '../../../../server/api/shopify/products';
-import './ProductPage.css';
-import '../../App.css';
+import { addToCart } from '@/store/state';
 import { Minus, Plus, ChevronLeft } from 'lucide-react';
-import Footer from '../../components/Footer';
+import { useParams } from 'next/navigation';
+import '@/styles/product.css'
 
 const MAX_CART_ITEMS = 10
 
-const ProductPage = () => {
-  const cart = useSelector((state) => state.cart);
+const page = () => {
   const { handle } = useParams();
+  const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
   // State fetches and displays product from Products.jsx when clicked
@@ -30,8 +30,9 @@ const ProductPage = () => {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const data = await fetchProduct(handle);
-        console.log("Fetched product data:", data);
+        const res = await fetch(`/api/shopify/${handle}`);
+        if (!res.ok) throw new Error ("Product not found or server error")
+        const data = await res.json()
         setProduct(data);
         // Automatically select the first available variant
         const firstAvailableVariant = data.variants.edges.find(
@@ -48,8 +49,10 @@ const ProductPage = () => {
 
     const getRelatedProducts = async () => {
       try {
-        const data = await fetchRelatedProducts();
-        setRelatedProducts(data);
+        const response = await fetch('/api/shopify/related-products');
+        if (!response.ok) throw new Error('Failed to fetch products'); // Check the data structure here
+        const data = await response.json()
+        setRelatedProducts(data.products || [])
       } catch (error) {
         console.error("Error fetching product list:", error);
       } finally {
@@ -59,6 +62,7 @@ const ProductPage = () => {
     
     getRelatedProducts();
     getProduct();
+    
     document.body.style.backgroundColor = 'var(--main-green)';
 
     return () => {
@@ -159,7 +163,7 @@ const ProductPage = () => {
   return (
     <div className='product-page-background'>
       <div className='product-page-container'>
-        <Link to='/Shop' reloadDocument>
+        <Link href='/shop'>
           <ChevronLeft style={{ position: 'relative', top: '0.45rem', color: 'white'}}/><h5>BACK TO SHOP</h5>
         </Link>
         <div className='product-content'>
@@ -167,7 +171,7 @@ const ProductPage = () => {
           <div className='product-main'>
             {/* PRODUCT IMAGE */}
             {product.images.edges.length > 0 && (
-              <img 
+              <img
                 src={product.images.edges[0].node.src} 
                 alt={product.title} 
                 width={600}
@@ -264,12 +268,13 @@ const ProductPage = () => {
                   key={node.id}
                 >
                   {/* Ensure the link is by handle */}
-                  <Link to={`/product/${node.handle}`} reloadDocument>
+                  <Link href={`/product/${node.handle}`}>
                     {node.images.edges.length > 0 && (
-                      <img 
+                      <Image 
                         src={node.images.edges[0].node.src} 
                         alt={node.title} 
                         width={200}
+                        height={180}
                       />
                     )}
                     <h3>{node.title}</h3>
@@ -283,9 +288,8 @@ const ProductPage = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   )
 }
 
-export default ProductPage;
+export default page;

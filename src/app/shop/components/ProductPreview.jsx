@@ -1,13 +1,11 @@
 import React, { useState, useEffect} from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux'
 import { motion } from 'framer-motion'
-import { previewAnimate } from '../../../lib/utils/popups/product_preview/animation'
-import { addToCart } from '../../../store/state'
-import Backdrop from '../../../lib/utils/popups/product_preview/Backdrop'
+import { previewAnimate } from '@/utils/popups/product_preview/animation'
+import { addToCart } from '@/store/state'
+import Backdrop from '@/utils/popups/product_preview/Backdrop'
 import { Plus, Minus, X } from 'lucide-react'
-import { fetchProduct } from '../../../../../server/api/shopify/products.mjs'
-import { createCart } from '../../../../../server/api/shopify/checkout'
 
 const MAX_CART_ITEMS = 10
 
@@ -23,7 +21,7 @@ const ProductPreview = ({ handle, handleClose }) => {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const data = await fetchProduct(handle);
+        const data = await fetch(`/api/shopify/product/${handle}`);
         console.log("Fetched product data:", data);
         setProduct(data);
         // Automatically select the first available variant

@@ -5,27 +5,25 @@ import { usePathname } from 'next/navigation';
 
 const Logo = () => {
   const [logoOnScroll, setLogoOnScroll] = useState(false);
-  const { pathname } = usePathname();
+  const pathname = usePathname();
 
-  // colourOnScroll logic
-  const changeLogoOnScroll = () => {
-    const scrollThresholds = {
-      '/': 650,
-      '/about': 1,
-      '/shop': 1,
-      '/menu': 0,
-      '/contact': 1,
-      '/careers': 180,
-      '/privacy': 1,
-      '/product/:handle': 1,
-    };
-
-    const threshold = scrollThresholds[pathname] || 0;
-    setLogoOnScroll(threshold)
-  }
-  
   useEffect(() => {
-    changeLogoOnScroll(); // Invoke on scroll mount
+    const changeLogoOnScroll = () => {
+      const scrollThresholds = {
+        '/': 650,
+        '/about': 1,
+        '/shop': 1,
+        '/menu': 0,
+        '/contact': 1,
+        '/careers': 180,
+        '/privacy': 1,
+        '/product/:handle': 1,
+      };
+
+      const threshold = scrollThresholds[pathname] || 0;
+      setLogoOnScroll(window.scrollY >= threshold)
+    }
+    changeLogoOnScroll();
     window.addEventListener('scroll', changeLogoOnScroll);
 
     return () => {

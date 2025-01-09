@@ -1,6 +1,7 @@
+"use client"
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'
-import { fetchProducts } from '../../../../../server/api/shopify/products.mjs';
+import Link from 'next/link'
+import Image from 'next/image'
 import { AnimatePresence } from 'framer-motion';
 import ProductPreview from './ProductPreview';
 import Loader from './Loader';
@@ -21,8 +22,10 @@ const Products = ({ addToCart }) => {
 
     const getProducts = async () => {
       try {
-        const data = await fetchProducts();
-        setProductsList(data);
+        const response = await fetch('/api/shopify/products')
+        if (!response.ok) throw new Error('Failed to fetch products'); // Check the data structure here
+        const data = await response.json()
+        setProductsList(data.products || [])
       } catch (error) {
         console.error("Error fetching product list:", error);
       } finally {
@@ -45,13 +48,15 @@ const Products = ({ addToCart }) => {
             key={node.id}
           >
             {/* Ensure the link is by handle */}
-            <Link to={`/product/${node.handle}`}>
+            <Link href={`/product/${node.handle}`}>
               {node.images.edges.length > 0 && (
-                <img 
+                <Image 
                   src={node.images.edges[0].node.src} 
                   alt={node.title} 
                   width={300}
+                  height={250}
                   loading='eager'
+                  priority
                 />
               )}
               <h2>{node.title}</h2>
@@ -69,19 +74,19 @@ const Products = ({ addToCart }) => {
                 </button>
               </div>
               <p>£{`${parseFloat(node.variants.edges[0].node.priceV2.amount).toFixed(2)}`}</p>
-            {/* Renders "SOLD OUT" label if totalInventory is 0 */}
-            {node.totalInventory === 0 && <p>SOLD OUT</p>}
-            {/* PREVIEW BUTTON OF PRODUCT FOR TABLET/MOBILE ONLY */}
-            <button 
-              onClick={(e) => {
-                e.preventDefault();
-                handleOpenModal(node.handle)
-              }} 
-              type='button'
-              className='pro'
-            >
-              PRODUCT PREVIEW
-            </button>
+              {/* Renders "SOLD OUT" label if totalInventory is 0 */}
+              {node.totalInventory === 0 && <p>SOLD OUT</p>}
+              {/* PREVIEW BUTTON OF PRODUCT FOR TABLET/MOBILE ONLY */}
+              <button 
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleOpenModal(node.handle)
+                }} 
+                type='button'
+                className='pro'
+              >
+                PRODUCT PREVIEW
+              </button>
             </Link>
           </div>
         ))

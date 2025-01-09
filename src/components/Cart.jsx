@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Link from 'next/link'
-import { clearCart, removeFromCart, updateQuantity } from '../../store/state'
+import { clearCart, removeFromCart, updateQuantity } from '@//store/state'
 import { motion } from 'framer-motion'
 import Backdrop from '@/lib/utils/popups/cart/Backdrop'
 import { Minus, Plus, X } from 'lucide-react'
@@ -104,7 +104,7 @@ const Cart = ({ handleClose }) => {
                       <div className='cart-item-container' key={item.id}>
                         <div className='cart-image'>
                           <Link href={`/product/${item.handle}`}>
-                            <Image src={item.image} alt={item.title} width={100} loading='lazy'/>
+                            <Image src={item.image} alt={item.title} width={100} height={90} loading='lazy'/>
                           </Link>
                         </div>
                         <div className='cart-title'>

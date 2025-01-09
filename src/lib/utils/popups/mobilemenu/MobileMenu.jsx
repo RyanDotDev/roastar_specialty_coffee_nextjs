@@ -34,8 +34,13 @@ const dropIn = {
     },
   };
 
+
 const MobileMenu = ({ handleClose }) => {
-  const { pathname } = usePathname();
+  const pathname = usePathname();
+
+  const refreshPage = (href) => {
+    window.location.assign(href);
+  }
   
   return (
     <Backdrop onClick={handleClose}>
@@ -53,8 +58,10 @@ const MobileMenu = ({ handleClose }) => {
               <Link 
                 href={item?.href} 
                 key={item._id} 
+                onClick={() => refreshPage(item?.href)}
+                className={`${item?.href === pathname && 'active'}`}
               >
-                <li className={`${pathname === item?.href ? 'nav-list-green active' : 'nav-list-green'}`}> 
+                <li className={`${item?.href === pathname ? 'nav-list-black active' : 'nav-list-black'}`}> 
                   {item?.title}
                 </li>
               </Link>

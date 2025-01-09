@@ -21,7 +21,7 @@ const MenuAd = () => {
             <br></br><br></br>
           </p>
           <div className='menu-link'>
-            <Link href='/Menu'>
+            <Link href='/menu'>
               <button>VIEW MENU</button>
             </Link>
           </div>

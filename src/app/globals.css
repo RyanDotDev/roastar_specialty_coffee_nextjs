@@ -36,9 +36,6 @@ body {
 }
 
 .navbar {
-  /* (green) background-color: hsl(96, 24%, 44%, 90%); */
-  /* background-color: hsl(49, 87%, 88%); */
-  /* border-bottom: 1px solid black; */
   position: fixed; 
   top: 0;
   height: 80px;
