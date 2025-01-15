@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react'
-/* import Loader from '../pages/Shop/components/Loader'; */
 import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 
 const CartSlider = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const response = await fetch('/api/shopify/cart-slider')
+        const response = await fetch('/api/shopify/cart-slider', { cache: 'no-store' })
         if (!response.ok) throw new Error('Failed to fetch products'); // Check the data structure here
         const data = await response.json()
         setProducts(data.products || [])
@@ -23,10 +22,9 @@ const CartSlider = () => {
         setLoading(false);
       }
     }
-
     getProducts();
   }, [])
-  
+
   if (loading) return 
 
   return (

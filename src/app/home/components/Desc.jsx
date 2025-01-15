@@ -12,11 +12,11 @@ const Desc = () => {
               'About Us' page. Learn about what makes our coffee so great and stands out.
               <br></br><br></br>
             </p>
-            <h4 className='about-us-link'>
+            <p className='about-us-link'>
               <Link href='/about'>
                 CLICK FOR MORE
               </Link>
-            </h4>
+            </p>
           </div>
           <img 
             src='/images/roastar_desc_ad.webp'

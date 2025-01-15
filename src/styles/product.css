@@ -21,6 +21,10 @@
   letter-spacing: 2px;
 }
 
+.product-page-container {
+  margin-bottom: -10rem;
+}
+
 .product-page-container h5 {
   position: relative;
   cursor: pointer;
@@ -35,7 +39,7 @@
 }
 
 .product-content {
-  padding: 5em 8em;
+  padding: 5em 8vw;
 }
 
 .product-content h1 {
@@ -44,6 +48,7 @@
 
 .product-content .product-img {
   margin-top: 2em;
+  object-fit: contain;
   width: 60%;
 }
 
@@ -208,7 +213,7 @@
   cursor: pointer;
   color: white;
   margin-top: 1rem;
-  width: 35vw;
+  width: 100%;
   padding: 1rem;
   border-radius: 5px;
   border: 2px solid white;
@@ -317,7 +322,6 @@
 }
 
 .related-product-card div:hover {
-  border: 2px solid hsla(0, 0%, 100%, 0.10);
   opacity: 1;
   transition:
     border 300ms,
@@ -337,6 +341,17 @@
   background: black;
 }
 
+.product-content .product-img {
+  margin-top: 2em;
+  object-fit: contain;
+  width: 60%;
+}
+
+@media all and (max-width: 1200px) {
+  .product-content {
+    padding: 5em 4vw;
+  }
+}
 
 @media all and (max-width: 1000px) {
   .product-content {
@@ -388,7 +403,7 @@
   }
 }
 
-@media all and (max-width: 500px) {
+@media all and (max-width: 600px) {
   .product-main .product-img {
     width: 100%;
   }

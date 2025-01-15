@@ -352,6 +352,10 @@ body {
   overflow: hidden;
 }
 
+.no-scroll {
+  overflow: hidden;
+}
+
 /* shopping-cart */
 .cart {
   position: relative;
@@ -964,10 +968,6 @@ body {
 }
 
 @media all and (max-width: 1000px) {
-  .footer {
-    margin-top: 31rem;
-  }
-
   .nav-list-mobile {
     display: block;
     color: var(--main-beige)
@@ -1075,10 +1075,5 @@ body {
 
   .payment-icons {
     justify-content: center;
-  }
-
-  .careers-container {
-    background-image: linear-gradient(var(--main-green), hsl(0, 0%, 100%));
-    width: 100vw;
   }
 }

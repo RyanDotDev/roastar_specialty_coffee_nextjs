@@ -2,14 +2,15 @@ import React, { useState, useRef } from 'react'
 import emailjs from '@emailjs/browser'
 import { motion } from 'framer-motion'
 import { X } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
-import Backdrop from '../../../lib/utils/popups/application/Backdrop';
-import { animate } from '../../../lib/utils/popups/application/animation';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import Backdrop from '@/utils/popups/application/Backdrop';
+import { animate } from '@/utils/popups/application/animation';
 
 const AppForm = ({ handleClose }) => {
   // To set focus on each input field and return error when field is not properly filled
   const [ focused, setFocused ] = React.useState({});
-  const navigate = useNavigate();
+  const router = useRouter();
 
   // For file name
   const [ fileName, setFileName ] = useState('')
@@ -90,7 +91,7 @@ const AppForm = ({ handleClose }) => {
       })
     console.log()
 
-    navigate('/Submit');
+    router.push('/submit');
   }
 
   return (
@@ -228,10 +229,7 @@ const AppForm = ({ handleClose }) => {
               <span style={{position: 'relative', top: '0.6em'}}>Please upload cv</span>
             </div>
           </div>
-          <Link 
-            to='/Submit'
-            reloadDocument
-          >
+          <Link href='/submit'>
             <button 
               disabled={!firstName | !lastName | !email | !phoneNumber | !job | !rightToWork | !resume }
               className='submit-btn'

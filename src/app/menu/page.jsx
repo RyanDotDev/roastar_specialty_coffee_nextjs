@@ -1,7 +1,7 @@
 import React from 'react'
 import '@/styles/menu.css'
 
-const Menu = () => {
+const page = () => {
   return (
     <div className='menu'>
 
@@ -9,4 +9,4 @@ const Menu = () => {
   )
 }
 
-export default Menu
+export default page

@@ -1,25 +1,25 @@
 import React from 'react'
-import './Submit.css'
 import { CircleCheckBig } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
+import '@/styles/submit.css'
 
-const Submit = () => {
+const page = () => {
   return (
     <div className='submit-container'>
       <div className='submit-nav'>
-        <Link reloadDocument to='/'>
+        <Link href='/'>
           HOME
         </Link>
-        <Link reloadDocument to='/Careers'>
+        <Link href='/careers'>
           BACK TO CAREERS
         </Link>
       </div>
       <div className='application-sent'>
-        <CircleCheckBig size={200} strokeWidth={0.7} style={{color: 'var(--btn-green)'}} />
+        <CircleCheckBig size={200} strokeWidth={0.7} style={{ color: 'var(--btn-green)' }} />
         <p>Thank you for your application!</p>
       </div>
     </div>
   )
 }
 
-export default Submit
+export default page

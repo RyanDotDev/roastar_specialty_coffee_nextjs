@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link'
 import Image from 'next/image'
 import { AnimatePresence } from 'framer-motion';
@@ -7,22 +7,18 @@ import ProductPreview from './ProductPreview';
 import Loader from './Loader';
 
 const Products = ({ addToCart }) => {
-  const [productsList, setProductsList] = useState([]);
-  const [loading, setLoading] = useState(true);
-  // State for popup/preview of product
-  const [selectedProduct, setSelectedProduct] = useState(null);
-
+  const [productsList, setProductsList] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [selectedProduct, setSelectedProduct] = React.useState(null);
   // handles for opening and closing preview of product
   const handleOpenModal = (handle) => setSelectedProduct(handle);
   const handleCloseModal = () => setSelectedProduct(null)
 
   useEffect(() => {
-    // calls close of handle modal
     handleCloseModal();
-
     const getProducts = async () => {
       try {
-        const response = await fetch('/api/shopify/products')
+        const response = await fetch('/api/shopify/products', { cache: 'no-store' })
         if (!response.ok) throw new Error('Failed to fetch products'); // Check the data structure here
         const data = await response.json()
         setProductsList(data.products || [])
@@ -32,9 +28,23 @@ const Products = ({ addToCart }) => {
         setLoading(false);
       }
     };
-
     getProducts();
   }, []);
+
+  // prevent scroll when popup is active
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const htmlElement = document.documentElement;
+      if (selectedProduct) {
+        htmlElement.classList.add('no-scroll');
+      } else {
+        htmlElement.classList.remove('no-scroll');
+      }
+        return () => {
+          htmlElement.classList.remove('no-scroll')
+        }
+      };
+    }, [selectedProduct]);
 
   if (loading) return <Loader />
 

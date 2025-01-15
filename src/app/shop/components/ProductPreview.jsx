@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux'
 import { motion } from 'framer-motion'
@@ -6,23 +6,23 @@ import { previewAnimate } from '@/utils/popups/product_preview/animation'
 import { addToCart } from '@/store/state'
 import Backdrop from '@/utils/popups/product_preview/Backdrop'
 import { Plus, Minus, X } from 'lucide-react'
-
-const MAX_CART_ITEMS = 10
+import { showErrorToast, showSuccessToast } from '@/lib/utils/toasts/toast'
 
 const ProductPreview = ({ handle, handleClose }) => {
   const cart = useSelector((state) => state.cart);
   const dispatch =  useDispatch();
-  const [product, setProduct] = useState(null);
-  const [selectedVariant, setSelectedVariant] = useState(null);
-  const [selectedOptions, setSelectedOptions] = useState({})
-  const [counter, setCounter] = useState(1);
-  const [loading, setLoading] = useState(true);
+  const [product, setProduct] = React.useState(null);
+  const [selectedVariant, setSelectedVariant] = React.useState(null);
+  const [selectedOptions, setSelectedOptions] = React.useState({})
+  const [counter, setCounter] = React.useState(1);
+  const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const data = await fetch(`/api/shopify/product/${handle}`);
-        console.log("Fetched product data:", data);
+        const res = await fetch(`/api/shopify/${handle}`, { cache: 'no-store' });
+        if (!res.ok) throw new Error ("Product not found or server error")
+        const data = await res.json()
         setProduct(data);
         // Automatically select the first available variant
         const firstAvailableVariant = data.variants.edges.find(
@@ -35,42 +35,49 @@ const ProductPreview = ({ handle, handleClose }) => {
     }
     
     getProduct();
-  }, [handle])
+  }, [handle]);
 
   const handleCheckout = async () => {
     setLoading(true);
-
     const unselectedOption = product.options.find(
       (option) => !selectedOptions[option.name]
     );
     if (unselectedOption) {
-      alert(`Please select option(s) before proceeding to checkout.`);
+      showErrorToast(`Please select options before proceeding to checkout.`);
       return
     }
-    // Ensure selectVariant matches the current selection
     if (!selectedVariant) {
-      alert("The selected variant is unavailable. Please choose a valid option");
+      showErrorToast("The selected variant is unavailable. Please choose a valid option");
       return // Stop execution if no valid variant is selected
     }
-
     try {
       const lineItems = [{ 
         merchandiseId: selectedVariant.id, 
-        quantity: counter 
+        quantity: counter,
       }]
-
-      const checkout = await createCart(lineItems);
-
-      if (!checkout) {
+      console.log("Line items sent to Shopify:", lineItems);
+      const response = await fetch('/api/shopify/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ lineItems })
+      })
+      if (!response) {
         throw new Error("Checkout URL is missing or invalid.")
       } 
-
-      console.log("Redirecting to checkout URL:", checkout)
-      window.location.href = checkout
-    } catch (error) {
-        console.error("Checkout Error:", error.message || error);
+      const { checkoutUrl } = await response.json();
+      if (checkoutUrl) {
+        console.log("Redirecting to checkout URL:", checkoutUrl);
+        window.location.href = checkoutUrl;
+      } else {
+        showErrorToast("Failed to create checkout. Please try again")
+      }
+    } catch(error) {
+      console.error("Checkout Error:", error.message || error);
+      showErrorToast("Error creating checkout. Please try again later")
     } finally {
-        setLoading(false);
+      setLoading(false);
     };
   };
 
@@ -110,7 +117,6 @@ const ProductPreview = ({ handle, handleClose }) => {
   const handleClickPlus = () => {
     setCounter(counter + 1)
   }
-
   const handleClickMinus = () => {
     setCounter(counter => Math.max(counter - 1, 1))
   }
@@ -120,33 +126,23 @@ const ProductPreview = ({ handle, handleClose }) => {
       (option) => !selectedOptions[option.name]
     );
     if (unselectedOption) {
-      alert(`Please choose a ${unselectedOption.name.toLowerCase()} option`);
+      showErrorToast(`Please choose a ${unselectedOption.name.toLowerCase()} option`);
       return
     }
     // Ensure selectVariant matches the current selection
     if (!selectedVariant) {
-      alert("The selected variant is unavailable. Please choose a valid option");
+      showErrorToast("The selected variant is unavailable. Please choose a valid option");
       return // Stop execution if no valid variant is selected
     }
 
     const totalItemsInCart = cart.reduce((total, item) => total + item.quantity, 0);
 
-    if (totalItemsInCart + counter > MAX_CART_ITEMS) {
-      alert(`You can only add up to ${MAX_CART_ITEMS} items to your cart.`);
+    if (totalItemsInCart + counter > process.env.MAX_CART_ITEMS) {
+      showErrorToast(`You can only add up to ${process.env.MAX_CART_ITEMS} items to your cart.`);
       return;
     }
 
     if (selectedVariant && product) {
-      console.log({
-        id: selectedVariant.id,
-        title: product.title,
-        variant: selectedVariant.title,
-        price: parseFloat(selectedVariant.priceV2.amount),
-        quantity: counter,
-        image: product.images.edges[0]?.node.src,
-        handle: product.handle,
-      });
-
       dispatch(addToCart({
         id: selectedVariant.id,
         title: product.title,
@@ -157,8 +153,8 @@ const ProductPreview = ({ handle, handleClose }) => {
         handle: product.handle,
       }));
     }
+    if (handleAddToCart) showSuccessToast('Item Added');
   };
-
   if (!product) return <p></p>;
 
   return (
@@ -227,20 +223,17 @@ const ProductPreview = ({ handle, handleClose }) => {
                       <option value='' disabled>
                         SELECT {option.name.toUpperCase()}
                       </option>
-                      {option.values.map((value) =>{
-                        // Checks to see if value is available
+                      {Array.from(new Set(option.values)).map((value, index) =>{
                         const isAvailable = getAvailableOptions(option.name).includes(value);
                         return (
-                          <option key={value} value={value} disabled={!isAvailable}>
+                          <option key={`${option.name}-${value}-${index}`} value={value} disabled={!isAvailable}>
                             {value.toUpperCase()}
                           </option>
                         );
                       })};
                     </select>
                   </div>
-                ))
-
-                }
+                ))}
               </div>
               {/* ADD TO CART/CHECKOUT */}
               <button 
@@ -255,11 +248,11 @@ const ProductPreview = ({ handle, handleClose }) => {
                 className='product-purchase'
                 disabled={product.totalInventory === 0}
               >
-                CHECKOUT
+                {loading ? 'CHECKOUT' : '...Processing'}
               </button>
               <Link 
                 className='view-details' 
-                to={`/product/${handle}`}
+                href={`/product/${handle}`}
               >
                 VIEW DETAILS
               </Link>

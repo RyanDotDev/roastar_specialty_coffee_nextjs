@@ -115,7 +115,7 @@
   transition: background 0.3s;
 }
 
-.dot.active-slide {
+.dot .active-slide {
   background: var(--main-green);
 }
 
@@ -123,6 +123,7 @@
 .home-container {
   position: relative;
   margin-top: 30em; 
+  margin-bottom: -10rem;
   width: 100%;
 }
 
@@ -237,10 +238,6 @@
   text-align: right;
 }
 
-.backdrop, html:has(.no-scroll) {
-  overflow: hidden;
-}
-
 .close {
   margin-top: 1em;
   margin-right: 1em;
@@ -261,8 +258,8 @@
 }
 
 .delivery-text h2 {
-  color: black;
-  font-weight: 500;
+  color: var(--main-green);
+  font-weight: 600;
   font-size: 2rem;
   letter-spacing: 1.5px;
 }
@@ -286,18 +283,25 @@
 }
 
 .deliveroo {
-  background: white;
+  background: #00CDBC;
   border-radius: 45px;
   height: 12.5rem;
   width: 12.5rem;
-  box-shadow: 3px 3px 10px 3px hsl(0, 0%, 21%, 30%);
+  box-shadow: 2px 2px 10px 2px hsl(0, 0%, 21%, 30%);
+  transition: box-shadow 300ms;
 }
 
 .deliveroo:active {
   transform: scale(0.98);
 }
 
+.deliveroo:hover {
+  box-shadow: 3px 3px 20px 3px var(--main-green);
+  transition: box-shadow 300ms;
+}
+
 .deliveroo img {
+  filter: brightness(4);
   width: 200px;
   height: 180px;
   margin-bottom: 1em;
@@ -308,10 +312,16 @@
   height: 12.5rem;
   width: 12.5rem;
   box-shadow: 3px 3px 10px 3px hsl(0, 0%, 21%, 30%);
+  transition: box-shadow 300ms;
 }
 
 .uber-eats:active {
   transform: scale(0.98);
+}
+
+.uber-eats:hover {
+  box-shadow: 3px 3px 20px 3px var(--main-green);
+  transition: box-shadow 300ms;
 }
 
 .desc-container {
@@ -359,6 +369,9 @@
   font-weight: 600;
   text-decoration: none;
   transition: 500ms;
+  text-underline-offset: --offset;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
   letter-spacing: 1.5px;
   text-decoration: none;
   font-size: 1.3em;
@@ -616,7 +629,6 @@
 /* For FeaturedShop.jsx */ 
 .fs-container {
   padding-top: 2em;
-  height: 700px;
 }
 
 .fs-content {
@@ -678,7 +690,14 @@
   .delivery-text h3 {
     color: white;
   }
-  
+
+  .deliveroo {
+    box-shadow: 1px 2px 10px 2px hsla(0, 0%, 96%, 0.3);
+  }
+
+  .uber-eats {
+    box-shadow: 1px 0px 10px 0px hsla(0, 0%, 96%, 0.3);
+  }
 }
 
 @media all and (max-width: 1250px) {
@@ -694,13 +713,16 @@
 }
 
 @media all and (max-width: 1000px) {
+  .home-container {
+    margin-bottom: -5rem;
+  }
+
   .link-images {
     display:inline-flex;
     flex-direction: column;
   }
 
   .image-one, .image-two, .image-three {
-    filter: brightness(1);
     transition: 
       transform 500ms, 
       filter 500ms,
@@ -708,7 +730,6 @@
   }
 
   .image-one:hover, .image-two:hover, .image-three:hover {
-    filter: brightness(1);
     transition: 
       transform 500ms, 
       filter 500ms,
@@ -805,7 +826,6 @@
 
   .fs-container {
     margin-top: 0em;
-    height: 400px;
   }
 
   .fs-content {

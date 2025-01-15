@@ -1,19 +1,16 @@
-"use client"
-import React, { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import Link from 'next/link'
-import { clearCart, removeFromCart, updateQuantity } from '@//store/state'
-import { motion } from 'framer-motion'
-import Backdrop from '@/lib/utils/popups/cart/Backdrop'
-import { Minus, Plus, X } from 'lucide-react'
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import Link from 'next/link';
+import { clearCart, removeFromCart, updateQuantity } from '@//store/state';
+import { motion } from 'framer-motion';
+import Backdrop from '@/utils/popups/cart/Backdrop';
+import { Minus, Plus, X } from 'lucide-react';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { cartAnimate } from '@/lib/utils/popups/cart/animation'
-import { createCheckout } from '@/pages/api/shopify/checkout.js'
-import CartSlider from './CartSlider'
-import Image from 'next/image'
+import { cartAnimate } from '@/lib/utils/popups/cart/animation';
+import CartSlider from './CartSlider';
+import Image from 'next/image';
 
 const Cart = ({ handleClose }) => {
-  // Cart state and dispatch() here
   const cart = useSelector((state) => state.cart);
   console.log("Cart state from Redux:", cart);
   const dispatch = useDispatch();
@@ -26,32 +23,40 @@ const Cart = ({ handleClose }) => {
     try {
       const lineItems = cart.map((item) => ({
         merchandiseId: item.id,
-        quantity: item.quantity
+        quantity: item.quantity,
       }));
       console.log("Line items sent to Shopify:", lineItems);
+      const response = await fetch('/api/shopify/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ lineItems }), // Send lineItems in the request body
+      })
 
-      const checkoutUrl = await createCheckout(lineItems);
+      if (!response) {
+        throw new Error("Failed to create checkout");
+      }
 
+      const { checkoutUrl } = await response.json();
       if (checkoutUrl) {
-        console.log("redirecting to checkout URL", checkoutUrl)
+        console.log(" Redirecting to checkout URL:", checkoutUrl);
         window.location.href = checkoutUrl;
       } else {
-        console.error("Failed to create checkout, no checkout URL.");
-        alert("Failed to create checkout. Please try again");
+        alert("Failed to create checkout. Please try again.")
       }
     } catch(error) {
       console.error("Checkout error:", error);
+      alert("Error creating checkout. Please try again later")
     } finally {
       setLoading(false)
     }
   };
 
-  // Removes product from cart
   const handleRemove = (id) => {
     dispatch(removeFromCart(id));
   }
 
-  // Clears whole cart
   const handleClearCart = () => {
     dispatch(clearCart());
   }
@@ -94,7 +99,7 @@ const Cart = ({ handleClose }) => {
               {cart.length === 0 ? (
                 <div className='cart-is-empty'>
                   <p className=''>YOUR CART IS EMPTY</p>
-                  <Link href='/Shop'><button className='continue'>CONTINUE SHOPPING</button></Link>
+                  <Link href='/shop'><button className='continue'>CONTINUE SHOPPING</button></Link>
                   <CartSlider />
                 </div>
               ) : (
@@ -142,7 +147,7 @@ const Cart = ({ handleClose }) => {
                       {loading ? 'CHECKOUT' : 'Processing...'}
                     </button>
                     {/* CONTINUE SHOPPING BUTTON */}
-                    <Link href='/Shop'>
+                    <Link href='/shop'>
                       <button className='continue'>
                         CONTINUE SHOPPING
                       </button>

@@ -1,15 +1,29 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 import { AnimatePresence } from 'framer-motion';
 import Content from '@/lib/utils/popups/delivery/Content';
 import Image from 'next/image';
 
 const Links = () => {
-  const [ modalOpen, setModalOpen ] = useState(false);
-
+  const [modalOpen, setModalOpen] = React.useState(false);
+  
   const close = () => setModalOpen(false);
   const open = () => setModalOpen(true);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const htmlElement = document.documentElement;
+      if (modalOpen) {
+        htmlElement.classList.add('no-scroll');
+      } else {
+        htmlElement.classList.remove('no-scroll');
+      }
+      return () => {
+        htmlElement.classList.remove('no-scroll');
+      }
+    }
+  }, [modalOpen]);
   
   return (
     <div className='links-container'>

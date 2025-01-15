@@ -20,7 +20,12 @@ const Logo = () => {
         '/product/:handle': 1,
       };
 
-      const threshold = scrollThresholds[pathname] || 0;
+      let threshold
+      if (pathname.startsWith('/product/')) {
+        threshold = 1
+      } else {
+        threshold = scrollThresholds[pathname] || 0;
+      }
       setLogoOnScroll(window.scrollY >= threshold)
     }
     changeLogoOnScroll();

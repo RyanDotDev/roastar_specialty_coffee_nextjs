@@ -32,7 +32,7 @@ const Content = ({ handleClose }) => {
         className='close' 
         onClick={handleClose}
       >
-        <X size={40} strokeWidth={1.1}/>
+        <X size={34} strokeWidth={1.3}/>
       </button>
       <motion.div 
         onClick={(e) => e.stopPropagation()}
@@ -44,7 +44,7 @@ const Content = ({ handleClose }) => {
       >
         <div className='delivery-text'>
           <h2>WE DELIVER TOO!</h2>
-          <h3>Choose a Delivery</h3>
+          <h3>Choose a delivery</h3>
         </div>
         <div className='delivery-link'>
           <div className='deliveroo'>
@@ -56,14 +56,15 @@ const Content = ({ handleClose }) => {
             </Link>
           </div>
           
-          <Link href='https://www.ubereats.com/gb/store/roastar-speciality-coffee/0oJZk_Y8WdGYpXWoQ1Qe_Q'>
-            <div className='uber-eats'>
+          
+          <div className='uber-eats'>
+            <Link href='https://www.ubereats.com/gb/store/roastar-speciality-coffee/0oJZk_Y8WdGYpXWoQ1Qe_Q'>
               <img
                 src='../../../icon/uber_eats_icon.png'
                 width={200}
               />
-            </div>
-          </Link>
+            </Link>
+          </div>
         </div>
       </motion.div>
     </Backdrop>

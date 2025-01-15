@@ -385,6 +385,11 @@
   .form-content select:invalid[data-focused="true"] ~ span {
     padding-left: 6.3vw;
   }
+
+  .careers-container {
+    background-image: linear-gradient(var(--main-green), hsl(0, 0%, 100%));
+    width: 100vw;
+  }
 }
 
 @media all and (max-width: 600px) {

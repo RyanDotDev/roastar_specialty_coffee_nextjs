@@ -4,17 +4,13 @@ import { createSlice } from '@reduxjs/toolkit';
 // Retrieve the initial state from localStorage, or use an empty array if none exists
 export const loadCartFromLocalStorage = () => {
   if (typeof window !== "undefined" && localStorage) {
-    console.log("LocalStorage available, loading cart...");
     const savedCart = localStorage.getItem("cart");
-    console.log("Loaded from localStorage:", savedCart);
     return savedCart ? JSON.parse(savedCart) : [];
   }
-  console.log("LocalStorage not available, returning empty cart...");
   return []; // Default empty cart if not in browser
 };
 
 export const saveCartToLocalStorage = (cart) => {
-  console.log("Saving to localStorage:", [...cart]); // Debug the saved data
   if (typeof window !== "undefined" && localStorage) {
     localStorage.setItem("cart", JSON.stringify(cart));
   }
@@ -23,8 +19,11 @@ export const saveCartToLocalStorage = (cart) => {
 // This function is for changing items to equal what is being passed into when there is setItems
 export const cartSlice = createSlice({
   name: "cart",
-  initialState: loadCartFromLocalStorage(),
+  initialState: [],
   reducers: {
+    setInitialCartState: (state, action) => {
+      return action.payload; // Set the initial cart state after loading from localStorage
+    },
     addToCart: (state, action) => {
       console.log("Adding to cart:", action.payload);
       const existingItem = state.find(
@@ -73,6 +72,7 @@ if (typeof window !== "undefined") {
 }
 
 export const {
+  setInitialCartState,
   addToCart,
   removeFromCart,
   clearCart,
@@ -80,3 +80,4 @@ export const {
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
+

@@ -1,30 +1,20 @@
-"use client"
-import React from 'react';
-import { ThemeProvider } from '@mui/material/styles';
-import { theme } from '../theme/theme.js';
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import cartReducer from '@/store/state.js'
-import Navbar from '@/components/Navbar.jsx';
-import Footer from '@/components/Footer.jsx';
-import './globals.css';
+import { ToastContainer } from "@/lib/utils/toasts/toast";
+import ClientProvider from "./ClientProvider";
 
-const store = configureStore({
-  reducer: { cart: cartReducer },
-});
+export const metadata = {
+  title: 'Roastar Specialty Coffee',
+  description: 'Bromley coffee shop'
+}
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" style={{ background: 'white' }}>
-      <body>
-        <Provider store={store}>
-          <ThemeProvider theme={theme}>
-            <header><Navbar /></header>
-            <main>{children}</main>
-            <footer><Footer /></footer>
-          </ThemeProvider>
-        </Provider>
+    <html lang="en">
+      <body style={{ background: 'white' }}>
+        <ClientProvider>
+          <ToastContainer />
+          {children}
+        </ClientProvider>
       </body>
     </html>
   );
-}
+};

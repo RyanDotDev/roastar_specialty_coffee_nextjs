@@ -63,7 +63,7 @@ export default async function fetchProduct(req, res) {
     if (!data || !data.product) {
       return res.status(404).json({ error: 'Product not found' })
     }
-
+    res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
     res.status(200).json(data.product)
   } catch(error) {
     console.error("Error in API route:", error);

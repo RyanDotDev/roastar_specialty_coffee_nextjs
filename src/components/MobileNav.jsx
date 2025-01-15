@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { usePathname } from 'next/navigation';
 import MobileMenu from '@/utils/popups/mobilemenu/MobileMenu';
 import { AnimatePresence } from 'framer-motion';
 
 const MobileNav = () => {
-    const [colourOnScroll, setColourOnScroll] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
+    const [colourOnScroll, setColourOnScroll] = React.useState(false);
+    const [menuOpen, setMenuOpen] = React.useState(false);
     const pathname = usePathname();
 
-    // arrow functions for opening and closing menu
     const close = () => setMenuOpen(false);
     const open = () => setMenuOpen(true);
 
     useEffect(() => {
-      // Called to open and close hamburger menu
       close();
       const changeColourOnScroll = () => {
         const scrollThresholds = {
@@ -26,8 +24,14 @@ const MobileNav = () => {
           '/privacy': 1,
           '/product/:handle': 1,
         };
-        const threshold = scrollThresholds[pathname] || 0;
-        setColourOnScroll(window.scrollY >= threshold)
+
+        let threshold
+          if (pathname.startsWith('/product/')) {
+            threshold = 1;
+          } else {
+            threshold = scrollThresholds[pathname] || 0;
+          }
+        setColourOnScroll(window.scrollY >= threshold);
       }
       changeColourOnScroll();
       window.addEventListener('scroll', changeColourOnScroll);
@@ -37,6 +41,20 @@ const MobileNav = () => {
       }
       // for useEffect to activate everytime the pathname changes
     },[pathname]);
+
+    useEffect(() => {
+      if (typeof window !== 'undefined') {
+        const htmlElement = document.documentElement
+        if (menuOpen) {
+          htmlElement.classList.add('no-scroll')
+        } else {
+          htmlElement.classList.remove('no-scroll')
+        }
+        return () => {
+          htmlElement.classList.remove('no-scroll')
+        }
+      }
+    }, [menuOpen])
 
   return (
     <>

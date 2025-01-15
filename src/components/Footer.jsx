@@ -9,7 +9,7 @@ import Image from 'next/image';
 
 
 const Footer = () => {
-  const { pathname } = usePathname;
+  const pathname  = usePathname();
 
   return (
     <footer className='footer'>
@@ -53,35 +53,35 @@ const Footer = () => {
           </p>
         </div>
         <div className='footer-nav'>
-          <div className={`footer-links ${pathname === '/about' ? 'active-footer' : ''}`}>
+          <div className={`footer-links ${'/about' === pathname && 'active-footer'}`}>
             <Link 
               href='/about'
             >
               ABOUT US
             </Link>
           </div>
-          <div className={`footer-links ${pathname === '/contact' ? 'active-footer' : ''}`}>
+          <div className={`footer-links ${'/contact' === pathname && 'active-footer'}`}>
             <Link 
               href='/contact'
             >
               CONTACT US
             </Link>
           </div>
-          <div className={`footer-links ${pathname === '/careers' ? 'active-footer' : ''}`}>
+          <div className={`footer-links ${'/careers' === pathname && 'active-footer'}`}>
             <Link  
               href={'/careers'} 
             >
               CAREERS
             </Link>
           </div>
-          <div className={`footer-links ${pathname === '/shop' ? 'active-footer' : ''}`}>
+          <div className={`footer-links ${'/shop' === pathname && 'active-footer'}`}>
             <Link 
               href={'/shop'} 
             >
               SHOP
             </Link>
           </div>
-          <div className={`footer-links ${pathname === '/privacy' ? 'active-footer' : ''}`}>
+          <div className={`footer-links ${'/privacy' === pathname && 'active-footer'}`}>
             <Link  
               href={'/privacy'} 
             >

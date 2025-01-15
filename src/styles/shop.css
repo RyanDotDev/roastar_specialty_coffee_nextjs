@@ -32,6 +32,17 @@
   letter-spacing: 2px;
 }
 
+/* If product list doesn't exist or not found */
+.products-not-found {
+  height: 400px;
+}
+
+.products-not-found p {
+  font-size: larger;
+  margin-top: 13rem;
+  text-align: center;
+}
+
 .product-container {
   background: white;
   width: 100%;
@@ -145,6 +156,10 @@
   top: 0;
   overflow: auto;
 }
+
+/* .product-preview-backdrop, body:has(.no-scroll) {
+  overflow: hidden;
+} */
 
 .product-preview-container {
   padding: 1em;
