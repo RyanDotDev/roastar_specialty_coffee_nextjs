@@ -18,7 +18,7 @@ const Products = ({ addToCart }) => {
     handleCloseModal();
     const getProducts = async () => {
       try {
-        const response = await fetch('/api/shopify/products', { cache: 'no-store' })
+        const response = await fetch('/api/shopify/products')
         if (!response.ok) throw new Error('Failed to fetch products'); // Check the data structure here
         const data = await response.json()
         setProductsList(data.products || [])

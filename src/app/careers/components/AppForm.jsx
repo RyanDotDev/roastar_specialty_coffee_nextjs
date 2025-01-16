@@ -1,19 +1,20 @@
-import React, { useState, useRef } from 'react'
-import emailjs from '@emailjs/browser'
-import { motion } from 'framer-motion'
+import React, { useState, useRef } from 'react';
+import emailjs from '@emailjs/browser';
+import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Backdrop from '@/utils/popups/application/Backdrop';
 import { animate } from '@/utils/popups/application/animation';
+import { showErrorToast } from '@/lib/utils/toasts/toast';
 
 const AppForm = ({ handleClose }) => {
   // To set focus on each input field and return error when field is not properly filled
-  const [ focused, setFocused ] = React.useState({});
+  const [focused, setFocused] = React.useState({});
   const router = useRouter();
 
   // For file name
-  const [ fileName, setFileName ] = useState('')
+  const [fileName, setFileName] = useState('')
 
   // Give the selected file a name when selected
   let handleFile = (file) => {
@@ -38,13 +39,13 @@ const AppForm = ({ handleClose }) => {
   };
 
   // For params in email.js
-  const [ firstName, setFirstName ] = useState('');
-  const [ lastName, setLastName ] = useState('');
-  const [ email, setEmail ] = useState('');
-  const [ phoneNumber, setPhoneNumber ] = useState('');
-  const [ job, setJob ] = useState('');
-  const [ rightToWork, setRightToWork ] = useState('');
-  const [ resume, setResume ] = useState(0);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [job, setJob] = useState('');
+  const [rightToWork, setRightToWork] = useState('');
+  const [resume, setResume] = useState(0);
   
   // This target each specific input field
   const handleBlur = (e) => {
@@ -57,39 +58,57 @@ const AppForm = ({ handleClose }) => {
   }
 
   // This submits the form
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const serviceId = '';
-    const templateId = '';
-    const publicKey = '';
+    try {
+      const formData = new FormData();
+      formData.append('file', resume);
 
-    const templateParams = {
-      from_firstname: firstName,
-      from_lastname: lastName,
-      from_email: email,
-      from_phonenumber: phoneNumber,
-      job: job,
-      right_to_work: rightToWork,
-      resume: resume,
-      to_name: 'Lucy',
-    };
+      const uploadResponse = await fetch('api/firebase/upload', {
+        method: 'POST',
+        body: JSON.stringify({ file: resume }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-    emailjs.send(serviceId, templateId, templateParams, publicKey)
-      .then((response) => {
-        console.log('Email sent successfully', response);
-        setFirstName('');
-        setLastName('');
-        setEmail('');
-        setPhoneNumber('');
-        setJob(true);
-        setRightToWork(true);
-        setResume(0);
-      })
-      .catch((error) => {
-        console.error('Error sending email:', error)
-      })
-    console.log()
+      if (!uploadResponse.ok) throw new Error('Failed to upload resume');
+      const { downloadUrl } = await uploadResponse.json();
+
+      const applicationData = {
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        job,
+        rightToWork,
+        resumeUrl: downloadUrl,
+      };
+
+      const response = await fetch('/api/firebase/apply', {
+        method: 'POST',
+        body: JSON.stringify(applicationData),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+
+      if (!response.ok) throw new Error('Failed to submit application');
+      console.log('Application submitted successfully')
+
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+      setPhoneNumber('');
+      setJob('');
+      setRightToWork('');
+      setResume(null);
+      router.push('/submit')
+    } catch(error) {
+      console.error('Error submitting application:', error);
+      showErrorToast('Error submitting application. Please try again later.');
+    }
 
     router.push('/submit');
   }

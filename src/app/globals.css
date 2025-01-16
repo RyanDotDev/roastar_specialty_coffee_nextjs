@@ -543,6 +543,29 @@ body {
   transition: 300ms;
 }
 
+.cart-slider-skeleton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 150px;
+  height: 200px;
+  background: #f0f0f0;
+  margin: 0 10px;
+}
+
+.skeleton-image {
+  width: 150px;
+  height: 130px;
+  background: #ddd;
+  margin-bottom: 10px;
+}
+
+.skeleton-text {
+  width: 80px;
+  height: 15px;
+  background: #ccc;
+}
+
 /* If cart has item(s) */
 .cart-container {
   margin: 1.4em 0.6em;

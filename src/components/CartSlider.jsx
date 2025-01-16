@@ -5,28 +5,39 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 
-const CartSlider = () => {
-  const [products, setProducts] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
+const CartSlider = ({ initialProducts = [] }) => {
+  const [products, setProducts] = React.useState(initialProducts);
+  const [loading, setLoading] = React.useState(!initialProducts.length);
 
   useEffect(() => {
-    const getProducts = async () => {
-      try {
-        const response = await fetch('/api/shopify/cart-slider', { cache: 'no-store' })
-        if (!response.ok) throw new Error('Failed to fetch products'); // Check the data structure here
-        const data = await response.json()
-        setProducts(data.products || [])
-      } catch (error) {
-        console.error("Error fetching products", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    getProducts();
-  }, [])
+    if (products.length > 0) return;
+      const getProducts = async () => {
+        try {
+          const response = await fetch('/api/shopify/cart-slider')
+          if (!response.ok) throw new Error('Failed to fetch products'); // Check the data structure here
+          const data = await response.json()
+          setProducts(data.products || [])
+        } catch (error) {
+          console.error("Error fetching products", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      getProducts();
+  }, [initialProducts, products])
 
-  if (loading) return 
-
+  if (loading) {
+    return (
+      <div className="cart-slider-skeleton">
+        {Array.from({ length: 2 }).map((_, index) => (
+          <div key={index} className="skeleton-card">
+            <div className="skeleton-image"></div>
+            <div className="skeleton-text"></div>
+          </div>
+        ))}
+      </div>
+    )
+  }
   return (
     <div className='cart-slider'>
       <Swiper
@@ -35,6 +46,7 @@ const CartSlider = () => {
         slidesPerView={2}
         loop={true}
         autoplay={{ delay: 3000 }}
+        lazyPreloadPrevNext={false}
       >
         {products.map(({ node }, index) => (
           <SwiperSlide 
@@ -45,12 +57,13 @@ const CartSlider = () => {
             <Link href={`/product/${node.handle}`} style={{ textDecoration: 'none', color: 'black' }}>
               {node.images.edges.length > 0 && (
                 <Image 
-                  src={node.images.edges[0].node.src}
+                  src={`${node.images.edges[0].node.src}?width=150&height=130`}
                   alt={node.title}
                   width={150}
                   height={130}
-                  className='cart-slide'
+                  className='cart-slide swiper-lazy'
                   loading={index < 2 ? 'eager' : 'lazy'}
+                  data-src={node.images.edges[0].node.src}
                 />
               )}
               <p>{node.title}</p>
