@@ -1,5 +1,4 @@
 import { db } from './firebase';
-import { doc, getDoc } from 'firebase/firestore';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
