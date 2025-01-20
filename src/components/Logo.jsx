@@ -42,7 +42,7 @@ const Logo = () => {
         <Link href='/'>
           {/* LOGO HOVER EFFECT (DAYTIME) */}
           <Image
-            src={logoOnScroll ? "/logo/Logo Roastar-green.webp" : "/logo/Logo ROASTAR-beige.webp"}
+            src={logoOnScroll ? "/logo/Logo-ROASTAR-green.webp" : "/logo/Logo-ROASTAR-beige.webp"}
             alt="Roastar Logo Hover"
             className='roastar-logo-hover'
             height={50}
@@ -51,7 +51,7 @@ const Logo = () => {
           />
           {/* DAYTIME LOGO */}
           <Image 
-            src="/logo/Logo ROASTAR-white.webp"
+            src="/logo/Logo-ROASTAR-white.webp"
             alt="Roastar Logo Daytime"
             className={`roastar-logo-daytime ${logoOnScroll ? 'logo-active' : ''}`}
             height={50}
@@ -60,7 +60,7 @@ const Logo = () => {
           />
           {/* NIGHTTIME LOGO / prefers-colors-scheme: dark */}
           <Image
-            src="/logo/Logo ROASTAR-white.webp"
+            src="/logo/Logo-ROASTAR-white.webp"
             alt="Roastar Logo Nighttime"
             className={`roastar-logo-nighttime ${logoOnScroll ? 'logo-active' : ''}`}
             height={50}

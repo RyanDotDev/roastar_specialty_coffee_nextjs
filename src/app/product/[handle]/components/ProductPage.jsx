@@ -27,8 +27,8 @@ const ProductPage = () => {
       setLoading(true)
       try {
         const [productRes, relatedRes] = await Promise.all([
-          fetch(`/api/shopify/${handle}`, { cache: 'no-store' }),
-          fetch('/api/shopify/related-products', { cache: 'no-store' }),
+          fetch(`/api/shopify/${handle}`, { cache: 'no-cache' }),
+          fetch('/api/shopify/related-products', { cache: 'no-cache' }),
         ]);
         if (!productRes || !relatedRes) {
           throw new Error('Failed to fetch data');

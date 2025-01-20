@@ -31,14 +31,6 @@
   z-index: 1;
 }
 
-.header-filter {
-  background-image: linear-gradient(hsl(96, 24%, 44%), hsl(0, 0%, 0%, 5%));
-  z-index: 1;
-  position: absolute;
-  height: 385px;
-  width: 100%;
-}
-
 .about-us-header img {
   filter: contrast(0.5) saturate(2.5);
   width: 100%;

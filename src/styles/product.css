@@ -102,7 +102,7 @@
   width: 60px;
   cursor: pointer;
   border: none;
-  background: none;
+  background: hsl(0, 0%, 100%, 0%) radial-gradient(circle, transparent 1%, hsl(0, 0%, 100%, 0%) 1%) center/15000%;
   padding: 1rem;
   transition: 
     background 300ms,
@@ -111,15 +111,16 @@
 
 .product-quantity button:hover {
   color: black;
-  background: white;
+  background: white radial-gradient(circle, transparent 1%, white 1%) center/15000%;
   transition: 
     background 300ms,
     color 300ms;
 }
 
 .product-quantity button:active {
-  color: black;
-  background: rgb(237, 237, 237);
+  background-color: hsl(0, 0%, 85%);
+  background-size: 100%;
+  transition: background 0s;
 }
 
 .product-quantity p {
@@ -170,10 +171,18 @@
     background 300ms, 
     border 300ms,
     color 300ms;
+  -webkit-transition: 
+    background 300ms, 
+    border 300ms,
+    color 300ms;
   &:before {
     transition: 
       background 300ms,
       border 300ms 
+      color 300ms;
+    -webkit-transition: 
+      background 300ms, 
+      border 300ms,
       color 300ms;
   }
   &:hover {
@@ -217,8 +226,12 @@
   padding: 1rem;
   border-radius: 5px;
   border: 2px solid white;
-  background: none;
+  background: hsl(0, 0%, 100%, 0%) radial-gradient(circle, transparent 1%, hsl(0, 0%, 100%, 0%) 1%) center/15000%;
   transition: 
+    background 300ms, 
+    border 300ms,
+    color 300ms;
+  -webkit-transiion:
     background 300ms, 
     border 300ms,
     color 300ms;
@@ -227,12 +240,22 @@
       background 300ms, 
       border 300ms,
       color 300ms;
+    -webkit-transiion:
+      background 300ms, 
+      border 300ms,
+      color 300ms;
   }
   &:hover {
-    background: white;
+    background: white radial-gradient(circle, transparent 1%, white 1%) center/15000%;
     border: 2px solid white;
     color: black;
   }
+}
+
+.add-to-cart:active {
+  background-color: hsl(0, 0%, 85%);
+  background-size: 100%;
+  transition: background 0s;
 }
 
 /* If product is sold out */

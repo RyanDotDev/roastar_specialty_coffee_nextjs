@@ -26,8 +26,8 @@ export const showSuccessToast = (message, type = "default") => {
     toast.error(message, config)
   } else {
     toast.success(message, config)
-  }
-}
+  };
+};
 
 export const showErrorToast = (message, type = "error") => {
   const config = {
@@ -48,14 +48,14 @@ export const showErrorToast = (message, type = "error") => {
         left: "50%", // Horizontally center
         transform: "translate(-50%, -50%)", // Offset by half its height and width
       },
-  }
+  };
 
   if (type === "error") {
     toast.error(message, config)
   } else {
     toast.success(message, config)
-  }
-}
+  };
+};
 
 export const ToastContainer = () => 
   <Toaster 

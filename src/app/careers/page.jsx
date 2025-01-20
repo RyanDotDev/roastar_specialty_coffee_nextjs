@@ -1,13 +1,13 @@
 import React from 'react'
 import Header from './components/Header'
-import Application from './components/Application'
+import CareersPage from './components/CareersPage'
 import '@/styles/careers.css'
 
 const page = () => {
   return (
     <div className='careers-container'>
       <Header />
-      <Application />
+      <CareersPage />
     </div>
   )
 }

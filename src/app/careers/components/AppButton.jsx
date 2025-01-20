@@ -3,7 +3,7 @@ import React, { useCallback, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import AppForm from './AppForm';
 
-const AppContent = () => {
+const AppButton = () => {
     const [applicationOpen, setApplicationOpen] = React.useState(false);
     const toggleApplication = useCallback(() => {
       setApplicationOpen((prev) => !prev);
@@ -39,4 +39,4 @@ const AppContent = () => {
   )
 }
 
-export default AppContent
+export default AppButton

@@ -230,7 +230,7 @@
   padding-top: 0.3rem;
   display: flex;
   gap: 0px;
-  background: white;
+  background: hsla(0, 0%, 0%, 0%);
   border: 2px solid black;
   width: 10.7em;
 }
@@ -242,6 +242,7 @@
   border-top-left-radius: 3px;
   border: none;
   padding: 16px;
+  background: hsla(0, 0%, 0%, 0%) radial-gradient(circle, transparent 1%, hsla(0, 0%, 0%, 0%) 1%) center/15000%;
   transition: 
     background 300ms,
     color 300ms;
@@ -255,6 +256,7 @@
   margin-left: 3.5rem;
   border-top-right-radius: 3px;
   padding: 16px;
+  background: hsla(0, 0%, 0%, 0%) radial-gradient(circle, transparent 1%, hsla(0, 0%, 0%, 0%) 1%) center/15000%;
   transition: 
     background 300ms,
     color 300ms;
@@ -262,15 +264,16 @@
 
 .product-preview-quantity button:hover {
   color: white;
-  background: black;
+  background: hsla(0, 0%, 0%, 100%) radial-gradient(circle, transparent 1%, hsla(0, 0%, 0%, 100%) 1%) center/15000%;
   transition: 
     background 300ms,
     color 300ms;
 }
 
 .product-preview-quantity button:active {
-  color: rgb(237, 237, 237);
-  background: rgb(22, 22, 22);
+  background-color: hsl(0, 0%, 85%);
+  background-size: 100%;
+  transition: background 0s;
 }
 
 .preview-disabled {
@@ -348,7 +351,7 @@
   padding: 1rem;
   border-radius: 5px;
   border: 2px solid black;
-  background: none;
+  background: hsla(0, 0%, 0%, 0%) radial-gradient(circle, transparent 1%, hsla(0, 0%, 0%, 0%) 1%) center/15000%;
   transition: 
     background 300ms, 
     border 300ms,
@@ -360,10 +363,16 @@
       color 300ms;
   }
   &:hover {
-    background: black;
+    background: black radial-gradient(circle, transparent 1%, black 1%) center/15000%;
     border: 2px solid black;
     color: white;
   }
+}
+
+.product-preview-details .product-add-to-cart:active {
+  background-color: hsl(0, 0%, 42%);
+  background-size: 100%;
+  transition: background 0s;
 }
 
 .product-add-to-cart:disabled {
@@ -388,7 +397,7 @@
   padding: 1rem;
   border-radius: 5px;
   border: 2px solid var(--btn-green);
-  background: var(--btn-green);
+  background: var(--btn-green) radial-gradient(circle, transparent 1%, var(--btn-green) 1%) center/15000%;
   transition: 
     background 300ms, 
     border 300ms,
@@ -400,10 +409,16 @@
       color 300ms;
   }
   &:hover {
-    background: rgb(238, 238, 238);
+    background: hsl(0, 0%, 93%) radial-gradient(circle, transparent 1%, hsl(0, 0%, 93%) 1%) center/15000%;
     border: 2px solid rgb(238, 238, 238);
     color: black;
   }
+}
+
+.product-preview-details .product-purchase:active {
+  background-color: hsl(0, 0%, 85%);
+  background-size: 100%;
+  transition: background 0s;
 }
 
 .product-purchase:disabled {

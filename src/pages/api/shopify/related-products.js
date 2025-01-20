@@ -1,4 +1,4 @@
-import { fetchShopifyData } from "@/lib/api/shopify/route";
+import { fetchShopifyData } from "./route";
 
 export default async function fetchRelatedProducts(req, res) {
   try {
@@ -36,7 +36,7 @@ export default async function fetchRelatedProducts(req, res) {
     if (!data || !data.products || !data?.products?.edges) {
       throw new Error("Invalid response from Shopify");
     }
-    res.setHeader('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
+    res.setHeader('Cache-Control', 'no-store');
     res.status(200).json({ products: data?.products?.edges });
   } catch(error) {
     console.error("Error in API route:", error);

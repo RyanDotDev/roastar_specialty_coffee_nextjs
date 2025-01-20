@@ -16,7 +16,7 @@ const Footer = () => {
       <div className='footer-container'>
         <div className='footer-address'>
           <Image
-            src='/logo/Logo ROASTAR-white.webp'
+            src='/logo/Logo-ROASTAR-white.webp'
             alt='Roastar Footer Image'
             height={80}
             width={180}

@@ -31,7 +31,7 @@ const Banner = () => {
         <img 
           className='slider-one-image'
           style={{ position: 'absolute', zIndex: 2 }} 
-          src='/logo/Logo ROASTAR-white.webp'
+          src='/logo/Logo-ROASTAR-white.webp'
           loading='eager'
         />
         {/* SLIDER ONE TEXT*/}
@@ -116,15 +116,6 @@ const Banner = () => {
             key={index}
             className={`dot ${activeSlide === index ? 'active-slide' : ''}`}
             onClick={() => setActiveSlide(index)}
-            style={{
-              cursor: 'pointer',
-              width: '15px',
-              height: '15px',
-              borderRadius: '50%',
-              background: activeSlide === index ? 'white' : 'var(--main-green)',
-              margin: '0 5px',
-              zIndex: 3,
-            }}
           ></div>
         ))}
       </div>

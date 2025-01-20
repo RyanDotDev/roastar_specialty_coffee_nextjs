@@ -20,7 +20,7 @@ const ProductPreview = ({ handle, handleClose }) => {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const res = await fetch(`/api/shopify/${handle}`);
+        const res = await fetch(`/api/shopify/${handle}`, { cache: 'no-cache'});
         if (!res.ok) throw new Error ("Product not found or server error")
         const data = await res.json()
         setProduct(data);

@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import emailjs from '@emailjs/browser';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import Link from 'next/link';
@@ -39,12 +38,12 @@ const AppForm = ({ handleClose }) => {
   };
 
   // For params in email.js
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [job, setJob] = useState('');
-  const [rightToWork, setRightToWork] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [job, setJob] = useState("");
+  const [rightToWork, setRightToWork] = useState("");
   const [resume, setResume] = useState(0);
   
   // This target each specific input field
@@ -61,16 +60,43 @@ const AppForm = ({ handleClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Example validations
+  if (!/^[A-Za-z]{2,16}$/.test(firstName)) {
+    showErrorToast('First name must be between 2 and 16 letters.');
+    return;
+  }
+  if (!/^[A-Za-z]{2,16}$/.test(lastName)) {
+    showErrorToast('Last name must be between 2 and 16 letters.');
+    return;
+  }
+  if (!/\S+@\S+\.\S+/.test(email)) {
+    showErrorToast('Please enter a valid email address.');
+    return;
+  }
+  if (!/^[+][0-9]{11,14}$/.test(phoneNumber)) {
+    showErrorToast('Phone number must include a country code and be 11-14 digits.');
+    return;
+  }
+  if (!job) {
+    showErrorToast('Please select a job role.');
+    return;
+  }
+  if (!rightToWork) {
+    showErrorToast('Please confirm your right to work in the UK.');
+    return;
+  }
+  if (!resume || (resume.size > 5 * 1024 * 1024)) {
+    showErrorToast('Please upload a resume under 5MB.');
+    return;
+  }
+
     try {
       const formData = new FormData();
       formData.append('file', resume);
 
       const uploadResponse = await fetch('api/firebase/upload', {
         method: 'POST',
-        body: JSON.stringify({ file: resume }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        body: formData,
       });
 
       if (!uploadResponse.ok) throw new Error('Failed to upload resume');
@@ -94,23 +120,15 @@ const AppForm = ({ handleClose }) => {
         },
       });
 
-      if (!response.ok) throw new Error('Failed to submit application');
+      if (!response.ok) {
+        throw new Error('Failed to submit application');
+      }
       console.log('Application submitted successfully')
-
-      setFirstName('');
-      setLastName('');
-      setEmail('');
-      setPhoneNumber('');
-      setJob('');
-      setRightToWork('');
-      setResume(null);
       router.push('/submit')
     } catch(error) {
       console.error('Error submitting application:', error);
       showErrorToast('Error submitting application. Please try again later.');
     }
-
-    router.push('/submit');
   }
 
   return (
@@ -130,7 +148,7 @@ const AppForm = ({ handleClose }) => {
           <X size={30}/>
         </button>
         <img 
-          src='/logo/Logo ROASTAR-white.webp'
+          src='/logo/Logo-ROASTAR-white.webp'
           width={150}
         />
         <form onSubmit={handleSubmit} className='app-form'>

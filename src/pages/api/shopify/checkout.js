@@ -1,4 +1,4 @@
-import { fetchShopifyData } from "@/lib/api/shopify/route";
+import { fetchShopifyData } from "./route";
 
 export default async function createCheckout(req, res) {
   if (req.method !== 'POST') {

@@ -1,8 +1,8 @@
 "use client"
 import React, { useEffect } from 'react'
-import AppContent from './AppContent'
+import AppButton from './AppButton'
 
-const Application = () => {
+const CareersPage = () => {
   const [vacancy, setVacancy] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
@@ -14,11 +14,15 @@ const Application = () => {
         const response = await fetch('/api/firebase/vacancies?jobId=1', { cache: 'no-store' });
         if (!response.ok) throw new Error("Failed to fetch vacancy")
         const data = await response.json();
-        setVacancy({
-          ...data,
-          status: data.isOpen ? "open" : "closed",
-          message: data.isOpen ? "Interested? Apply down below." : "No vacancies available.",
-        });
+        if (data && typeof data === 'object') {
+          setVacancy({
+            ...data,
+            status: data.isOpen ? "open" : "closed",
+            message: data.isOpen ? "Interested? Apply down below." : "No vacancies available.",
+          });
+        } else {
+          throw new Error('Invalid vacancy data received')
+        }
         setError(null);
       } catch(error) {
         console.error("Error fetching vacancy status:", error);
@@ -115,7 +119,7 @@ const Application = () => {
               <>
                 {/* If vacancies are available */}
                 <p>{vacancy.message}</p>
-                <AppContent />
+                <AppButton />
               </>
             ) : (
               <>
@@ -130,4 +134,4 @@ const Application = () => {
   )
 }
 
-export default Application
+export default CareersPage

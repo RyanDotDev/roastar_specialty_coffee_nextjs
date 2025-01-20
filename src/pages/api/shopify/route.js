@@ -2,7 +2,7 @@ import { LRUCache } from "lru-cache";
 
 const cache = new LRUCache({
   max: 100,
-  ttl: 1000 * 60,
+  ttl: 1000 * 10,
 })
 
 export async function fetchShopifyData(query, variables = {}) {
