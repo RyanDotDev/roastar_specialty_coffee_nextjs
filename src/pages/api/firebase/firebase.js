@@ -12,4 +12,6 @@ if (!admin.apps.length) {
 } 
 
 const db = admin.firestore(); // Use the initialized app
-export { db };
+const storage = admin.storage().bucket();
+
+export { db, storage };

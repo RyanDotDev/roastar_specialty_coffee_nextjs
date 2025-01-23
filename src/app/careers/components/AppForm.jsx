@@ -5,9 +5,16 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Backdrop from '@/utils/popups/application/Backdrop';
 import { animate } from '@/utils/popups/application/animation';
-import { showErrorToast } from '@/lib/utils/toasts/toast';
+import { showErrorToast, showSuccessToast } from '@/lib/utils/toasts/toast';
 
 const AppForm = ({ handleClose }) => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [job, setJob] = useState("");
+  const [rightToWork, setRightToWork] = useState("");
+  const [resume, setResume] = useState(null);
   // To set focus on each input field and return error when field is not properly filled
   const [focused, setFocused] = React.useState({});
   const router = useRouter();
@@ -18,6 +25,7 @@ const AppForm = ({ handleClose }) => {
   // Give the selected file a name when selected
   let handleFile = (file) => {
     setFileName(file?.name)
+    setResume(file)
   }
 
   // Create a reference to the hidden file input element
@@ -25,7 +33,7 @@ const AppForm = ({ handleClose }) => {
 
   // Programatically click the hidden file input element
   // when the Button component is clicked
-  const handleClick = event => {
+  const handleClick = () => {
     hiddenFileInput.current.click();
   };
 
@@ -33,22 +41,17 @@ const AppForm = ({ handleClose }) => {
   // to handle the user-selected file 
   const handleChange = event => {
     const fileUploaded = event.target.files[0];
-    handleFile(fileUploaded);
-    console.log('upload successful')
+    if (fileUploaded) {
+      handleFile(fileUploaded);
+      console.log('upload successful')
+    }
   };
 
   // For params in email.js
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [job, setJob] = useState("");
-  const [rightToWork, setRightToWork] = useState("");
-  const [resume, setResume] = useState(0);
   
   // This target each specific input field
   const handleBlur = (e) => {
-    setFocused(prev => ({...prev, [e.target.name]: true}))
+    setFocused(prev => ({ ...prev, [e.target.name]: true }))
   }
 
   // For focusing the input field for correct information
@@ -60,76 +63,59 @@ const AppForm = ({ handleClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Example validations
-  if (!/^[A-Za-z]{2,16}$/.test(firstName)) {
-    showErrorToast('First name must be between 2 and 16 letters.');
-    return;
-  }
-  if (!/^[A-Za-z]{2,16}$/.test(lastName)) {
-    showErrorToast('Last name must be between 2 and 16 letters.');
-    return;
-  }
-  if (!/\S+@\S+\.\S+/.test(email)) {
-    showErrorToast('Please enter a valid email address.');
-    return;
-  }
-  if (!/^[+][0-9]{11,14}$/.test(phoneNumber)) {
-    showErrorToast('Phone number must include a country code and be 11-14 digits.');
-    return;
-  }
-  if (!job) {
-    showErrorToast('Please select a job role.');
-    return;
-  }
-  if (!rightToWork) {
-    showErrorToast('Please confirm your right to work in the UK.');
-    return;
-  }
-  if (!resume || (resume.size > 5 * 1024 * 1024)) {
-    showErrorToast('Please upload a resume under 5MB.');
+  if (!resume) {
+    showErrorToast('Please upload a valid CV before submitting.');
     return;
   }
 
-    try {
-      const formData = new FormData();
-      formData.append('file', resume);
+  try {
+    // Create FormData and append the file
+    const formData = new FormData();
+    formData.append('file', resume); // Use 'resume' instead of 'selectedFile'
 
-      const uploadResponse = await fetch('api/firebase/upload', {
-        method: 'POST',
-        body: formData,
-      });
+    // Upload the file and get the public URL
+    const uploadResponse = await fetch('/api/firebase/upload', {
+      method: 'POST',
+      body: formData,
+    });
 
-      if (!uploadResponse.ok) throw new Error('Failed to upload resume');
-      const { downloadUrl } = await uploadResponse.json();
+    if (!uploadResponse.ok) {
+      throw new Error('Failed to upload resume');
+    }
 
-      const applicationData = {
-        firstName,
-        lastName,
-        email,
-        phoneNumber,
-        job,
-        rightToWork,
-        resumeUrl: downloadUrl,
-      };
+    const { downloadUrl } = await uploadResponse.json(); // Assume API returns { downloadUrl }
 
-      const response = await fetch('/api/firebase/apply', {
-        method: 'POST',
-        body: JSON.stringify(applicationData),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      });
+    // Prepare application data with the uploaded file URL
+    const applicationData = {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      job,
+      rightToWork,
+      resumeUrl: downloadUrl, // Use the public URL of the uploaded file
+    };
 
-      if (!response.ok) {
-        throw new Error('Failed to submit application');
-      }
-      console.log('Application submitted successfully')
-      router.push('/submit')
-    } catch(error) {
+    // Submit application
+    const response = await fetch('/api/firebase/apply', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(applicationData),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to submit application');
+    }
+
+      console.log('Application submitted successfully');
+      showSuccessToast('Application submitted successfully!');
+    } catch (error) {
       console.error('Error submitting application:', error);
       showErrorToast('Error submitting application. Please try again later.');
     }
-  }
+  };
 
   return (
     <Backdrop>
@@ -266,14 +252,12 @@ const AppForm = ({ handleClose }) => {
               <span style={{position: 'relative', top: '0.6em'}}>Please upload cv</span>
             </div>
           </div>
-          <Link href='/submit'>
             <button 
               disabled={!firstName | !lastName | !email | !phoneNumber | !job | !rightToWork | !resume }
               className='submit-btn'
             >
               <span>SUBMIT</span>
             </button>
-          </Link>
         </form>
       </motion.div>
     </Backdrop>
