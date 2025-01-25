@@ -13,7 +13,7 @@ const Logo = () => {
         '/': 650,
         '/about': 1,
         '/shop': 1,
-        '/menu': 0,
+        '/menu': 1,
         '/contact': 1,
         '/careers': 180,
         '/privacy': 1,

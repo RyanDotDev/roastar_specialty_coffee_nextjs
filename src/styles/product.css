@@ -8,6 +8,7 @@
 
 /* If product not found */
 .pnf-container {
+  background: var(--main-green);
   height: 50rem;
   text-align: center;
   color: white;

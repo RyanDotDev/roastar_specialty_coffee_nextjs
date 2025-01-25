@@ -4,7 +4,7 @@ export default async function fetchCartSlideProducts(req, res) {
   try {
     const query = `
       {
-        products(first: 5, reverse: true) {
+        products(first: 5) {
           edges {
             node {
               id

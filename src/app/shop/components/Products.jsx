@@ -9,6 +9,7 @@ import Loader from './Loader';
 const Products = ({ addToCart }) => {
   const [productsList, setProductsList] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
   const [selectedProduct, setSelectedProduct] = React.useState(null);
   // handles for opening and closing preview of product
   const handleOpenModal = (handle) => setSelectedProduct(handle);
@@ -24,6 +25,7 @@ const Products = ({ addToCart }) => {
         setProductsList(data.products || [])
       } catch (error) {
         console.error("Error fetching product list:", error);
+        setError('Sorry, something went wrong')
       } finally {
         setLoading(false);
       }
@@ -47,6 +49,7 @@ const Products = ({ addToCart }) => {
     }, [selectedProduct]);
 
   if (loading) return <Loader />
+  if (error) return <div className='products-not-found'><p>{error}</p></div>
 
   return (
     <div className="product-container">

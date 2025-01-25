@@ -1,6 +1,33 @@
 .menu {
-  background: white;
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
+  background: var(--main-green);
+}
+
+.menu-header {
+  text-align: center;
+  padding-top: 3em;
+  height: 250px;
+}
+
+.menu-header h1 {
+  padding-top: 1.5em;
+  font-size: 3rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: white;
+}
+
+.menu-page {
+  text-align: center;
+}
+
+.menu-page p {
+  color: white;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+.menu-page img {
+  padding-right: 1rem;
+  padding-left: 1rem;
+  object-fit: contain;
 }

@@ -13,7 +13,7 @@ const CartSlider = ({ initialProducts = [] }) => {
     if (products.length > 0) return;
       const getProducts = async () => {
         try {
-          const response = await fetch('/api/shopify/cart-slider')
+          const response = await fetch('/api/shopify/cart-slider', { cache: 'no-cache' })
           if (!response.ok) throw new Error('Failed to fetch products'); // Check the data structure here
           const data = await response.json()
           setProducts(data.products || [])
@@ -57,7 +57,7 @@ const CartSlider = ({ initialProducts = [] }) => {
             <Link href={`/product/${node.handle}`} style={{ textDecoration: 'none', color: 'black' }}>
               {node.images.edges.length > 0 && (
                 <Image 
-                  src={`${node.images.edges[0].node.src}?width=150&height=130`}
+                  src={node.images.edges[0].node.src}
                   alt={node.title}
                   width={150}
                   height={130}

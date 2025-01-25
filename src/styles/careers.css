@@ -74,8 +74,9 @@
 
 .app-text p {
   padding-top: 1em;
-  font-size: 20px;
-  font-weight:200;
+  font-size: 1.1rem;
+  font-weight:300;
+  letter-spacing: 1px;
 }
 
 .apply {
@@ -124,12 +125,14 @@
 }
 
 .app-card {
-  position: fixed;
-  top: 1em;
-  left: 30%;
+  position: absolute;
   border-radius: 5px;
-  background-image: linear-gradient(to bottom,  #1c8d58 0%,#1c8d58 10%,#ffffff 10%,#ffffff 100%);
-  width: 40%;
+  top: 1em;
+  left: 0;
+  right: 0;
+  background-image: linear-gradient(to bottom,  var(--btn-green) 0%, var(--btn-green) 10%,#ffffff 10%,#ffffff 100%);
+  margin: auto;
+  width: 580px;
   height: 670px;
   box-shadow: 5px 5px 30px 5px hsl(0, 0%, 0%, 60%);
   z-index: 102;
@@ -153,14 +156,14 @@
   transform: scale(0.90);
 }
 
-.app-card img {
-  padding-top: 0.4em;
-  margin-left: 2.5em;
-}
-
 .app-form {
   display: block;
   padding-top: 1.5em;
+}
+
+.app-card img {
+  padding-top: 0.4em;
+  margin-left: 2.5em;
 }
 
 .app-form h3 {
@@ -170,121 +173,121 @@
 }
 
 .form-content {
+  border-top: 1px solid hsl(0, 0%, 0%, 10%);
+  border-bottom: 1px solid hsl(0, 0%, 0%, 10%);
   position: relative;
-  margin-top: -1.5em;
+  margin: 1rem;
+  margin-right: 1.5rem;
+  margin-left: 1.5rem;
+  max-height: 31rem;
+  overflow-y: auto;
 }
-
-.form-content input:invalid[data-focused="true"] ~ span {
-  padding-left: 4.3vw;
-  text-align: left;
-  position: relative;
-  top: 2.3rem;
-  font-size: 12px;
-  display: block;
-  color: red;
-  z-index: 1;
-}
-
 
 .form-content input {
   position: relative;
-  top: 2rem;
-  width: 80%;
-  height: 40px;
+  top: 0rem;
+  width: 100%;
+  height: 50px;
   border: 1px solid hsl(0, 0%, 0%, 30%);
   border-radius: 5px;
-  margin-top: 1em;
+  margin-top: 1rem;
   padding-left: 1em;
-}
-
-.form-content span {
-  display: none;
-}
-
-.job p {
-  letter-spacing: 0px;
-  text-align: left;
-  font-size: 14px;
-  position: relative;
-  top: 0.4em;
-  padding-left: 10.7%;
-}
-
-.rtw p {
-  letter-spacing: 0px;
-  text-align: left;
-  font-size: 14px;
-  position: relative;
-  top: 0.4em;
-  padding-left: 10.7%;
 }
 
 .form-content select {
+  cursor: pointer;
   background: url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ljk1IDEwIj48ZGVmcz48c3R5bGU+LmNscy0ye2ZpbGw6IzQ0NDt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmFycm93czwvdGl0bGU+PHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjEuNDEgNC42NyAyLjQ4IDMuMTggMy41NCA0LjY3IDEuNDEgNC42NyIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIzLjU0IDUuMzMgMi40OCA2LjgyIDEuNDEgNS4zMyAzLjU0IDUuMzMiLz48L3N2Zz4=) no-repeat 100% 50%;
   appearance: none;
-  margin-top: 1em;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   padding-left: 1em;
-  height: 40px;
-  width: 80%;
+  height: 50px;
+  width: 100%;
   border: 1px solid hsl(0, 0%, 0%, 30%);
   border-radius: 5px;
   position: relative;
   z-index: 1;
 }
 
-.form-content select:invalid[data-focused="true"] ~ span {
-  padding-left: 4.3vw;
+.form-content .input-error {
+  font-size: 0.8rem;
+  letter-spacing: 1px;
   text-align: left;
-  position: relative;
-  top: 0.3em;
-  font-size: 12px;
-  display: block;
   color: red;
+  margin-top: 0rem;
+  margin-bottom: rem;
 }
 
-.form-content option {
-  position: relative;
-  top: 5em;
+.form-content .input-error::before {
+  display: inline;
+  content: "⚠ ";
 }
 
-.first-name {
-  position: relative;
-  z-index: 3;
+.form-content .error {
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  text-align: left;
+  font-weight: 500;
+  color: red;
+  margin-top: -1rem;
+  margin-bottom: 1rem;
 }
 
-.last-name {
-  position: relative;
-  z-index: 2;
+.form-content .error::before {
+  display: inline;
+  content: "⚠ ";
 }
 
-.email {
+.job p {
+  letter-spacing: 1px;
+  font-weight: 400;
+  text-align: left;
+  font-size: 14px;
   position: relative;
-  z-index: 1;
+  margin-top: -1rem;
 }
 
-.phone-number {
+.rtw p {
+  letter-spacing: 1px;
+  font-weight: 400;
+  text-align: left;
+  font-size: 14px;
   position: relative;
+  margin-top: 0rem;
 }
 
 .cv {
   position: relative;
   text-align: center;
-  margin-top: 0.8em;
+  margin-top: 0rem;
 }
 
 .cv span {
   position: relative;
+  display: none;
 }
 
 .button-upload {
+  color: white;
   text-align: center;
+  margin-top: 1rem;
   cursor: pointer;
-  width: 80%;
-  height: 40px;;
+  width: 100%;
+  height: 50px;;
   border: none;
   border-radius: 5px;
-  color: white;
   background: var(--btn-green);
+  transition: 
+    background 300ms,
+    color 300ms;
+}
+
+.button-upload:hover {
+  background: hsla(0, 0%, 92%, 0.3);
+  color: black;
+  transition: 
+    background 300ms,
+    color 300ms;
 }
 
 .button-upload p {
@@ -297,38 +300,26 @@
 }
 
 .button-upload:active {
-  font-size: 13px;
-  box-shadow: 1px 1px 2px 1px var(--btn-green);
-}
-
-.cv input:invalid[data-focused="true"] ~ span {
-  padding-left: 4.3vw;
-  text-align: left;
-  position: relative;
-  top: 2.7em;
-  font-size: 12px;
-  display: block;
-  color: red;
+  transform: scale(0.98);
 }
 
 .job {
   position: relative;
-  top: 1em;
+  top: 1rem;
 }
 
 .submit-btn {
-  position: absolute;
-  top: 39rem;
-  margin-top: 0em;
-  margin-left: -3em;
-  margin-right: -3em;
+  position: relative;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  width: 200px;
   cursor: pointer;
   font-weight: 500;
-  font-size: 1rem;
+  font-size: 0.8rem;
   border-radius: 4px;
   letter-spacing: 1.5px;
   border: none;
-  padding: 10px;
+  padding: 1rem;
   background: #1c8d58;
   color: white;
   transition: background 300ms;
@@ -368,11 +359,6 @@
     text-align: center;
   }
 
-  .app-card {
-    left: 19%;
-    width: 60%;
-  }
-
   .close-div {
     left: 73%;
     right: 73%;
@@ -402,15 +388,14 @@
     font-size: 45px;
     font-weight: 400;
   }
+
+  .app-card {
+    width: 95%;
+  }
   
   .close-div {
     left: 80%;
     right: 80%;
-  }
-
-  .app-card {
-    left: 5%;
-    width: 90%;
   }
 
   .form-content input:invalid[data-focused="true"] ~ span {

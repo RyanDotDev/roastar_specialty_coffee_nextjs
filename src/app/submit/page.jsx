@@ -17,6 +17,7 @@ const page = () => {
       <div className='application-sent'>
         <CircleCheckBig size={200} strokeWidth={0.7} style={{ color: 'var(--btn-green)' }} />
         <p>Thank you for your application!</p>
+        <p>You should hear from us soon.</p>
       </div>
     </div>
   )

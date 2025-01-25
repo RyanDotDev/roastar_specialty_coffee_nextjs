@@ -31,7 +31,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Run multer middleware
     await runMiddleware(req, res, upload.single('file'));
 
     const file = req.file;
