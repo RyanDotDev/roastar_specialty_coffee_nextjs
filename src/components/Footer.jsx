@@ -12,8 +12,8 @@ const Footer = () => {
   const pathname  = usePathname();
 
   return (
-    <footer className='footer'>
-      <div className='footer-container'>
+    <footer className='footer-container'>
+      <div className='footer-left-section'>
         <div className='footer-address'>
           <Image
             src='/logo/Logo-ROASTAR-white.webp'
@@ -26,6 +26,11 @@ const Footer = () => {
             <li>BROMLEY</li>
             <li>BR1 1QX</li>
           </ul>
+          {/*<div className='opening-times'>
+            <p>MONDAY - FRIDAY | 7:45am - 5pm</p>
+            <p>SATURDAY | 8am - 5:30pm</p>
+            <p>SUNDAY | 9am - 5pm</p>
+          </div>*/}
           <div className='phone-no'>
             <p>020 4559 2984</p>
           </div>
@@ -35,9 +40,9 @@ const Footer = () => {
             <Link href='https://www.instagram.com/roastar.coffee/'>
               <InstagramIcon
                 className='insta'
-                style={{fontSize: '2rem'}}
+                style={{ fontSize: '2rem' }}
               />
-           </Link>
+            </Link>
           </p>
           <p>
             <Link href='https://www.facebook.com/roastarcoffeeuk'>
@@ -48,10 +53,12 @@ const Footer = () => {
                   position: 'relative',
                   top: '-0.05em'
                 }}
-            />
+              />
             </Link>
           </p>
         </div>
+      </div>
+      <div className='footer-right-section'>
         <div className='footer-nav'>
           <div className={`footer-links ${'/about' === pathname && 'active-footer'}`}>
             <Link 
@@ -59,7 +66,7 @@ const Footer = () => {
             >
               ABOUT US
             </Link>
-          </div>
+            </div>
           <div className={`footer-links ${'/contact' === pathname && 'active-footer'}`}>
             <Link 
               href='/contact'
@@ -81,36 +88,29 @@ const Footer = () => {
               SHOP
             </Link>
           </div>
-          <div className={`footer-links ${'/privacy' === pathname && 'active-footer'}`}>
+         <div className={`footer-links ${'/privacy' === pathname && 'active-footer'}`}>
             <Link  
               href={'/privacy'} 
             >
               PRIVACY NOTICE
             </Link>
           </div>
-          <div style={{textAlign: 'center'}}>
-            <span 
+          <div className='copyright'>
+            <Copyright 
+              size={12}
               style={{
-                color: 'white', 
                 position: 'relative',
-                left: '5px',
-                fontSize: '12px'
-              }}>
-              <Copyright 
-                size={12}
-                style={{
-                  position: 'relative',
-                  top: '1.5px',
-                  left: '-5px'
-                }}
-              />
-                Copyright 2025. Roastar Coffee. All Rights Reserved
-            </span>
+                top: '1.5px',
+                marginRight: '0.2rem'
+              }}
+            />
+              Copyright 2025. Roastar Coffee. All Rights Reserved
           </div>
           <div className='payment-icons'>
-            <img src='/icon/payment_visa_icon.svg' alt="Visa" width="60" />
-            <img src='/icon/payment_mastercard_icon.svg' alt="Visa" width="60" />
-            <img src='/icon/payment_paypal_icon.svg' alt="Visa" width="60" />
+             <img className='shopify-logo' src='/icon/shopify_bag.webp' alt="Visa" width="60" />
+            <img className='visa-logo' src='/icon/payment_visa_icon.svg' alt="Visa" width="60" />
+            <img className='mastercard-logo' src='/icon/mastercard.webp' alt="Visa" width="60" />
+            <img className='paypal-logo' src='/icon/payment_paypal_icon.svg' alt="Shopify" width="60" />
           </div>
         </div>
       </div>

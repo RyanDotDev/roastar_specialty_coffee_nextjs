@@ -35,7 +35,7 @@ const Banner = () => {
           loading='eager'
         />
         {/* SLIDER ONE TEXT*/}
-        <h2 className='slider-one-text' style={{ position: 'absolute', zIndex: 2 }}>Welcome to our shop!</h2>
+        <h2 className='slider-one-text' style={{ position: 'absolute', zIndex: 2 }}>Welcome!</h2>
         {/* SLIDER ONE BACKGROUND */}
         <div style={{ zIndex: 1 }}>
           <img
@@ -63,10 +63,12 @@ const Banner = () => {
         }}
       >
         {/* SLIDE TWO TEXT */}
-        <h1 className='slider-two-header' style={{ position: 'absolute', zIndex: 2 }}>COCONUT COFFEE</h1>
-        <h2 className='slider-two-text' style={{ position: 'absolute', zIndex: 2 }}>
-          Try our coconut coffee! One of our most beloved.
-        </h2>
+        <div className='slider-two-container'>
+          <h1 className='slider-two-header'>COCONUT COFFEE</h1>
+          <h2 className='slider-two-text'>
+            Try our coconut coffee! One of our most beloved.
+          </h2>
+        </div>
         {/* SLIDE TWO BACKGROUND */}
         <div style={{ zIndex: 1 }}>
           <img
@@ -94,10 +96,12 @@ const Banner = () => {
         }}
       >
         {/* SLIDE TWO TEXT */}
-        <h1 className='slider-three-header' style={{ position: 'absolute', zIndex: 2 }}>ENJOY OUR SERVICE</h1>
-        <h2 className='slider-three-text' style={{ position: 'absolute', zIndex: 2 }}>
-          Eat, drink, chat and enjoy yourselves and our service.
-        </h2>
+        <div className='slider-three-container'>
+          <h1 className='slider-three-header'>ENJOY OUR SERVICE</h1>
+          <h2 className='slider-three-text'>
+            Eat, drink, chat and enjoy yourselves and our service.
+          </h2>
+        </div>
         <img
           className='slider-three'
           src='/images/roastar_social_image.webp'
@@ -105,7 +109,7 @@ const Banner = () => {
           height={720}
           width={1440}
           loading='lazy'
-          style={{ width: '100%', objectFit: 'cover', }}
+          style={{ width: '100%', objectFit: 'cover' }}
         />
       </div>
 

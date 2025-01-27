@@ -823,35 +823,18 @@ body {
 }
 
 /* For Footer.jsx */
-.footer {
+.footer-container {
+  color: white;
   width: 100vw;
   height: 400px;
-  text-align: center;
   position: relative; 
   top: 9.5rem;
+  padding: 2rem;
   background-color: hsl(96, 24%, 44%);
-  /*background-color: hsl(0%, 0%, 11%) */ 
-  bottom: 0px;
-  left: 50%;
-  -webkit-transform: translate(-50%, 0%);
-  transform: translate(-50%, 0);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   z-index: 99;
-}
-
-.footer-container {
-  padding: 50px;
-  position: relative;
-}
-
-.footer-nav {
-  position: relative; 
-  top: -12em; 
-  text-align: left;
-  float: right;
-  display: grid;
-  grid-template: repeat(1, 1fr) / repeat(1, 1fr);
-  gap: 20px;
-  list-style-type: none;
 }
 
 .active-footer {
@@ -860,6 +843,24 @@ body {
   text-underline-offset: 11.4px;
   text-decoration-thickness: 2px;
   z-index: 1;
+}
+
+.footer-left-section {
+  margin-top: 1rem;
+}
+
+.footer-address img {
+  position: relative;
+  left: -0.4rem;
+  width: 18em;
+  height: 6em;
+}
+
+.footer-address ul {
+  font-weight: 600;
+  list-style-type: none;
+  position: relative;
+  left: 0em;
 }
 
 .footer-links a {
@@ -891,26 +892,6 @@ body {
   }
 }
 
-.footer-address {
-  color: white;
-  text-align: left;
-  display: block;
-}
-
-.footer-address img {
-  width: 18em;
-  height: 6em;
-  position: relative; 
-  left: -6.5px;
-}
-
-.footer-address ul {
-  font-weight: 600;
-  list-style-type: none;
-  position: relative;
-  left: 0em;
-}
-
 .address {
   letter-spacing: 1.5px;
   text-align: left;
@@ -923,6 +904,14 @@ body {
   letter-spacing: 1.5px;
   font-weight: 600;
   padding-top: 20px;
+}
+
+.opening-times {
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .socials {
@@ -938,10 +927,42 @@ body {
   color: white;
 }
 
+.footer-right-section {
+  margin-top: 1.5rem;
+}
+
+.footer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.copyright {
+  color: white;
+  font-size: 0.8rem;
+}
+
 .payment-icons {
+  position: relative;
+  left: -10px;
   display: flex;
   gap: 30px;
 }
+
+/*
+.shopify-logo {
+  filter: brightness(15) saturate(0);
+}
+
+.visa-logo, .paypal-logo {
+  filter: brightness(5);
+}
+
+.mastercard-logo {
+  filter: brightness(4);
+}
+*/
+
 /* For submit when someone submits an application */
 .submit-container {
   background: grey;
@@ -964,11 +985,19 @@ body {
     }
   }
 
+  /* this will transform all of the hamburger slices into a crossmark */
+  .nav-list-mobile input:checked ~ span {
+    opacity: 1;
+    transform: rotate(-45deg) translate(2px, 2px) scale(.94, 1);
+    position: relative;
+    background: white;
+  }
+
   .mobile-backdrop {
     position: fixed;
     width: 100%;
     height: 105vh;
-    background: hsla(0, 0%, 11%, 0.9);
+    background: hsla(0, 0%, 11%);
     z-index: 102;
   }
 
@@ -1039,73 +1068,27 @@ body {
     display: block;
   }
   
-  .footer {
-    position: relative;
-    height: 650px; 
-    width: 100vw;
-    left: 50vw;
-    padding: 0 !important;
-  }
-
   .footer-container {
+    display: block;
     text-align: center;
+    height: auto; 
   }
 
-  .footer-nav {
+  .footer-address img {
     position: relative;
-    top: 3em;
-    left: -.5em;
-    text-align: center;
-    float: inherit;
+    left: 0rem;
   }
 
-  .footer-address {
-    text-align: center;
+  .address {
+    justify-content: center;
     margin-right: -1rem;
     margin-left: -1rem;
   }
 
-  .footer-address img {
-    left: 1px;
-  }
-
-  .address {
-    position: relative;
-    gap: 20px;
-    display: flex;
-  }
-
-  .footer-address ul {
-    justify-content: center;
-    position: relative;
-    left: 0em;
-  }
-
-  .phone-no {
-    margin-right: 1em;
-  }
-
   .socials {
-    position: relative;
-    gap: 0px;
-    top: 1.5em;
-    left: 0;
-    margin-right: 3.6em;
     justify-content: center;
-  }
-
-  .facebook {
-    position: relative;
-    margin-left: -25px;
-    left: 1em;
-  }
-
-  .insta {
-    margin-bottom: -5px;
-  }
-
-  .socials a {
-    outline: none;
+    margin-bottom: 2rem;
+    left: 0em;
   }
 
   .payment-icons {

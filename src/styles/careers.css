@@ -156,14 +156,14 @@
   transform: scale(0.90);
 }
 
-.app-form {
-  display: block;
-  padding-top: 1.5em;
-}
-
 .app-card img {
   padding-top: 0.4em;
   margin-left: 2.5em;
+}
+
+.app-form {
+  display: block;
+  padding-top: 1.5em;
 }
 
 .app-form h3 {
@@ -179,7 +179,7 @@
   margin: 1rem;
   margin-right: 1.5rem;
   margin-left: 1.5rem;
-  max-height: 31rem;
+  max-height: 30rem;
   overflow-y: auto;
 }
 

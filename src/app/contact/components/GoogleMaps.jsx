@@ -34,6 +34,11 @@ const GoogleMaps = () => {
       {/* Map title */}
       <h2 className='google-maps-title'>LOCATION</h2>
       <h2>ROASTAR SPECIALTY COFFEE</h2>
+      <div className='google-maps-address'>
+        <p>MONDAY - FRIDAY | 7:45am - 5pm</p>
+        <p>SATURDAY | 8am - 5:30pm</p>
+        <p>SUNDAY | 9am - 5pm</p>
+      </div>
       <p>8 EAST ST, BROMLEY, BR1 1QX</p>
       {/* Map content */}
       <div  className='google-maps'>
@@ -56,7 +61,7 @@ const GoogleMaps = () => {
           </Map>
         </APIProvider>
         ) : (
-          <p>...Loading</p>
+          <p style={{ height: '100vh' }}>...Loading</p>
         )}
       </div>
     </section>

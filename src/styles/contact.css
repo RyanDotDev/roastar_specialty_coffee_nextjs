@@ -10,10 +10,12 @@
 }
 
 .contact-us-header {
+  position: relative;
   background: var(--main-green);
   text-align: center;
   padding-top: 3em;
   height: 250px;
+  box-shadow: 1px 1px 10px 1px hsl(0, 0%, 73%);
 }
 
 .contact-us-header h1 {
@@ -190,4 +192,8 @@
   margin-left: 9.4vw;
   margin-right: 9.4vw;
   box-shadow: 2px 2px 10px 2px hsl(0, 0%, 54%);;
+}
+
+.google-maps-address {
+  margin-bottom: 1.5rem;
 }

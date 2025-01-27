@@ -13,7 +13,8 @@ const CartSlider = ({ initialProducts = [] }) => {
     if (products.length > 0) return;
       const getProducts = async () => {
         try {
-          const response = await fetch('/api/shopify/cart-slider', { cache: 'no-cache' })
+          // put his inside fetch() function to change products: { cache: "no-cache" }
+          const response = await fetch('/api/shopify/cart-slider')
           if (!response.ok) throw new Error('Failed to fetch products'); // Check the data structure here
           const data = await response.json()
           setProducts(data.products || [])

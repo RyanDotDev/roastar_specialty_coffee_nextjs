@@ -1,11 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 
 const MenuAd = () => {
   return (
     <div className="menu-container">
-      <Image 
+      <img 
         src="/images/roastar_menu_image.webp"
         alt='Roastar Menu'
         height={1000}

@@ -1,5 +1,6 @@
 .container {
   background: white;
+  height: 100%;
 }
 
 /* Banner.jsx */
@@ -25,7 +26,7 @@
   margin: auto;
   left: 0;
   right: 0;
-  width: 280px;
+  width: fit-content;
   margin-top: 21rem;
 }
 
@@ -35,30 +36,32 @@
 }
 
 /* Slider two selectors */
-.slider-two-header {
-  text-align: center;
-  font-size: 4rem;
-  font-weight: 500;
-  letter-spacing: 1.5px;
-  color: var(--main-beige);
-  margin-inline: auto ;
-  margin: auto;
+.slider-two-container {
+  text-align: left;
+  position: absolute;
+  margin-inline: auto;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  top: 16rem;
   left: 0;
   right: 0;
-  margin-top: 10rem;
+  width: fit-content;
+  z-index: 2;
+  margin-right: 3rem;
+}
+
+.slider-two-header {
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  font-size: 3.5rem;
+  color: var(--main-beige);
+  margin-bottom: 1rem;
 }
 
 .slider-two-text {
-  text-align: center;
-  width: 420px;
   letter-spacing: 1.5px;
   font-weight: 400;
   color: white;
-  margin-inline: auto ;
-  margin: auto;
-  left: 0;
-  right: 0;
-  margin-top: 19rem;
 }
 
 .slider-two {
@@ -67,34 +70,36 @@
 }
 
 /* slider three selectors */
-.slider-three-header {
+.slider-three-container {
   text-align: center;
-  font-size: 4rem;
-  font-weight: 500;
-  letter-spacing: 1.5px;
-  color: var(--main-beige);
-  margin-inline: auto ;
-  margin: auto;
+  position: absolute;
+  margin-inline: auto;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  top: 16rem;
   left: 0;
   right: 0;
-  margin-top: 10rem;
+  width: fit-content;
+  z-index: 2;
+}
+
+.slider-three-header {
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  font-size: 3.5rem;
+  color: var(--main-beige);
+  margin-bottom: 1rem;
 }
 
 .slider-three-text {
-  text-align: center;
   letter-spacing: 1.5px;
   font-weight: 400;
   color: white;
-  margin-inline: auto ;
-  margin: auto;
-  left: 0;
-  right: 0;
-  margin-top: 19rem;
 }
 
 .slider-three {
-  -webkit-filter: brightness(0.9);
-  filter: brightness(0.9);
+  -webkit-filter: brightness(0.8);
+  filter: brightness(0.8);
 }
 
 /* Pagination */
@@ -642,7 +647,7 @@
 
 /* For FeaturedShop.jsx */ 
 .fs-container {
-  padding-top: 2em;
+  padding-top: 0rem;
 }
 
 .fs-content {
@@ -729,6 +734,19 @@
 @media all and (max-width: 1000px) {
   .home-container {
     margin-bottom: -5rem;
+  }
+
+  .slider-two-container {
+    text-align: center;
+    position: absolute;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    margin-inline: auto;
+    top: 16rem;
+    left: 0;
+    right: 0;
+    width: fit-content;
+    z-index: 2;
   }
 
   .link-images {
@@ -953,35 +971,6 @@
     margin-top: 4em;
     width: 90%;
     object-fit: cover;
-  }
-}
-
-@media all and (max-width: 596px) {
-  .specialty-content h1 {
-    margin-right: 0.5em;
-    margin-left: 0.5em;
-  }
-}
-
-@media all and (max-width: 580px) {
-  .slider-two-header {
-    text-align: center;
-    font-size: 10.5vw;
-    margin-inline: auto ;
-    margin: auto;
-    left: 0;
-    right: 0;
-    margin-top: 10rem;
-  }
-
-  .slider-three-header {
-    text-align: center;
-    font-size: 10.5vw;
-    margin-inline: auto ;
-    margin: auto;
-    left: 0;
-    right: 0;
-    margin-top: 10rem;
   }
 }
 

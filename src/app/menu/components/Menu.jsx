@@ -3,12 +3,7 @@ import React, { useEffect } from 'react';
 import Image from 'next/image';
 
 const Menu = () => {
-  useEffect(() => {
-    document.body.style.backgroundColor = 'var(--main-green)';
-    return () => {
-      document.body.style.backgroundColor = ''
-    }
-  }, [])
+  
   return (
     <div className='menu'>
       <div className='menu-header'>

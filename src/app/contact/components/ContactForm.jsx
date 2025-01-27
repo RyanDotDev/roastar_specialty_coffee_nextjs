@@ -64,12 +64,15 @@ const ContactForm = () => {
       {show ? (
         <form onSubmit={handleSubmit} className='form'>
           <div className='textbox name'>
+            <label htmlFor='name'/>
             <input
+              id='name'
               name='from_name'
               value={name}
               type='text'
               placeholder='Your Name'
               pattern='^[A-Za-z]{3,16}$'
+              autoComplete='name'
               onBlur={handleBlur}
               onChange={(e) => setName(e.target.value)}
               data-focused={isFocused('from_name').toString()}
@@ -78,10 +81,13 @@ const ContactForm = () => {
             <span>Please fill in this field</span>
           </div>
           <div className='textbox email'>
+            <label htmlFor='email'/>
             <input
+              id='email'
               name='from_email'
               value={email}
               type='email'
+              autoComplete='off'
               placeholder='Your Email'
               onBlur={handleBlur}
               onChange={(e) => setEmail(e.target.value)}
@@ -91,7 +97,9 @@ const ContactForm = () => {
             <span>Please fill in this field</span>
           </div>
           <div className='textbox subject'>
+            <label htmlFor='subject'/>
             <select
+              id='subject'
               name='from_subject'
               value={subject}
               onBlur={handleBlur}
@@ -108,7 +116,9 @@ const ContactForm = () => {
             <span>Please select an appropiate subject</span>
           </div>
           <div className='textbox message'>
+            <label htmlFor='message'/>
             <textarea
+              id='message'
               name='message'
               value={message}
               cols="30"

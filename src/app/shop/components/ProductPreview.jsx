@@ -137,8 +137,10 @@ const ProductPreview = ({ handle, handleClose }) => {
 
     const totalItemsInCart = cart.reduce((total, item) => total + item.quantity, 0);
 
-    if (totalItemsInCart + counter > process.env.MAX_CART_ITEMS) {
-      showErrorToast(`You can only add up to ${process.env.MAX_CART_ITEMS} items to your cart.`);
+    const maxCartItems = 10
+
+    if (totalItemsInCart + counter > maxCartItems) {
+      showErrorToast(`You can only add up to ${maxCartItems} items to your cart.`);
       return;
     }
 

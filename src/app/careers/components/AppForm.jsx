@@ -141,6 +141,7 @@ const AppForm = ({ handleClose }) => {
                   <label htmlFor="first-name"/>
                   <input
                     {...field}
+                    id='first-name'
                     name='first-name'
                     placeholder="First Name"
                     autoComplete="given-name"
@@ -169,6 +170,7 @@ const AppForm = ({ handleClose }) => {
                   <label htmlFor="last-name"/>
                   <input
                     {...field}
+                    id='last-name'
                     name='last-name'
                     placeholder="Last Name"
                     autoComplete="family-name"
@@ -197,6 +199,7 @@ const AppForm = ({ handleClose }) => {
                   <label htmlFor="email"/>
                   <input
                     {...field}
+                    id='email'
                     placeholder="Email"
                     autoComplete="off"
                     onChange={(e) => {
@@ -221,9 +224,10 @@ const AppForm = ({ handleClose }) => {
               }}
               render={({ field }) => (
                 <div className='phone-number'>
-                  <label htmlFor="phoneNumber"/>
+                  <label htmlFor="phone-number"/>
                   <input
                     {...field}
+                    id='phone-number'
                     placeholder="Phone number (please include country code)"
                     onChange={(e) => {
                       field.onChange(e);
@@ -245,6 +249,7 @@ const AppForm = ({ handleClose }) => {
                   <label htmlFor="job"/>
                   <select 
                     {...field}
+                    id='job'
                     onChange={(e) => {
                       field.onChange(e);
                       clearErrors("job")
@@ -265,9 +270,10 @@ const AppForm = ({ handleClose }) => {
               render={({ field }) => (
                 <div className='rtw'>
                   <p>Do you have a right to work in the UK?</p>
-                  <label htmlFor="rightToWork"/>
+                  <label htmlFor="right-to-work"/>
                   <select 
                     {...field}
+                    id='right-to-work'
                     onChange={(e) => {
                       field.onChange(e);
                       clearErrors("rightToWork")
@@ -291,6 +297,7 @@ const AppForm = ({ handleClose }) => {
                 {fileName ? <p>{fileName}</p> : <p>UPLOAD CV</p>}
               </button>
               <input
+                id='cv'
                 type="file"
                 accept='.pdf, .docx'
                 style={{ display: 'none' }}

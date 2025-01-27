@@ -1,11 +1,14 @@
 .menu {
-  background: var(--main-green);
+  background: white;
 }
 
 .menu-header {
+  background: var(--main-green);
+  position: relative;
   text-align: center;
   padding-top: 3em;
   height: 250px;
+  box-shadow: 1px 1px 10px 1px hsl(0, 0%, 73%);
 }
 
 .menu-header h1 {
@@ -17,17 +20,24 @@
 }
 
 .menu-page {
+  margin-top: 3rem;
   text-align: center;
 }
 
 .menu-page p {
-  color: white;
+  color: black;
   letter-spacing: 1px;
   margin-bottom: 1rem;
 }
 
 .menu-page img {
-  padding-right: 1rem;
-  padding-left: 1rem;
+  margin-top: 2rem;
   object-fit: contain;
+  box-shadow: 2px 2px 10px 2px hsl(0, 0%, 0%, 10%);
+}
+
+@media all and (max-width: 620px) {
+  .menu-page img {
+    width: 95%;
+  }
 }

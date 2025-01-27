@@ -20,7 +20,7 @@ const MobileNav = () => {
           '/shop': 1,
           '/menu': 1,
           '/contact': 1,
-          '/careers': 180,
+          '/careers': 1,
           '/privacy': 1,
           '/product/:handle': 1,
         };

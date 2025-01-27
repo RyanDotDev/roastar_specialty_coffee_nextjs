@@ -486,18 +486,15 @@
   }
 
   .product-preview-content {
-    height: 70em;
-  }
-
-  .product-preview-main {
-    padding: 1em;
-    height: 65rem;
-    margin-bottom: 40vw;
-    width: 100%;
+    height: 70rem;
   }
 
   .product-preview-main {
     display: block;
+    padding: 1rem;
+    height: auto;
+    padding-bottom: 5rem;
+    width: 100%;
   }
 
   .product-preview-details {
@@ -525,7 +522,7 @@
     text-align: center;
   }
 
-  .product-preview-details .product-preview-quantity{
+  .product-preview-details .product-preview-quantity {
     margin: 1rem auto;
     width: 10.7em;
   }
