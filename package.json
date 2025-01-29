@@ -5,11 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "doppler run -- next dev",
-    "build": "doppler run -- next build",
-    "start": "doppler run -- next start",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
-    "compile": "node --trace-deprecation",
-    "postinstall": "npm install -g doppler"
+    "compile": "node --trace-deprecation"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
