@@ -9,7 +9,9 @@ export const showSuccessToast = (message, type = "default") => {
       color: "black",
       fontWeight: "bold",
       top: "10rem",
-      padding: "1rem",
+      padding: "0.5rem",
+      paddingTop: "1rem",
+      paddingBottom: "1rem",
       borderRadius: "0.5rem"
     },
     duration: 3000,
@@ -37,7 +39,9 @@ export const showErrorToast = (message, type = "error") => {
       color: "black",
       fontWeight: "bold",
       top: "10rem",
-      padding: "1rem",
+      padding: "0.5rem",
+      paddingTop: "1rem",
+      paddingBottom: "1rem",
       borderRadius: "0.5rem"
     },
     duration: 3000,
@@ -61,6 +65,7 @@ export const ToastContainer = () =>
   <Toaster 
     containerStyle={{ 
       position: "fixed", 
+      width: "100%",
       top: "50%", // Vertically center
       left: "50%", // Horizontally center
       transform: "translate(-50%, -70%)",

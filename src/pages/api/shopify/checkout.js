@@ -32,12 +32,13 @@ export default async function createCheckout(req, res) {
 
     const data = await fetchShopifyData(query, variables);
     const checkoutUrl = data?.cartCreate?.cart?.checkoutUrl;
+    const orderId = data?.cartCreate?.cart?.id;
 
-    if (!checkoutUrl) {
+    if (!checkoutUrl || !orderId) {
       throw new Error("Failed to create checkout")
     }
 
-    res.status(200).json({ checkoutUrl })
+    res.status(200).json({ checkoutUrl, orderId })
   } catch(error) {
     console.error("Error in createCheckout API route:", error);
     res.status(500).json({ error: error.message || 'Failed to create checkout' });

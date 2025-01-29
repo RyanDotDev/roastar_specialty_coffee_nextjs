@@ -12,6 +12,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100%;
+  margin-bottom: 6rem;
 }
 
 .about-us-header {
@@ -70,7 +71,7 @@
 
 .text-container-one p {
   letter-spacing: 1px;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 300;
   color: black;
   margin-top: 1em;
@@ -105,7 +106,7 @@
 
 .second-section-text p {
   letter-spacing: 1px;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 300;
   color: black;
   margin-top: 1em;
@@ -140,7 +141,7 @@
 
 .third-section-text p {
   letter-spacing: 1px;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 300;
   color: black;
   margin-top: 1em;

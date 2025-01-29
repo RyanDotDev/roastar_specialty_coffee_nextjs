@@ -544,13 +544,15 @@ body {
 }
 
 .cart-slider-skeleton {
+  justify-content: center;
   display: flex;
   flex-direction: row;
+  gap: 20px;
   align-items: center;
   width: 150px;
   height: 200px;
   background: #f0f0f0;
-  margin: 0 10px;
+  margin: 120px 120px;
 }
 
 .skeleton-image {
@@ -826,9 +828,10 @@ body {
 .footer-container {
   color: white;
   width: 100vw;
-  height: 400px;
+  height: auto;
   position: relative; 
-  top: 9.5rem;
+  top: 0.1rem;
+  margin-bottom: -6.5rem;
   padding: 2rem;
   background-color: hsl(96, 24%, 44%);
   display: flex;
@@ -949,19 +952,20 @@ body {
   gap: 30px;
 }
 
-/*
 .shopify-logo {
-  filter: brightness(15) saturate(0);
+  filter: grayscale(100%) brightness(12);
+  -webkit-filter: grayscale(100%) brightness(12);
 }
 
 .visa-logo, .paypal-logo {
-  filter: brightness(5);
+  filter: grayscale(100%) brightness(12);
+  -webkit-filter: grayscale(100%) brightness(12);
 }
 
 .mastercard-logo {
-  filter: brightness(4);
+  filter: grayscale(100%) brightness(1.8);
+  -webkit-filter: grayscale(100%) brightness(1.8);
 }
-*/
 
 /* For submit when someone submits an application */
 .submit-container {

@@ -5,7 +5,7 @@ import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Backdrop from '@/utils/popups/application/Backdrop';
 import { animate } from '@/utils/popups/application/animation';
-import { showErrorToast, showSuccessToast } from '@/lib/utils/toasts/toast';
+import { showErrorToast } from '@/lib/utils/toasts/toast';
 
 const AppForm = ({ handleClose }) => {
   const { control, handleSubmit, setValue, clearErrors, watch, formState: { errors } } = useForm({

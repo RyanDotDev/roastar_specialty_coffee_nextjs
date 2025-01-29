@@ -32,8 +32,12 @@ const CareersPage = () => {
         setLoading(false);
       }
     };
-
+    
     fetchVacancy();
+    document.body.style.backgroundColor = 'var(--main-green)';
+    return () => {
+      document.body.style.backgroundColor = ''
+    }
   }, []);
 
   if (loading) 

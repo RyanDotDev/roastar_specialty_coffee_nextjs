@@ -30,7 +30,13 @@ const Products = ({ addToCart }) => {
         setLoading(false);
       }
     };
+    
     getProducts();
+    const originalBackgroundColor = document.body.style.backgroundColor;
+    document.body.style.backgroundColor = 'var(--main-green)';
+    return () => {
+      document.body.style.backgroundColor = originalBackgroundColor;
+    };
   }, []);
 
   // prevent scroll when popup is active

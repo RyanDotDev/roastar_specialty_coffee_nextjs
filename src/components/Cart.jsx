@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
-import { clearCart, removeFromCart, updateQuantity } from '@//store/state';
+import { clearCart, removeFromCart, updateQuantity } from '@/store/state';
 import { motion } from 'framer-motion';
 import Backdrop from '@/utils/popups/cart/Backdrop';
 import { Minus, Plus, X } from 'lucide-react';
@@ -9,6 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { cartAnimate } from '@/lib/utils/popups/cart/animation';
 import CartSlider from './CartSlider';
 import Image from 'next/image';
+import { showErrorToast } from '@/lib/utils/toasts/toast';
 
 const Cart = ({ handleClose }) => {
   const cart = useSelector((state) => state.cart);
@@ -38,20 +39,70 @@ const Cart = ({ handleClose }) => {
         throw new Error("Failed to create checkout");
       }
 
-      const { checkoutUrl } = await response.json();
-      if (checkoutUrl) {
-        console.log(" Redirecting to checkout URL:", checkoutUrl);
+      const { checkoutUrl, orderId } = await response.json();
+      if (checkoutUrl && orderId) {
+        localStorage.setItem('orderId', orderId)
         window.location.href = checkoutUrl;
       } else {
-        alert("Failed to create checkout. Please try again.")
+        showErrorToast("Failed to create checkout. Please try again.")
       }
     } catch(error) {
       console.error("Checkout error:", error);
-      alert("Error creating checkout. Please try again later")
+      showErrorToast("Error creating checkout. Please try again later")
     } finally {
       setLoading(false)
     }
   };
+
+  /* This code is will be implemented when ready for production.
+  useEffect(() => {
+    const handlePaymentConfirmation = async () => {
+      const orderId = localStorage.getItem('orderId');
+      if (!orderId) {
+        console.error("Order ID is missing, cannot confirm payment.");
+        return;
+      }
+  
+      try {
+        const response = await fetch('/api/shopify/order-paid', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ orderId })
+        });
+  
+        const data = await response.json();
+        console.log("Shopify Webhook Response", data)
+  
+        if (data.success) {
+          console.log('Cart has been cleared.')
+          dispatch(clearCart())
+          localStorage.removeItem('orderId')
+        } else {
+          console.log('There was an issue clearing your cart.', data)
+        }
+      } catch (error) {
+        console.error('Error confirming payment:', error)
+      }
+    }
+
+    handlePaymentConfirmation();
+
+    const storageListener = () => {
+      const orderId = localStorage.getItem('orderId');
+      if (!orderId) {
+        dispatch(clearCart());
+      }
+    }
+
+    window.addEventListener('storage', storageListener);
+
+    return () => {
+      window.removeEventListener('storage', storageListener)
+    }
+  }, [dispatch])
+  */
 
   const handleRemove = (id) => {
     dispatch(removeFromCart(id));

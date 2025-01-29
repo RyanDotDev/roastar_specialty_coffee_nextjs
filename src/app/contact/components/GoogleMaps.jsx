@@ -61,7 +61,7 @@ const GoogleMaps = () => {
           </Map>
         </APIProvider>
         ) : (
-          <p style={{ height: '100vh' }}>...Loading</p>
+          <p style={{ height: '100vh', position: 'relative', top: '21.5rem' }}>...Loading</p>
         )}
       </div>
     </section>

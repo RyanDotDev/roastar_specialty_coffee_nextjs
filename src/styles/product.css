@@ -421,7 +421,7 @@
   }
 
   .related-product-list {
-    margin: 3em auto;
+    margin: 3em -2.5em;
     padding: 0;
     padding-left: 1em;
   }

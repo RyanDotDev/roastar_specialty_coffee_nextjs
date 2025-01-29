@@ -1,9 +1,30 @@
 import { LRUCache } from "lru-cache";
+import crypto from 'crypto';
+import { buffer } from 'micro';
 
 const cache = new LRUCache({
   max: 100,
   ttl: 1000 * 10,
 })
+
+export const verifyShopifyWebhook = async (req) => {
+  const hmacHeader = req.headers['x-shopify-hmac-sha256'];
+
+  const rawBody = await buffer(req);
+  console.log("Raw body:", rawBody.toString('utf8'));
+
+  const webhookSecret = process.env.SHOPIFY_WEBHOOK_SECRET;
+
+  const generatedHMAC = crypto
+    .createHmac('sha256', webhookSecret)
+    .update(rawBody, 'utf8')
+    .digest('base64');
+
+    console.log("Generated HMAC:", generatedHMAC);  // Log to check if it's being generated properly
+    console.log("Received HMAC:", hmacHeader);
+
+  return hmacHeader === generatedHMAC;
+};
 
 export async function fetchShopifyData(query, variables = {}) {
   const controller = new AbortController();

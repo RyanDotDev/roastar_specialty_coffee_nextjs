@@ -88,6 +88,13 @@ const Footer = () => {
               SHOP
             </Link>
           </div>
+          <div className={`footer-links ${'/shipping' === pathname && 'active-footer'}`}>
+            <Link 
+              href={'/shipping'} 
+            >
+              SHIPPING & RETURNS
+            </Link>
+          </div>
          <div className={`footer-links ${'/privacy' === pathname && 'active-footer'}`}>
             <Link  
               href={'/privacy'} 
@@ -107,10 +114,10 @@ const Footer = () => {
               Copyright 2025. Roastar Coffee. All Rights Reserved
           </div>
           <div className='payment-icons'>
-             <img className='shopify-logo' src='/icon/shopify_bag.webp' alt="Visa" width="60" />
-            <img className='visa-logo' src='/icon/payment_visa_icon.svg' alt="Visa" width="60" />
-            <img className='mastercard-logo' src='/icon/mastercard.webp' alt="Visa" width="60" />
-            <img className='paypal-logo' src='/icon/payment_paypal_icon.svg' alt="Shopify" width="60" />
+            <img className='shopify-logo' src='/logo/shopify_logo.webp' alt="Shopify Logo" width="60" />
+            <img className='visa-logo' src='/icon/payment_visa_icon.svg' alt="Visa Logo" width="60" />
+            <img className='mastercard-logo' src='/icon/mastercard_payment_logo.webp' alt="Mastercard Logo" width="60" />
+            <img className='paypal-logo' src='/icon/payment_paypal_icon.svg' alt="PayPal Logo" width="60" />
           </div>
         </div>
       </div>

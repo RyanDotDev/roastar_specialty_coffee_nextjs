@@ -1,13 +1,9 @@
-.menu {
-  background: white;
-}
-
 .menu-header {
   background: var(--main-green);
   position: relative;
   text-align: center;
   padding-top: 3em;
-  height: 250px;
+  height: 80px;
   box-shadow: 1px 1px 10px 1px hsl(0, 0%, 73%);
 }
 
@@ -16,12 +12,14 @@
   font-size: 3rem;
   font-weight: 600;
   letter-spacing: 2px;
-  color: white;
+  color: black;
 }
 
 .menu-page {
-  margin-top: 3rem;
+  background: white;
   text-align: center;
+  padding-top: 10rem;
+  padding-bottom: 5rem;
 }
 
 .menu-page p {
