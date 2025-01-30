@@ -1,6 +1,6 @@
 import { ToastContainer } from "@/lib/utils/toasts/toast";
 import ClientProvider from "./ClientProvider";
-import { SpeedInsights } from "@vercel/speed-insights";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata = {
   title: 'Roastar Specialty Coffee',
