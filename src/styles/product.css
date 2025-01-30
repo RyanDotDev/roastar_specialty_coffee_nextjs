@@ -50,7 +50,7 @@
 .product-content .product-img {
   margin-top: 2em;
   object-fit: contain;
-  width: 60%;
+  width: 100vw;
 }
 
 .product-main {
@@ -363,12 +363,6 @@
   color: white;
   margin-top: 7em;
   background: black;
-}
-
-.product-content .product-img {
-  margin-top: 2em;
-  object-fit: contain;
-  width: 60%;
 }
 
 @media all and (max-width: 1200px) {

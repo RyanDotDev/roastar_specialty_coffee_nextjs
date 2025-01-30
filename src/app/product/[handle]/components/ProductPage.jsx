@@ -148,12 +148,12 @@ const ProductPage = () => {
           <div className='product-main'>
             {/* PRODUCT IMAGE */}
             {product.images.edges.length > 0 && (
-              <img
+              <Image
                 src={product.images.edges[0].node.src} 
                 alt={product.title} 
                 width={600}
+                height={550}
                 className='product-img'
-                loading='eager'
               />
             )}
             <div className='product-details'>

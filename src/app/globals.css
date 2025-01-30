@@ -573,7 +573,7 @@ body {
   margin: 1.4em 0.6em;
   padding-bottom: 3rem;
   overflow-y: auto;
-  max-height: 25em;
+  max-height: 25rem;
   border-top: 1px solid hsl(0, 0%, 0%, 10%);
   border-bottom: 1px solid hsl(0, 0%, 0%, 10%);
 }
@@ -1097,5 +1097,17 @@ body {
 
   .payment-icons {
     justify-content: center;
+  }
+}
+
+@media all and (max-width: 768px) {
+  .cart-container {
+    max-height: 20rem;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .cart-container {
+    max-height: 15rem; 
   }
 }

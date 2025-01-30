@@ -1,5 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react'
+import Image from 'next/image';
 
 const Banner = () => {
   const [activeSlide, setActiveSlide] = useState(0);
@@ -28,23 +29,23 @@ const Banner = () => {
         }}
       >
         {/* SLIDER ONE IMAGE */}
-        <img 
+        <Image
           className='slider-one-image'
-          style={{ position: 'absolute', zIndex: 2 }} 
+          alt='roastar logo banner'
+          width={500}
+          height={180}
           src='/logo/Logo-ROASTAR-white.webp'
-          loading='eager'
         />
         {/* SLIDER ONE TEXT*/}
         <h2 className='slider-one-text' style={{ position: 'absolute', zIndex: 2 }}>Welcome!</h2>
         {/* SLIDER ONE BACKGROUND */}
         <div style={{ zIndex: 1 }}>
-          <img
+          <Image
             className='slider-one'
             src='/slides/slider-one.webp'
             alt='slider_one'
             height={720}
             width={1440}
-            loading='eager'
             style={{ width: '100%', objectFit: 'cover' }}
           />
         </div>
@@ -71,13 +72,12 @@ const Banner = () => {
         </div>
         {/* SLIDE TWO BACKGROUND */}
         <div style={{ zIndex: 1 }}>
-          <img
+          <Image
             className='slider-two'
             src='/slides/slider-two.webp'
             alt='slider_two'
             height={720}
             width={1440}
-            loading='lazy'
             style={{ width: '100%', objectFit: 'cover', }}
           />
         </div>
@@ -102,13 +102,12 @@ const Banner = () => {
             Eat, drink, chat and enjoy yourselves and our service.
           </h2>
         </div>
-        <img
+        <Image
           className='slider-three'
           src='/images/roastar_social_image.webp'
           alt='slider_three'
           height={720}
           width={1440}
-          loading='lazy'
           style={{ width: '100%', objectFit: 'cover' }}
         />
       </div>

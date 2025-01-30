@@ -1,5 +1,6 @@
 import { ToastContainer } from "@/lib/utils/toasts/toast";
 import ClientProvider from "./ClientProvider";
+import { SpeedInsights } from "@vercel/speed-insights";
 
 export const metadata = {
   title: 'Roastar Specialty Coffee',
@@ -13,6 +14,7 @@ export default function RootLayout({ children }) {
         <ClientProvider>
           <ToastContainer />
           {children}
+          <SpeedInsights />
         </ClientProvider>
       </body>
     </html>

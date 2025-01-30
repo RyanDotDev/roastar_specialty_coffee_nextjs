@@ -1,5 +1,4 @@
 .container {
-  background: white;
   height: auto;
   margin-bottom: 9rem;
 }
@@ -12,12 +11,14 @@
 
 /* slider one selectors */
 .slider-one-image {
+  position: absolute;
+  z-index: 2;
   margin-inline: auto ;
   margin: auto;
   left: 0;
   right: 0;
   width: 500px;
-  margin-top: 10rem;
+  margin-top: 9rem;
 }
 
 .slider-one-text {
