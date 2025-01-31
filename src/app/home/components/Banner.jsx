@@ -8,7 +8,7 @@ const Banner = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % 3)
-    }, 5000)
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -65,7 +65,10 @@ const Banner = () => {
       >
         {/* SLIDE TWO TEXT */}
         <div className='slider-two-container'>
-          <h1 className='slider-two-header'>COCONUT COFFEE</h1>
+          <h1 className='slider-two-header'>
+            COCONUT 
+            <span>COFFEE</span>
+          </h1>
           <h2 className='slider-two-text'>
             Try our coconut coffee! One of our most beloved.
           </h2>

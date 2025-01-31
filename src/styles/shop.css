@@ -482,7 +482,8 @@
   }
 
   .product-preview-content {
-    height: 70rem;
+    height: auto;
+    margin-bottom: 5rem;
   }
 
   .product-preview-main {

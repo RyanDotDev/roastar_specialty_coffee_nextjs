@@ -9,7 +9,8 @@ const Menu = () => {
     return () => {
       document.body.style.backgroundColor = originalBackgroundColor;
     };
-  }, [])
+  }, []);
+
   return (
     <div className='menu'>
       <div className='menu-header'>

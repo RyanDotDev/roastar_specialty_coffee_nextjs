@@ -6,7 +6,8 @@
 /* Banner.jsx */
 .banner {
   width: 100%;
-  height: 300px;
+  height: 720px;
+  background: var(--main-beige);
 }
 
 /* slider one selectors */
@@ -18,7 +19,8 @@
   left: 0;
   right: 0;
   width: 500px;
-  margin-top: 9rem;
+  margin-top: 10rem;
+  height: auto;
 }
 
 .slider-one-text {
@@ -56,9 +58,15 @@
   letter-spacing: 1.5px;
   font-weight: 600;
   font-size: 3.5rem;
-  color: var(--main-beige);
+  color: var(--main-green);
   margin-bottom: 1rem;
 }
+
+.slider-two-header span {
+  margin-left: 1rem;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 2px;
+} 
 
 .slider-two-text {
   letter-spacing: 1.5px;
@@ -67,8 +75,8 @@
 }
 
 .slider-two {
-  -webkit-filter: brightness(0.8);
-  filter: brightness(0.8);
+  -webkit-filter: brightness(0.9);
+  filter: brightness(0.9);
 }
 
 /* slider three selectors */
@@ -141,7 +149,7 @@
   flex-direction: column;
   min-height: 100%;
   position: relative;
-  margin-top: 30em; 
+  margin-top: 5rem; 
   margin-bottom: -10rem;
   width: 100%;
 }
@@ -258,6 +266,7 @@
 }
 
 .close {
+  color: black;
   margin-top: 1em;
   margin-right: 1em;
   background: none;
@@ -576,6 +585,8 @@
   color: var(--main-green);
   position: relative;
   text-align: right;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 2px;
   -moz-transform: translateX(-100%);
   -webkit-transform: translateX(-100%);
   transform: translateX(-100%);
@@ -747,9 +758,14 @@
     top: 16rem;
     left: 0;
     right: 0;
-    width: fit-content;
+    width: auto;
     z-index: 2;
   }
+
+  .slider-two-header span {
+    display: block;
+    margin-left: auto;
+  } 
 
   .link-images {
     display:inline-flex;

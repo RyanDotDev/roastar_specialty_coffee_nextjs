@@ -2,7 +2,8 @@ import React from 'react'
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from "framer-motion";
-import Backdrop from './Backdrop'
+import Backdrop from './Backdrop';
+import Image from 'next/image';
 
 const navigation = [ 
     { _id:101, title: 'HOME', href: '/' },
@@ -22,10 +23,10 @@ const dropIn = {
       y: "0",
       opacity: 1,
       transition: {
-        duration: 0.5,
+        duration: 0.01,
         type: "spring",
         damping: 30,
-        stiffness: 500,
+        stiffness: 250,
       },
     },
     exit: {

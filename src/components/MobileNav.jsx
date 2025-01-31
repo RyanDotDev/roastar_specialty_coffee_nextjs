@@ -67,7 +67,7 @@ const MobileNav = () => {
           <span></span>
           <span></span>
       </button>
-      
+
       <AnimatePresence>
         {menuOpen && <MobileMenu menuOpen={menuOpen} handleClose={close}/>}
       </AnimatePresence>

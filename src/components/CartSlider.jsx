@@ -63,7 +63,6 @@ const CartSlider = ({ initialProducts = [] }) => {
                   width={150}
                   height={130}
                   className='cart-slide swiper-lazy'
-                  loading={index < 2 ? 'eager' : 'lazy'}
                   data-src={node.images.edges[0].node.src}
                 />
               )}

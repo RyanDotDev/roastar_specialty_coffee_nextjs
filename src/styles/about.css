@@ -15,7 +15,8 @@
 }
 
 .about-us-header {
-  background: white;
+  height: 400px;
+  background: rgb(165, 110, 42);
   text-align: center;
 }
 
