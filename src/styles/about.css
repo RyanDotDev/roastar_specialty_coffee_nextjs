@@ -14,9 +14,10 @@
   margin-bottom: 6rem;
 }
 
-.about-us-header {
+.about-us-header-background {
+  filter: contrast(0.5) saturate(2.5);
   height: 400px;
-  background: rgb(165, 110, 42);
+  background: center / cover no-repeat url("/images/roastar_aboutus_two.webp");
   text-align: center;
 }
 
@@ -77,10 +78,9 @@
   margin-top: 1em;
 }
 
-.text-container-one img {
-  position: relative;
-  margin-left: 3em;
-  width: 70%;
+.first-section-images img {
+  height: auto;
+  width: auto;
 }
 
 /* For SecondSection.jsx */

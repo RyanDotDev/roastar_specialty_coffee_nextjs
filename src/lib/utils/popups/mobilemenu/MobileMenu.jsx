@@ -45,6 +45,24 @@ const MobileMenu = ({ handleClose }) => {
   
   return (
     <Backdrop onClick={handleClose}>
+      <div className='roastar-logo-mobile-daytime'>
+        <Image 
+          src='/logo/logo-ROASTAR-black.webp'
+          alt='Roastar Logo Mobile Daytime'
+          height={50}
+          width={150}
+          priority
+        />
+      </div>
+      <div className='roastar-logo-mobile-nighttime'>
+        <Image 
+          src='/logo/logo-ROASTAR-white.webp'
+          alt='Roastar Logo Mobile Daytime'
+          height={50}
+          width={150}
+          priority
+        />
+      </div>
       <motion.div
         onClick={(e) => e.stopPropagation()}  
         variants={dropIn}

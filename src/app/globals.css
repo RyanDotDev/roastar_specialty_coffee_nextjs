@@ -50,7 +50,7 @@ body {
   position: relative; 
   top: 6px; 
   left: 10px;
-  z-index: 102;
+  z-index: 101;
 }
 
 .roastar-logo-daytime {
@@ -328,6 +328,21 @@ body {
   height: 105vh;
   background: hsl(50, 100%, 99%);
   z-index: 101;
+}
+
+.roastar-logo-mobile-daytime, .roastar-logo-mobile-nighttime {
+  position: absolute;
+  margin-inline: auto;
+  top: 6px;
+  left: 0;
+  right: 0;
+  width: fit-content;
+  height: auto;
+}
+
+.roastar-logo-mobile-nighttime {
+  opacity: 0;
+  left: -2px;
 }
 
 .mobile-nav {
@@ -1007,6 +1022,10 @@ body {
     z-index: 101;
   }
 
+  .roastar-logo-mobile-nighttime {
+    opacity: 1;
+  }  
+
   .mobile-nav-list a {
     color: white;
     text-decoration: none;
@@ -1046,12 +1065,15 @@ body {
   .logo {
     text-align: center;
     left: -4.79em;
+    z-index: 101;
   }
 
   .roastar-logo-hover {
     position: absolute;
     top: 0;
-    left: 49.9vw;
+    left: 9.43em;
+    right: 0;
+    margin-inline: auto;
   }
 
   .nav-list {

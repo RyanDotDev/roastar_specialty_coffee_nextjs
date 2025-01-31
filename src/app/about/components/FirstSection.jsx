@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 
 const FirstSection = () => {
   return (
@@ -37,20 +38,21 @@ const FirstSection = () => {
       {/* TOP SECTION IMAGES */}
       <div className='first-section-images'>
         <div className='about-image-one'>
-          <img 
+          <Image
             src='/images/roastar_origin_two.webp'
             alt='roastar origin two'
             width={400}
-            loading='eager'
+            height={380}
+            priority
           />
         </div>
         <div className='about-image-two'>
-          <img 
+          <Image
             src='/images/roastar_origin_one.webp'
             alt='roastar origin one'
             width={400}
-            height={400}
-            loading='lazy'
+            height={380}
+            priority
           />
         </div>
       </div>
