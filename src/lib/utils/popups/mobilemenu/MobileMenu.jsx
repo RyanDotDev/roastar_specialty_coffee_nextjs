@@ -47,7 +47,7 @@ const MobileMenu = ({ handleClose }) => {
     <Backdrop onClick={handleClose}>
       <div className='roastar-logo-mobile-daytime'>
         <Image 
-          src='/logo/logo-ROASTAR-black.webp'
+          src='/logo/Logo-ROASTAR-black.webp'
           alt='Roastar Logo Mobile Daytime'
           height={50}
           width={150}
@@ -56,7 +56,7 @@ const MobileMenu = ({ handleClose }) => {
       </div>
       <div className='roastar-logo-mobile-nighttime'>
         <Image 
-          src='/logo/logo-ROASTAR-white.webp'
+          src='/logo/Logo-ROASTAR-white.webp'
           alt='Roastar Logo Mobile Daytime'
           height={50}
           width={150}

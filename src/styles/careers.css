@@ -358,6 +358,10 @@
     text-align: justify;
   }
 
+  .app-text h3 {
+    text-align: center;
+  }
+
   .close-div {
     left: 73%;
     right: 73%;

@@ -1,6 +1,7 @@
 "use client"
-import React, { useEffect } from 'react'
-import AppButton from './AppButton'
+import React, { useEffect } from 'react';
+import Image from 'next/image';
+import AppButton from './AppButton';
 
 const CareersPage = () => {
   const [vacancy, setVacancy] = React.useState(null);
@@ -46,14 +47,16 @@ const CareersPage = () => {
         <div className='app-content'>
           <h2>JOIN THE TEAM</h2>
           <div className='careers-image'>
-            <img 
+            <Image 
               src='/images/imageThree.webp'
+              alt='Roastar Careers Image'
               width={1000}
               height={300}
+              priority
             />
           </div>
           <div className='app-text'>
-            <h3>FUN AT WORK? ABSOLUTELY!</h3>
+            <h3>BECOME A ROASTER!</h3>
             <p>Here at Roastar, we look after our staff just as much as our customers and always strive to
                maintain a pleasurable experience for all during their visit to our cafe.
             </p>
@@ -75,14 +78,16 @@ const CareersPage = () => {
           <div className='app-content'>
             <h2>JOIN THE TEAM</h2>
             <div className='careers-image'>
-              <img 
+              <Image 
                 src='/images/imageThree.webp'
+                alt='Roastar Careers Image'
                 width={1000}
                 height={300}
+                priority
               />
             </div>
             <div className='app-text'>
-              <h3>FUN AT WORK? ABSOLUTELY!</h3>
+              <h3>BECOME A ROASTER!</h3>
               <p>Here at Roastar, we look after our staff just as much as our customers and always strive to
                  maintain a pleasurable experience for all during their visit to our cafe.
               </p>
@@ -103,14 +108,16 @@ const CareersPage = () => {
       <div className='app-content'>
         <h2>JOIN THE TEAM</h2>
         <div className='careers-image'>
-          <img 
+          <Image 
             src='/images/imageThree.webp'
+            alt='Roastar Careers Image'
             width={1000}
             height={300}
+            priority
           />
         </div>
         <div className='app-text'>
-          <h3>FUN AT WORK? ABSOLUTELY!</h3>
+          <h3>BECOME A ROASTER!</h3>
           <p>Here at Roastar, we look after our staff just as much as our customers and always strive to
              maintain a pleasurable experience for all during their visit to our cafe.
           </p>
