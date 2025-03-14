@@ -29,9 +29,9 @@ const ContactForm = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('/api/send-email', {
+      const response = await fetch('/api/sendgrid/contact', {
         method: 'POST',
-        header: {
+        headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({

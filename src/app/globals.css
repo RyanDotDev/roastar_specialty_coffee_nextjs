@@ -28,8 +28,7 @@ body {
 
 /* Navbar.jsx */
 .navbarbg {
-  background-color: hsl(0, 0%, 100%, 90%);
-  backdrop-filter: blur(30px); 
+  background-color: hsl(0, 0%, 100%);
   box-shadow: 1px 1px 5px 1px hsl(0, 0%, 89%);
   transition: background-color 500ms;
   margin: 0;
@@ -167,6 +166,7 @@ body {
     width: 0;
     height: 3px;
     position: absolute;
+    pointer-events: none;
     bottom: -10px;
     right: 0;
     background-color: white;
@@ -199,6 +199,7 @@ body {
     width: 0;
     height: 3px;
     position: absolute;
+    pointer-events: none;
     bottom: -10px;
     right: 0;
     background-color: black;
@@ -452,7 +453,6 @@ body {
   right: 0;
   left: 0;
   top: 0;
-  overflow: hidden;
 }
 
 /* For Cart.jsx/Cart-design */
@@ -747,7 +747,8 @@ body {
   gap: 10px;
   margin-right: 1em;
   margin-left: 1em;
-  bottom: 3em; 
+  padding-bottom: 1rem;
+  bottom: 3rem;
 }
 
 .cart-bottom-section .tax-and-shipping {
@@ -1094,6 +1095,20 @@ body {
 
   .cart-badge {
     display: block;
+  }
+
+  .cart-slider {
+    position: relative;
+    top: 2rem;
+    margin-top: 7.5rem;
+    margin-left: 0.5rem;
+    padding-bottom: 3rem;
+    width: 100%;
+  }
+
+  .cart-bottom-section {
+    position: relative;
+    margin-top: 17rem;
   }
   
   .footer-container {

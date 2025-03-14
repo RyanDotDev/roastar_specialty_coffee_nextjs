@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import Image from 'next/image';
 
 const Points = () => {
   return (
@@ -7,9 +8,11 @@ const Points = () => {
         <h2>THE TASTE OF VIETNAM AT YOUR DOORSTEP!</h2>
       </div>
       <div className='points-banner'>
-        <img 
+        <Image 
           src='/images/roastar_coffee_image.png'
+          alt='Roastar Coffee Image'
           width={800}
+          height={800}
         />
       </div>
     </div>

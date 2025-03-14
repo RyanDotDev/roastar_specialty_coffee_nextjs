@@ -1,15 +1,15 @@
-import React from 'react'
-import Link from 'next/link'
+import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 
 const MenuAd = () => {
   return (
     <div className="menu-container">
-      <img 
+      <Image
         src="/images/roastar_menu_image.webp"
         alt='Roastar Menu'
         height={1000}
         width={1440}
-        loading='lazy'
       />
       <div className='menu-content'> 
         <div className='menu-text'>

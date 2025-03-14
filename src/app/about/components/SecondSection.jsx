@@ -1,14 +1,15 @@
-import React from 'react'
+import React from 'react';
+import Image from 'next/image';
 
 const SecondSection = () => {
   return (
     <section className='second-section'>
       <div className='second-section-img'>
-        <img
+        <Image
           src='/images/roastar_inside.webp'
           alt='Roastar Shop Inside'
           width={700}
-          loading='lazy'
+          height={500}
         />
       </div>
       <div className='second-section-text'>

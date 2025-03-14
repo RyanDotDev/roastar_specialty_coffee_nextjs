@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import Image from 'next/image';
 
 const ThirdSection = () => {
   return (
@@ -23,18 +24,19 @@ const ThirdSection = () => {
       </div>
       <div className='third-section-images'>
         <div className='about-image-one'>
-          <img 
+          <Image
             src='/images/imageTwo.png'
+            alt='Image Two'
             width={400}
-            loading='lazy'
+            height={400}
           />
         </div>
         <div className='about-image-two'>
-          <img 
+          <Image 
             src='/images/roastar_aboutus_image.png'
+            alt='About Us Image'
             width={400}
             height={400}
-            loading='lazy'
           />
         </div>
       </div>

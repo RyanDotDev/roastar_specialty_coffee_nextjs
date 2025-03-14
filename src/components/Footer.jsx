@@ -88,14 +88,7 @@ const Footer = () => {
               SHOP
             </Link>
           </div>
-          <div className={`footer-links ${'/shipping' === pathname && 'active-footer'}`}>
-            <Link 
-              href={'/shipping'} 
-            >
-              SHIPPING & RETURNS
-            </Link>
-          </div>
-         <div className={`footer-links ${'/privacy' === pathname && 'active-footer'}`}>
+          <div className={`footer-links ${'/privacy' === pathname && 'active-footer'}`}>
             <Link  
               href={'/privacy'} 
             >

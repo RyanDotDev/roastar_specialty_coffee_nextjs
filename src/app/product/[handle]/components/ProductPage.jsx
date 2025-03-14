@@ -112,7 +112,7 @@ const ProductPage = () => {
       return // Stop execution if no valid variant is selected
     }
 
-    const maxCartItems = 10
+    const maxCartItems = 50;
     const totalItemsInCart = cart.reduce((total, item) => total + item.quantity, 0);
     if (totalItemsInCart + counter > maxCartItems) {
       showErrorToast(`You can only add up to ${maxCartItems} items to your cart.`);

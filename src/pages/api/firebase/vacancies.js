@@ -1,37 +1,51 @@
 import { db } from './firebase';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
 export default async function handler(req, res) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ message: 'Method Not Allowed' });
-  }
+  const { method, query, body } = req;
 
-  const { jobId } = req.query;
+  if (method === "GET") {
+    const { jobId } = query;
 
-  if (!jobId) {
-    return res.status(400).json({ message: 'Job ID is required' });
-  }
-
-  try {
-    console.log('Fetching vacancy for jobId:', jobId);
-    const docRef = db.collection('vacancies').doc(jobId.toString());
-    const docSnap = await docRef.get();
-
-    if (!docSnap.exists) {
-      console.error(`Vacancy for jobId ${jobId} not found.`)
-      return res.status(404).json({ status: 'closed', message: 'Vacancy not found' });
+    if (!jobId) {
+      return res.status(400).json({ message: "Job ID is required" });
     }
 
-    const data = docSnap.data(); // Correctly retrieve data from Firestore document
+    try {
+      console.log("Fetching vacancy for jobId:", jobId);
+      const docRef = doc(db, "vacancies", jobId);
+      const docSnap = await getDoc(docRef);
 
-    if (!data || typeof data !== 'object') {
-      console.error('Invalid data received for jobId:', jobId, data);
-      return res.status(500).json({ message: 'Invalid data format' });
+      if (!docSnap.exists()) {
+        console.error(`Vacancy for jobId ${jobId} not found.`);
+        return res.status(404).json({ isOpen: false, message: "No vacancies available" });
+      }
+
+      const data = docSnap.data();
+      return res.status(200).json(data);
+    } catch (error) {
+      console.error("Error fetching vacancy:", error);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
+
+  if (method === "POST") {
+    const { jobId, isOpen } = body;
+
+    if (!jobId || typeof isOpen !== "boolean") {
+      return res.status(400).json({ message: "Missing required fields" });
     }
 
-    console.log('Vacancy data:', data);
-    res.status(200).json(data);
-  } catch (error) {
-    console.error('Error fetching vacancy:', error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    try {
+      const jobRef = doc(db, "vacancies", jobId);
+      await updateDoc(jobRef, { isOpen });
+
+      return res.status(200).json({ success: true });
+    } catch (error) {
+      console.error("Error updating vacancy:", error);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
   }
+
+  return res.status(405).json({ message: "Method Not Allowed" });
 }
