@@ -1,6 +1,8 @@
-import { storage } from './firebase';
+// THIS CODE IS NO LONGER IN USE
+
+/* import { storage } from './firebase';
 import { v4 as uuidv4 } from 'uuid';
-import multer from 'multer';
+import multer from 'multer'; 
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -68,3 +70,4 @@ export default async function handler(req, res) {
     return res.status(500).json({ message: 'Internal server error', error: uploadError.message });
   }
 }
+*/

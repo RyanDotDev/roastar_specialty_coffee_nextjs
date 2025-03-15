@@ -1,4 +1,6 @@
-import { db } from "./firebase";
+// THIS CODE IS NO LONGER IN USE
+
+/* import { db } from "./firebase";
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -33,3 +35,4 @@ export default async function handler(req, res) {
     res.status(405).json({ message: 'Method not allowed' });
   }
 }
+*/
