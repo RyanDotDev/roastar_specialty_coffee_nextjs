@@ -495,7 +495,7 @@
   }
 
   .product-preview-details {
-    margin-top: 1rem;
+    margin-top: 0rem;
     position: relative;
     right: 0;
     top: 0; 
@@ -506,6 +506,8 @@
 
   .product-preview-main img {
     margin-right: 0;
+    height: auto;
+    width: 100%;
   }
 
   .product-preview-details .product-preview-price {

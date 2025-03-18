@@ -29,7 +29,7 @@ const ContactForm = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('/api/sendgrid/contact', {
+      const response = await fetch('/api/web3forms/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -124,7 +124,7 @@ const ContactForm = () => {
               cols="30"
               rows="15"
               minLength={100}
-              placeholder='What is your message to us about? Any specifics, please add here.'
+              placeholder='What is your message about? Any specifics, please add here.'
               onBlur={handleBlur}
               onChange={(e) => setMessage(e.target.value)}
               data-focused={isFocused('message').toString()}

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import Image from 'next/image';
 import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux'
 import { motion } from 'framer-motion'
@@ -43,7 +44,7 @@ const ProductPreview = ({ handle, handleClose }) => {
       (option) => !selectedOptions[option.name]
     );
     if (unselectedOption) {
-      showErrorToast(`Please select options before proceeding to checkout.`);
+      showErrorToast(`Options must be selected before proceeding to checkout.`);
       return
     }
     if (!selectedVariant) {
@@ -126,7 +127,7 @@ const ProductPreview = ({ handle, handleClose }) => {
       (option) => !selectedOptions[option.name]
     );
     if (unselectedOption) {
-      showErrorToast(`Please choose a ${unselectedOption.name.toLowerCase()} option`);
+      showErrorToast(`Please choose a ${unselectedOption.name.toLowerCase()}`);
       return
     }
     // Ensure selectVariant matches the current selection
@@ -137,7 +138,7 @@ const ProductPreview = ({ handle, handleClose }) => {
 
     const totalItemsInCart = cart.reduce((total, item) => total + item.quantity, 0);
 
-    const maxCartItems = 10
+    const maxCartItems = 50;
 
     if (totalItemsInCart + counter > maxCartItems) {
       showErrorToast(`You can only add up to ${maxCartItems} items to your cart.`);
@@ -157,6 +158,7 @@ const ProductPreview = ({ handle, handleClose }) => {
     }
     if (handleAddToCart) showSuccessToast('Item Added');
   };
+
   if (!product) return <p></p>;
 
   return (
@@ -178,15 +180,15 @@ const ProductPreview = ({ handle, handleClose }) => {
           <div className='product-preview-main'>
             {/* PRODUCT IMAGE */}
             {product.images.edges.length > 0 && (
-              <img 
+              <Image 
                 src={product.images.edges[0].node.src} 
                 alt={product.title} 
                 width={500}
+                height={500}
                 className='product-img'
               />
             )}
             <div className='product-preview-details'>
-              {/* allVariantsUnavailable ? (<h2>SOLD OUT</h2>) : (<>CODE GOES HERE<> */}
               {/* PRODUCT PRICE */}
               <h2 className='product-preview-price'>
                 £{selectedVariant && selectedOptions ? 

@@ -1099,7 +1099,7 @@ body {
 
   .cart-slider {
     position: relative;
-    top: 2rem;
+    bottom: -2rem;
     margin-top: 7.5rem;
     margin-left: 0.5rem;
     padding-bottom: 3rem;
@@ -1136,6 +1136,16 @@ body {
 
   .payment-icons {
     justify-content: center;
+  }
+}
+
+@media all and (max-width: 1000px) and (min-height: 800px) {
+  .cart-slider {
+    position: absolute;
+    bottom: 5rem;
+    overflow: hidden;
+    width: 90%;
+    margin-bottom: 0rem;
   }
 }
 

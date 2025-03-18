@@ -15,11 +15,11 @@ const ThirdSection = () => {
           awarness to our coffee culture and to grow our business to new heights.
         </p>
         <br/>
-        <img 
+        <Image 
           src='/icon/Logo ROASTAR-lettermark.PNG'
           alt='Roastar Lettermark'
-          width={500}
-          loading='lazy'
+          width={400}
+          height={400}
         />
       </div>
       <div className='third-section-images'>
@@ -27,16 +27,16 @@ const ThirdSection = () => {
           <Image
             src='/images/imageTwo.png'
             alt='Image Two'
-            width={400}
-            height={400}
+            width={350}
+            height={350}
           />
         </div>
         <div className='about-image-two'>
           <Image 
             src='/images/roastar_aboutus_image.png'
             alt='About Us Image'
-            width={400}
-            height={400}
+            width={350}
+            height={350}
           />
         </div>
       </div>

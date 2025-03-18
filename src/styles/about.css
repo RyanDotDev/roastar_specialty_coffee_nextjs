@@ -111,7 +111,7 @@
 
 .second-section-img img {
   object-fit: contain;
-  width: 100%;
+  width: 40vw;
   height: 100%;
 }
 
@@ -145,7 +145,10 @@
 }
 
 .third-section-text img {
-  width: 80%;
+  position: relative;
+  left: 3rem;
+  height: 30vw;
+  width: 30vw;
 }
 
 @media all and (max-width: 1250px) {
@@ -200,6 +203,11 @@
     text-align: center;
   }
 
+  .second-section-img img {
+    width: 100%;
+    height: 100%;
+  }
+
   /* For ThirdSection.jsx */
   .third-section {
     display: flex;
@@ -225,8 +233,9 @@
   }
 
   .third-section-images img {
-    width: 45vw;
-    height: 45vw;
+    text-align: center;
+    width: 100%;
+    height: 100%;
   }
 }
 
