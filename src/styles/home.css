@@ -259,6 +259,7 @@
   display: block;
   width: 100%;
   height: 100%;
+  overflow-y: scroll;
   top: 0em;
   left: 0em;
   z-index: 102;
@@ -963,11 +964,13 @@
   }
 
   .delivery-link {
+    position: relative;
     align-items: center;
     margin-top: 3em;
     gap: 2em;
     display: flex;
     flex-direction: column;
+    padding-bottom: 3rem;
   }
 
   .desc-content img {

@@ -74,7 +74,6 @@ const Products = ({ addToCart }) => {
                   alt={node.title} 
                   width={300}
                   height={250}
-                  loading='eager'
                   priority
                 />
               )}

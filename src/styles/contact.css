@@ -49,38 +49,49 @@
   margin-top: 3em;
 }
 
-/* validation code */
-.form input:invalid[data-focused='true'] {
-  border-color: red;
+.form-content {
+  margin: auto;
+  width: 100%;
+  padding-left: 9.5vw;
+  padding-right: 9.5vw;
 }
 
-.form input:invalid[data-focused='true'] ~ span {
+.form-content .input-error {
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  text-align: left;
   color: red;
-  display: block;
+  position: relative;
+  margin-top: -1.5rem;
+  margin-bottom: 0.8rem;
+  right: 0.9rem;
 }
 
-.form select:invalid[data-focused='true'] {
-  border-color: red;
+.form-content .input-error::before {
+  display: inline;
+  content: "⚠ ";
 }
 
-.form select:invalid[data-focused='true'] ~ span {
+.form-content .error {
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  text-align: left;
   color: red;
-  display: block;
+  position: relative;
+  margin-top: -1.5rem;
+  margin-bottom: 0.8rem;
+  right: 0.9rem;
 }
 
-.form textarea:invalid[data-focused='true'] {
-  border-color: red;
-}
-
-.form textarea:invalid[data-focused='true'] ~ span {
-  color: red;
-  display: block;
+.form-content .error::before {
+  display: inline;
+  content: "⚠ ";
 }
 
 /* textbox designs */
 .textbox input, .textbox select, .textbox textarea {
   border: 3px solid var(--hover-beige);
-  width: 80%;
+  width: 100%;
   margin-bottom: 2em;
   padding-left: 1em;
   font-size: 1rem;
@@ -96,17 +107,6 @@
   border-radius: 0px;
   cursor: pointer;
   color: black;
-}
-
-.textbox span {
-  display: block;
-  text-align: left;
-  font-size: 0.80rem;
-  margin-left: 10vw;
-  display: none;
-  position: relative;
-  top: -1.8em;
-  margin-bottom: -1em;
 }
 
 .textbox textarea {

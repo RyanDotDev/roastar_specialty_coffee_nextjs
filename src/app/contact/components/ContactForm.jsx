@@ -1,58 +1,38 @@
 "use client"
-import React, { useState } from 'react';
+import React from 'react';
 import { CircleCheckBig } from 'lucide-react';
+import { useForm, Controller } from 'react-hook-form';
 
 const ContactForm = () => {
   // react states for required field inputs
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [subject, setSubject] = useState('');
-  const [message, setMessage] = useState('');
-  // react state for confirmation of message sent
+  const { control, handleSubmit, clearErrors, reset, formState: { errors, isValid } } = useForm({ 
+    mode: 'onBlur', 
+    defaultValues: {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    }
+  });
+ 
   const [show, setShow] = React.useState(true);
 
-  // To set focus on each input field and return error when field is not properly filled
-  const [focused, setFocused] = React.useState({});
-
-  // Function that seperates each field for handling blur
-  const handleBlur = (e) => {
-    setFocused(prev => ({...prev, [e.target.name]: true}));
-  };
-
-  // For focusing the input field for correct information
-  const isFocused = (name) => {
-    return focused[name] === true;
-  };
-
-  // the handle submit function combined with EmailJs
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const onSubmit = async (formData) => {
     try {
       const response = await fetch('/api/web3forms/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          name,
-          email,
-          subject,
-          message,
-        }),
+        body: JSON.stringify(formData)
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to send email')
-      }
+      if (!response.ok) throw new Error('Failed to send email')
 
       const data = await response.json();
-      console.log('Email sent successfully', data)
+      console.log('Email sent successfully', data);
 
-      setName('')
-      setEmail('')
-      setSubject('')
-      setMessage('')
+      reset();
       setShow(false); // Displays confirmation once form is submitted
     } catch (error) {
       console.error('Error sending email', error)
@@ -62,90 +42,135 @@ const ContactForm = () => {
   return (
     <>
       {show ? (
-        <form onSubmit={handleSubmit} className='form'>
-          <div className='textbox name'>
-            <label htmlFor='name'/>
-            <input
-              id='name'
-              name='from_name'
-              value={name}
-              type='text'
-              placeholder='Your Name'
-              pattern='^[A-Za-z]{3,16}$'
-              autoComplete='name'
-              onBlur={handleBlur}
-              onChange={(e) => setName(e.target.value)}
-              data-focused={isFocused('from_name').toString()}
-              required
-            />
-            <span>Please fill in this field</span>
-          </div>
-          <div className='textbox email'>
-            <label htmlFor='email'/>
-            <input
-              id='email'
-              name='from_email'
-              value={email}
-              type='email'
-              autoComplete='off'
-              placeholder='Your Email'
-              onBlur={handleBlur}
-              onChange={(e) => setEmail(e.target.value)}
-              data-focused={isFocused('from_email').toString()}
-              required
-            />
-            <span>Please fill in this field</span>
-          </div>
-          <div className='textbox subject'>
-            <label htmlFor='subject'/>
-            <select
-              id='subject'
-              name='from_subject'
-              value={subject}
-              onBlur={handleBlur}
-              onChange={(e) => setSubject(e.target.value)}
-              data-focused={isFocused('from_subject').toString()}
-              required
-            >
-              <option value=''>What is your enquiry about?</option>
-              <option value='General'>General</option>
-              <option value='Review'>Review</option>
-              <option value='Business'>Business</option>
-              <option value='Other'>Other</option>
-            </select>
-            <span>Please select an appropiate subject</span>
-          </div>
-          <div className='textbox message'>
-            <label htmlFor='message'/>
-            <textarea
-              id='message'
-              name='message'
-              value={message}
-              cols="30"
-              rows="15"
-              minLength={100}
-              placeholder='What is your message about? Any specifics, please add here.'
-              onBlur={handleBlur}
-              onChange={(e) => setMessage(e.target.value)}
-              data-focused={isFocused('message').toString()}
-              required
-            />
-            <span>Message needs to be at least 100 characters long</span>
-          </div>
+        <form onSubmit={handleSubmit(onSubmit)} className='form'>
+          <div className='form-content'>
+          <Controller
+            name='name'
+            control={control}
+            rules={{
+              required: 'Name is required',
+              pattern: {
+                value: /^[A-Za-z]{2,16}$/,
+                message: "Name needs to be at least 3 characters"
+              }
+            }}
+            render={({ field }) => (
+              <div className='textbox name'>
+                <label htmlFor='name'/>
+                <input
+                  {...field}
+                  id="name"
+                  placeholder='Name'
+                  autoComplete='given-name'
+                  onChange={(e) => {
+                    field.onChange(e);
+                    clearErrors("name")
+                  }}
+                  onBlur={(e) => field.onBlur(e)}
+                />
+                {errors.name && <p className='input-error'>{errors.name.message}</p>}
+              </div>
+            )}
+          />
+          <Controller
+            name='email'
+            control={control}
+            rules={{
+              required: 'Email is required',
+              pattern: {
+                value: /^[^@]+@[^@]+\.[^@]+$/,
+                message: "A valid email address is required"
+              }
+            }}
+            render={({ field }) => (
+              <div className='textbox email'>
+                <label htmlFor='email'/>
+                <input
+                  {...field}
+                  id="email"
+                  placeholder='Email'
+                  autoComplete='off'
+                  onChange={(e) => {
+                    field.onChange(e);
+                    clearErrors("email")
+                  }}
+                  onBlur={(e) => field.onBlur(e)}
+                />
+                {errors.email && <p className='input-error'>{errors.email.message}</p>}
+              </div>
+            )}
+          />
+          <Controller
+            name="subject"
+            control={control}
+            rules={{ required: "Subject is required" }}
+            render={({ field }) => (
+              <div className='textbox subject'>
+                <label htmlFor="subject"/>
+                <select
+                  {...field}
+                  id="subject"
+                  onChange={(e) => {
+                    field.onChange(e);
+                    clearErrors("subject")
+                  }}
+                  onBlur={(e) => field.onBlur(e)}
+                >
+                  <option value='' disabled>What is your enquiry about?</option>
+                  <option value='General'>General</option>
+                  <option value='Review'>Review</option>
+                  <option value='Business'>Business</option>
+                  <option value='Other'>Other</option>
+                </select>
+                {errors.subject && <p className='error'>{errors.subject.message}</p>}
+              </div>
+            )}
+          />
+          <Controller
+            name='message'
+            control={control}
+            rules={{ 
+              required: 'Message needs to be 100 characters minimum',
+              minLength: {
+                value: 100,
+                message: "Message must be at least 100 characters"
+              }
+            }}
+            render={({ field }) => (
+              <div className='textbox message'>
+                <label htmlFor='message'/>
+                <textarea
+                  {...field}
+                  id='message'
+                  cols="30"
+                  rows="15"
+                  minLength={100}
+                  placeholder='What is your message about? Any specifics, please add here.'
+                  onChange={(e) => {
+                    field.onChange(e);
+                    clearErrors("message")
+                  }}
+                  onBlur={(e) => field.onBlur(e)}
+                />
+                {errors.message && <p className='input-error'>{errors.message.message}</p>}
+             </div>
+            )}
+          />
           <div >
             <button 
-              disabled={!name | !email | !subject | !message }
+              disabled={!isValid}
               className='message-submit-btn'
               type='submit'
             >
               SUBMIT MESSAGE
             </button>
           </div>
+          </div>
         </form>
         ) : (
         <div className='sent-confirm'>
           <CircleCheckBig 
-            style={{color: 'var(--btn-green)'}}
+            style={{ color: 'var(--btn-green)' }}
             strokeWidth={0.4} 
             size={400}/>
           <p className='sent-confirm-text'>Thank you for your message!</p>
