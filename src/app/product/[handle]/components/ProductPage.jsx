@@ -104,7 +104,7 @@ const ProductPage = () => {
       (option) => !selectedOptions[option.name]
     );
     if (unselectedOption) {
-      showErrorToast(`Please choose a ${unselectedOption.name.toLowerCase()} option`);
+      showErrorToast(`Please choose a ${unselectedOption.name.toLowerCase()}`);
       return
     }
     if (!selectedVariant) {
