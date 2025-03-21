@@ -42,129 +42,129 @@ const ContactForm = () => {
   return (
     <>
       {show ? (
-        <form onSubmit={handleSubmit(onSubmit)} className='form'>
-          <div className='form-content'>
-          <Controller
-            name='name'
-            control={control}
-            rules={{
-              required: 'Name is required',
-              pattern: {
-                value: /^[A-Za-z]{2,16}$/,
-                message: "Name needs to be at least 3 characters"
-              }
-            }}
-            render={({ field }) => (
-              <div className='textbox name'>
-                <label htmlFor='name'/>
-                <input
-                  {...field}
-                  id="name"
-                  placeholder='Name'
-                  autoComplete='given-name'
-                  onChange={(e) => {
-                    field.onChange(e);
-                    clearErrors("name")
-                  }}
-                  onBlur={(e) => field.onBlur(e)}
-                />
-                {errors.name && <p className='input-error'>{errors.name.message}</p>}
-              </div>
-            )}
-          />
-          <Controller
-            name='email'
-            control={control}
-            rules={{
-              required: 'Email is required',
-              pattern: {
-                value: /^[^@]+@[^@]+\.[^@]+$/,
-                message: "A valid email address is required"
-              }
-            }}
-            render={({ field }) => (
-              <div className='textbox email'>
-                <label htmlFor='email'/>
-                <input
-                  {...field}
-                  id="email"
-                  placeholder='Email'
-                  autoComplete='off'
-                  onChange={(e) => {
-                    field.onChange(e);
-                    clearErrors("email")
-                  }}
-                  onBlur={(e) => field.onBlur(e)}
-                />
-                {errors.email && <p className='input-error'>{errors.email.message}</p>}
-              </div>
-            )}
-          />
-          <Controller
-            name="subject"
-            control={control}
-            rules={{ required: "Subject is required" }}
-            render={({ field }) => (
-              <div className='textbox subject'>
-                <label htmlFor="subject"/>
-                <select
-                  {...field}
-                  id="subject"
-                  onChange={(e) => {
-                    field.onChange(e);
-                    clearErrors("subject")
-                  }}
-                  onBlur={(e) => field.onBlur(e)}
-                >
-                  <option value='' disabled>What is your enquiry about?</option>
-                  <option value='General'>General</option>
-                  <option value='Review'>Review</option>
-                  <option value='Business'>Business</option>
-                  <option value='Other'>Other</option>
-                </select>
-                {errors.subject && <p className='error'>{errors.subject.message}</p>}
-              </div>
-            )}
-          />
-          <Controller
-            name='message'
-            control={control}
-            rules={{ 
-              required: 'Message needs to be 100 characters minimum',
-              minLength: {
-                value: 100,
-                message: "Message must be at least 100 characters"
-              }
-            }}
-            render={({ field }) => (
-              <div className='textbox message'>
-                <label htmlFor='message'/>
-                <textarea
-                  {...field}
-                  id='message'
-                  cols="30"
-                  rows="15"
-                  minLength={100}
-                  placeholder='What is your message about? Any specifics, please add here.'
-                  onChange={(e) => {
-                    field.onChange(e);
-                    clearErrors("message")
-                  }}
-                  onBlur={(e) => field.onBlur(e)}
-                />
-                {errors.message && <p className='input-error'>{errors.message.message}</p>}
-             </div>
-            )}
-          />
-          <div >
-            <button 
-              disabled={!isValid}
-              className='message-submit-btn'
-              type='submit'
-            >
-              SUBMIT MESSAGE
-            </button>
-          </div>
+        <form onSubmit={handleSubmit(onSubmit)} className='contact-form'>
+          <div className='contact-form-content'>
+            <Controller
+              name='name'
+              control={control}
+              rules={{
+                required: 'Name is required',
+                pattern: {
+                  value: /^[A-Za-z]{2,16}$/,
+                  message: "Name needs to be at least 3 characters"
+                }
+              }}
+              render={({ field }) => (
+                <div className='textbox name'>
+                  <label htmlFor='name'/>
+                  <input
+                    {...field}
+                    id="name"
+                    placeholder='Name'
+                    autoComplete='given-name'
+                    onChange={(e) => {
+                      field.onChange(e);
+                      clearErrors("name")
+                    }}
+                    onBlur={(e) => field.onBlur(e)}
+                  />
+                  {errors.name && <p className='input-error'>{errors.name.message}</p>}
+                </div>
+              )}
+            />
+            <Controller
+              name='email'
+              control={control}
+              rules={{
+                required: 'Email is required',
+                pattern: {
+                  value: /^[^@]+@[^@]+\.[^@]+$/,
+                  message: "A valid email address is required"
+                }
+              }}
+              render={({ field }) => (
+                <div className='textbox email'>
+                  <label htmlFor='email'/>
+                  <input
+                    {...field}
+                    id="email"
+                    placeholder='Email'
+                    autoComplete='off'
+                    onChange={(e) => {
+                      field.onChange(e);
+                      clearErrors("email")
+                    }}
+                    onBlur={(e) => field.onBlur(e)}
+                  />
+                  {errors.email && <p className='input-error'>{errors.email.message}</p>}
+                </div>
+              )}
+            />
+            <Controller
+              name="subject"
+              control={control}
+              rules={{ required: "Subject is required" }}
+              render={({ field }) => (
+                <div className='textbox subject'>
+                  <label htmlFor="subject"/>
+                  <select
+                    {...field}
+                    id="subject"
+                    onChange={(e) => {
+                      field.onChange(e);
+                      clearErrors("subject")
+                    }}
+                    onBlur={(e) => field.onBlur(e)}
+                  >
+                    <option value='' disabled>What is your enquiry about?</option>
+                    <option value='General'>General</option>
+                    <option value='Review'>Review</option>
+                    <option value='Business'>Business</option>
+                    <option value='Other'>Other</option>
+                  </select>
+                  {errors.subject && <p className='error'>{errors.subject.message}</p>}
+                </div>
+              )}
+            />
+            <Controller
+              name='message'
+              control={control}
+              rules={{ 
+                required: 'Message needs to be 100 characters minimum',
+                minLength: {
+                  value: 100,
+                  message: "Message must be at least 100 characters"
+                }
+              }}
+              render={({ field }) => (
+                <div className='textbox message'>
+                  <label htmlFor='message'/>
+                  <textarea
+                    {...field}
+                    id='message'
+                    cols="30"
+                    rows="15"
+                    minLength={100}
+                    placeholder='What is your message about? Any specifics, please add here.'
+                    onChange={(e) => {
+                      field.onChange(e);
+                      clearErrors("message")
+                    }}
+                    onBlur={(e) => field.onBlur(e)}
+                  />
+                  {errors.message && <p className='input-error'>{errors.message.message}</p>}
+               </div>
+              )}
+            />
+            <div >
+              <button 
+                disabled={!isValid}
+                className='message-submit-btn'
+                type='submit'
+              >
+                SUBMIT MESSAGE
+              </button>
+            </div>
           </div>
         </form>
         ) : (

@@ -45,18 +45,18 @@
 }
 
 /* For ContactForm.jsx */
-.form {
+.contact-form {
   margin-top: 3em;
 }
 
-.form-content {
+.contact-form-content {
   margin: auto;
   width: 100%;
   padding-left: 9.5vw;
   padding-right: 9.5vw;
 }
 
-.form-content .input-error {
+.contact-form-content .input-error {
   font-size: 0.8rem;
   letter-spacing: 1px;
   text-align: left;
@@ -67,12 +67,12 @@
   right: 0.9rem;
 }
 
-.form-content .input-error::before {
+.contact-form-content .input-error::before {
   display: inline;
   content: "⚠ ";
 }
 
-.form-content .error {
+.contact-form-content .error {
   font-size: 0.8rem;
   letter-spacing: 1px;
   text-align: left;
@@ -83,7 +83,7 @@
   right: 0.9rem;
 }
 
-.form-content .error::before {
+.contact-form-content .error::before {
   display: inline;
   content: "⚠ ";
 }
