@@ -3,8 +3,10 @@ import ClientProvider from "./ClientProvider";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata = {
-  title: 'Roastar Specialty Coffee',
-  description: 'Bromley coffee shop'
+  title: 'Roastar Coffee',
+  icons: {
+    icon: '/favicon.ico'
+  }
 }
 
 export default function RootLayout({ children }) {
