@@ -7,6 +7,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import cartReducer, { setInitialCartState, loadCartFromLocalStorage } from '@/store/state.js';
 import Navbar from '@/components/Navbar.jsx';
 import Footer from '@/components/Footer.jsx';
+import Maintenance from '@/components/Maintenance.jsx';
 import './globals.css';
 
 const store = configureStore({
@@ -25,6 +26,7 @@ export default function ClientProvider({ children }) {
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <header><Navbar /></header>
+        <Maintenance />
         <main>{children}</main>
         <footer><Footer /></footer>
       </ThemeProvider>
