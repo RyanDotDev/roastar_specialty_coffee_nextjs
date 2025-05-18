@@ -69,7 +69,7 @@ const Links = () => {
         
         {/* LINK TO '/Shop' */}
         <div className='image-three'>
-          <Link href='/shop'>
+          <Link href='/coming-soon'>
             <Image
               src='/images/roastar_products.webp'
               alt='Roastar Shop'

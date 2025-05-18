@@ -15,7 +15,7 @@ const MenuAd = () => {
         <div className='menu-text'>
           <h3>OUR MENU</h3>
           <p>
-            From our range of whole grain Vietnamese coffee beans to our homemade Banh Mih sandwiches and baked goods, Our menu
+            From our range of whole grain Vietnamese coffee beans to our homemade Bánh Mi sandwiches and baked goods, Our menu
             contains a wide variety of delicious foods, coffee and other beverages guaranteed to satisfy your tastebuds.
             <br></br><br></br>
           </p>

@@ -13,6 +13,7 @@ const Points = () => {
           alt='Roastar Coffee Image'
           width={800}
           height={800}
+          style={{ height: 'auto', width: 'auto' }}
         />
       </div>
     </div>

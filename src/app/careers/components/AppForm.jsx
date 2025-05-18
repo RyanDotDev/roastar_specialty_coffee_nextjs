@@ -50,55 +50,44 @@ const AppForm = ({ handleClose }) => {
 
   // Handles the submission of data to backend
   const onSubmit = async (data) => {
-    setLoading(true)
-    if (!data.resume) {
-      showErrorToast('Please upload a valid CV before submitting.');
-      return;
+    setLoading(true);
+  if (!data.resume) {
+    showErrorToast('Please upload a valid CV before submitting.');
+    return;
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append('firstName', data.firstName);
+    formData.append('lastName', data.lastName);
+    formData.append('email', data.email);
+    formData.append('phoneNumber', data.phoneNumber);
+    formData.append('job', data.job);
+    formData.append('rightToWork', data.rightToWork);
+    formData.append('resume', data.resume);
+
+    const response = await fetch('/api/web3forms/application', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to submit application');
     }
 
-    try {
-      // Create FormData and append the file
-      const formData = new FormData();
-      formData.append('file', data.resume);
-
-      // Upload the file and get the public URL
-      const uploadResponse = await fetch('/api/firebase/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!uploadResponse.ok) {
-        throw new Error('Failed to upload resume');
-      }
-
-      const { downloadUrl } = await uploadResponse.json(); // Assume API returns { downloadUrl }
-
-      // Prepare application data with the uploaded file URL
-      const applicationData = {
-        ...data,
-        resumeUrl: downloadUrl, // Use the public URL of the uploaded file
-      };
-
-      // Submit application
-      const response = await fetch('/api/firebase/apply', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(applicationData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to submit application');
-      };
-
+    const result = await response.json();
+    if (result.success) {
       console.log('Application submitted successfully');
-    } catch (error) {
-      console.error('Error submitting application:', error);
-      showErrorToast('Error submitting application. Please try again later.');
-    } finally {
-      setLoading(false)
+      router.push('/submit');
+    } else {
+      throw new Error(result.message || 'Submission failed');
     }
+  } catch (error) {
+    console.error('Error submitting application:', error);
+    showErrorToast('Error submitting application. Please try again later.');
+  } finally {
+    setLoading(false);
+  }
 
     router.push('/submit');
   };

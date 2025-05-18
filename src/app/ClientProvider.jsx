@@ -22,6 +22,7 @@ export default function ClientProvider({ children }) {
       store.dispatch(setInitialCartState(initialCart));
     }
   }, []); // Runs once after mounting
+  
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>

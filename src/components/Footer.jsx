@@ -9,7 +9,9 @@ import Image from 'next/image';
 
 
 const Footer = () => {
-  const pathname  = usePathname();
+  const pathname = usePathname();
+
+  if (pathname === '/coming-soon') return null;
 
   return (
     <footer className='footer-container'>
@@ -26,13 +28,10 @@ const Footer = () => {
             <li>BROMLEY</li>
             <li>BR1 1QX</li>
           </ul>
-          {/*<div className='opening-times'>
+          <div className='opening-times'>
             <p>MONDAY - FRIDAY | 7:45am - 5pm</p>
             <p>SATURDAY | 8am - 5:30pm</p>
             <p>SUNDAY | 9am - 5pm</p>
-          </div>*/}
-          <div className='phone-no'>
-            <p>020 4559 2984</p>
           </div>
         </div>
         <div className='socials'>
@@ -83,17 +82,19 @@ const Footer = () => {
           </div>
           <div className={`footer-links ${'/shop' === pathname && 'active-footer'}`}>
             <Link 
-              href={'/shop'} 
+              href={'/coming-soon'} 
             >
               SHOP
             </Link>
           </div>
-          <div className={`footer-links ${'/privacy' === pathname && 'active-footer'}`}>
-            <Link  
-              href={'/privacy'} 
+          <div className={`footer-links`}>
+            <a  
+              href={'/privacy_policy/roastar_coffee_privacy_policy.pdf'} 
+              target='_blank'
+              rel='noopener noreferrer'
             >
-              PRIVACY NOTICE
-            </Link>
+              PRIVACY POLICY
+            </a>
           </div>
           <div className='copyright'>
             <Copyright 
@@ -108,9 +109,9 @@ const Footer = () => {
           </div>
           <div className='payment-icons'>
             <img className='shopify-logo' src='/logo/shopify_logo.webp' alt="Shopify Logo" width="60" />
-            <img className='visa-logo' src='/icon/payment_visa_icon.svg' alt="Visa Logo" width="60" />
-            <img className='mastercard-logo' src='/icon/mastercard_payment_logo.webp' alt="Mastercard Logo" width="60" />
-            <img className='paypal-logo' src='/icon/payment_paypal_icon.svg' alt="PayPal Logo" width="60" />
+            <img className='visa-logo' src='/icon/visa_icon.svg' alt="Visa Logo" width="60" />
+            <img className='mastercard-logo' src='/icon/mastercard_icon.svg' alt="Mastercard Logo" width="50" />
+            <img className='paypal-logo' src='/icon/paypal-brands.svg' alt="PayPal Logo" width="30" />
           </div>
         </div>
       </div>

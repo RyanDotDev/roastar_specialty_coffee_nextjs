@@ -141,7 +141,7 @@ const ProductPage = () => {
     <div className='product-page-background'>
       <div className='product-page-container'>
         <Link href='/shop'>
-          <ChevronLeft style={{ position: 'relative', top: '0.45rem', color: 'white'}}/><h5>BACK TO SHOP</h5>
+          <ChevronLeft style={{ position: 'relative', top: '0.45rem', color: 'white' }}/><h5>BACK TO SHOP</h5>
         </Link>
         <div className='product-content'>
           <h1>{product.title}</h1>

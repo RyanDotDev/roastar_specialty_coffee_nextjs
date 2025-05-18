@@ -45,18 +45,17 @@ const CareersPage = () => {
     return (
       <div className='app-container'>
         <div className='app-content'>
-          <h2>JOIN THE TEAM</h2>
           <div className='careers-image'>
             <Image 
-              src='/images/imageThree.webp'
+              src='/images/roastar_aboutus_image.png'
               alt='Roastar Careers Image'
               width={1000}
-              height={300}
+              height={320}
               priority
             />
           </div>
           <div className='app-text'>
-            <h3>BECOME A ROASTER!</h3>
+            <h3>BECOME A ROASTAR!</h3>
             <p>Here at Roastar, we look after our staff just as much as our customers and always strive to
                maintain a pleasurable experience for all during their visit to our cafe.
             </p>
@@ -76,18 +75,17 @@ const CareersPage = () => {
       return (
         <div className='app-container'>
           <div className='app-content'>
-            <h2>JOIN THE TEAM</h2>
             <div className='careers-image'>
               <Image 
-                src='/images/imageThree.webp'
+                src='/images/roastar_aboutus_image.png'
                 alt='Roastar Careers Image'
                 width={1000}
-                height={300}
+                height={320}
                 priority
               />
             </div>
             <div className='app-text'>
-              <h3>BECOME A ROASTER!</h3>
+              <h3>BECOME A ROASTAR!</h3>
               <p>Here at Roastar, we look after our staff just as much as our customers and always strive to
                  maintain a pleasurable experience for all during their visit to our cafe.
               </p>
@@ -106,18 +104,17 @@ const CareersPage = () => {
   return (
     <div className='app-container'>
       <div className='app-content'>
-        <h2>JOIN THE TEAM</h2>
         <div className='careers-image'>
           <Image 
-            src='/images/imageThree.webp'
+            src='/images/roastar_aboutus_image.png'
             alt='Roastar Careers Image'
             width={1000}
-            height={300}
+            height={320}
             priority
           />
         </div>
         <div className='app-text'>
-          <h3>BECOME A ROASTER!</h3>
+          <h3>BECOME A ROASTAR!</h3>
           <p>Here at Roastar, we look after our staff just as much as our customers and always strive to
              maintain a pleasurable experience for all during their visit to our cafe.
           </p>

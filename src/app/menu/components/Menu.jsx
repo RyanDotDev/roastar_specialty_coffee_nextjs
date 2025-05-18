@@ -14,16 +14,26 @@ const Menu = () => {
   return (
     <div className='menu'>
       <div className='menu-header'>
-        <h1>MENU</h1>
+        
       </div>
       <div className='menu-page'>
-        <p>Check out our tasty menu.</p>
-        <Image
-          src="/images/small_bites.webp"
-          alt='small bites'
-          height={800}
-          width={600}
-       />
+        <div className='menu-image-container'>
+          <Image
+            src="/images/coffee_menu.webp"
+            alt='Coffee Menu'
+            height={800}
+            width={600}
+            style={{ height: 'auto', width: 'auto' }}
+          />
+          <Image
+            src="/images/food_menu.webp"
+            alt='Food Menu'
+            height={800}
+            width={600}
+            style={{ height: 'auto', width: 'auto' }}
+           />
+        </div>
+        <p>For allergens, please contact a member of staff.</p>
       </div>
     </div>
   )

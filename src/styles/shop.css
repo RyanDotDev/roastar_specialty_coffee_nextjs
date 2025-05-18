@@ -96,7 +96,7 @@
   border: 2px solid transparent;
   border-radius: 5px;
   height: 27rem;
-  width: 100%;
+  width: 101%;
   position: absolute;
   top: -0.1em;
   right: 0;
@@ -199,7 +199,7 @@
   margin: 0;
   position: absolute;
   right: 12rem;
-  top: 23.5rem;
+  top: 23.5rem; /* 50vh */
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
   text-align: left;

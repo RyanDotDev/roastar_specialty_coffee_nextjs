@@ -9,9 +9,10 @@
 /* If product not found */
 .pnf-container {
   background: var(--main-green);
-  height: 50rem;
+  height: 100vh;
   text-align: center;
   color: white;
+  margin-bottom: -1rem;
 }
 
 .pnf-container p {

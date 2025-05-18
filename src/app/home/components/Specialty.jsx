@@ -6,11 +6,14 @@ const Specialty = () => {
     <div className='specialty-container'>
       <div className='specialty-content'>
         <Image 
-          src='/slides/slider-five.webp'
+          src='/images/roastar_outside_image.webp'
           alt='Roastar Outside Image'
           height={900}
           width={900}
         />
+      </div>
+      <div className='points-title'>
+        <h2>THE TASTE OF VIETNAM AT YOUR DOORSTEP!</h2>
       </div>
     </div>
   )

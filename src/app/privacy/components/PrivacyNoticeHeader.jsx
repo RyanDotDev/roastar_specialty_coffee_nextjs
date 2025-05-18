@@ -3,7 +3,7 @@ import React from 'react'
 const PrivacyNoticeHeader = () => {
   return (
     <div className='privacy-notice-header'>
-      <h1>PRIVACY NOTICE</h1>
+      <h1>PRIVACY POLICY</h1>
     </div>
   )
 }

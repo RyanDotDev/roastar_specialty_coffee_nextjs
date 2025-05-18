@@ -7,6 +7,15 @@ const Logo = () => {
   const [logoOnScroll, setLogoOnScroll] = useState(false);
   const pathname = usePathname();
 
+  const isMobile = () => window.innerWidth <= 768;
+
+  const handleLogoClick = (e) => {
+    if (pathname === '/' && isMobile()) {
+      e.preventDefault();
+      window.location.reload();
+    }
+  };
+
   useEffect(() => {
     const changeLogoOnScroll = () => {
       const scrollThresholds = {
@@ -18,6 +27,7 @@ const Logo = () => {
         '/careers': 1,
         '/privacy': 1,
         '/product/:handle': 1,
+        '/coming-soon': 700,
       };
 
       let threshold
@@ -39,7 +49,7 @@ const Logo = () => {
   return (
     <>
       <div className="logo">
-        <Link href='/'>
+        <Link href='/' onClick={handleLogoClick}>
           {/* LOGO HOVER EFFECT (DAYTIME) */}
           <Image
             src={logoOnScroll ? "/logo/Logo-ROASTAR-green.webp" : "/logo/Logo-ROASTAR-beige.webp"}

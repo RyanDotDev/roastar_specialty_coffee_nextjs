@@ -5,7 +5,7 @@ import { AdvancedMarker, Pin, APIProvider, Map } from '@vis.gl/react-google-maps
 const GoogleMaps = () => {
   const [apiKey, setApiKey] = React.useState('')
   const position = { lat: 51.4064, lng: 0.0158 };
-  const markerPosition = { lat: 51.40648, lng: 0.01576 }
+  const markerPosition = { lat: 51.40643, lng: 0.01575 }
 
   useEffect(() => {
     // Fetch API key from backend

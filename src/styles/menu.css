@@ -7,6 +7,7 @@
   box-shadow: 1px 1px 10px 1px hsl(0, 0%, 73%);
 }
 
+/*
 .menu-header h1 {
   padding-top: 1.5em;
   font-size: 3rem;
@@ -14,28 +15,39 @@
   letter-spacing: 2px;
   color: black;
 }
+*/
 
 .menu-page {
   background: white;
   text-align: center;
-  padding-top: 10rem;
+  padding-top: 5rem;
   padding-bottom: 5rem;
 }
 
 .menu-page p {
   color: black;
   letter-spacing: 1px;
-  margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 
-.menu-page img {
+.menu-image-container {
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.menu-image-container img {
   margin-top: 2rem;
   object-fit: contain;
-  box-shadow: 2px 2px 10px 2px hsl(0, 0%, 0%, 10%);
 }
 
 @media all and (max-width: 620px) {
-  .menu-page img {
+  .menu-image-container {
+    gap: 0px;
+  }
+  .menu-image-container img {
     width: 95%;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }

@@ -70,7 +70,7 @@ const Banner = () => {
             <span>COFFEE</span>
           </h1>
           <h2 className='slider-two-text'>
-            Try our coconut coffee! One of our most beloved.
+            Specially made with Vietnamese "Phin" brewed coffee.
           </h2>
         </div>
         {/* SLIDE TWO BACKGROUND */}

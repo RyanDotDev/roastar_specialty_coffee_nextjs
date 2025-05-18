@@ -37,12 +37,12 @@
 
 .app-content h2 {
   position: relative;
-  top: 4.1em;
+  top: 3.8em;
   color: white;
   z-index: 2;
   letter-spacing: 1.5px;
   text-align: center;
-  font-size: 40px;
+  font-size: 3rem;
   font-weight: 500;
 }
 
@@ -52,8 +52,10 @@
 }
 
 .careers-image img {
+  margin-top: 3rem;
   width: 90%;
   object-fit: cover;
+  object-position: 80% 76%;
 }
 
 .app-text {

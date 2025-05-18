@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link';
 import { motion } from "framer-motion";
 import Backdrop from './Backdrop'
+import Image from 'next/image';
 import { X } from 'lucide-react';
 
 const dropIn = {
@@ -49,19 +50,21 @@ const Content = ({ handleClose }) => {
         <div className='delivery-link'>
           <div className='deliveroo'>
             <Link href='https://deliveroo.co.uk/menu/london/bromley/roastar-speciality-coffee-8-east-street'>
-              <img
-                src='../../../icon/deliveroo_icon.png'
+              <Image
+                src='/icon/deliveroo_icon.svg'
+                alt='Deliveroo Icon'
                 width={250}
+                height={250}
               />
             </Link>
-          </div>
-          
-          
+          </div>       
           <div className='uber-eats'>
             <Link href='https://www.ubereats.com/gb/store/roastar-speciality-coffee/0oJZk_Y8WdGYpXWoQ1Qe_Q'>
-              <img
-                src='../../../icon/uber_eats_icon.png'
-                width={200}
+            <Image
+                src='/icon/uber_eats_icon.svg'
+                alt='Deliveroo Icon'
+                width={250}
+                height={250}
               />
             </Link>
           </div>

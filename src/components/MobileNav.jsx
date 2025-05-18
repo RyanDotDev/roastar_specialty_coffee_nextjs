@@ -23,6 +23,7 @@ const MobileNav = () => {
           '/careers': 1,
           '/privacy': 1,
           '/product/:handle': 1,
+          '/coming-soon': 700,
         };
 
         let threshold

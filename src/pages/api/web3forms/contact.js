@@ -5,6 +5,7 @@ export default async function handler(req, res) {
 
   try {
     const { name, email, subject, message } = req.body;
+    console.log("Sending email to:", process.env.COMPANY_EMAIL);
 
     const response = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
@@ -16,10 +17,12 @@ export default async function handler(req, res) {
         subject,
         message,
         replyTo: email,
+        to: process.env.COMPANY_EMAIL,
       }),
     });
 
     const result = await response.json();
+    console.log("Web3Forms response:", result);
 
     if (result.success) {
       return res.status(200).json({ success: true, message: "Email sent successfully" });
