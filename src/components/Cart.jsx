@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { clearCart, removeFromCart, updateQuantity } from '@/store/state';
 import { motion } from 'framer-motion';
 import Backdrop from '@/utils/popups/cart/Backdrop';
 import { Minus, Plus, X } from 'lucide-react';
@@ -10,17 +8,17 @@ import { cartAnimate } from '@/lib/utils/popups/cart/animation';
 import CartSlider from './CartSlider';
 import Image from 'next/image';
 import { showErrorToast } from '@/lib/utils/toasts/toast';
+import { useCartStore } from '@/store/cartStore';
 
 const Cart = ({ handleClose }) => {
-  const cart = useSelector((state) => state.cart);
-  console.log("Cart state from Redux:", cart);
-  const dispatch = useDispatch();
+  const { cart, removeFromCart, clearCart, updateQuantity } = useCartStore();
   const [loading, setLoading] = useState(true);
 
   console.log("Cart state after adding:", JSON.stringify(cart, null, 2));
 
   const handleCheckout = async () => {
     setLoading(true)
+    
     try {
       const lineItems = cart.map((item) => ({
         merchandiseId: item.id,
@@ -104,20 +102,24 @@ const Cart = ({ handleClose }) => {
   }, [dispatch])
   */
 
-  const handleRemove = (id) => {
-    dispatch(removeFromCart(id));
-  }
+  const handleRemove = (id) => removeFromCart(id)
+  const handleClearCart = () => clearCart();
 
-  const handleClearCart = () => {
-    dispatch(clearCart());
-  }
+  const handleQuantityChange = (id, variant, type) => {
+    const item = cart.find((item) => item.id === id && item.variant === variant);
+    if (!item) return;
 
-  const handleQuantityChange = (id, type) => {
-    const item = cart.find((item) => item.id === id);
-    if (item) {
-      const newQuantity = type === 'increment' ? item.quantity + 1 : Math.max(item.quantity - 1, 1);
-      dispatch(updateQuantity({ id, quantity: newQuantity }))
+    const maxQuantity = 99;
+    let newQuantity = item.quantity;
+
+    if (type === 'increment') {
+      if (item.quantity >= maxQuantity) return;
+      newQuantity = item.quantity + 1;
+    } else {
+      newQuantity = Math.max(item.quantity - 1, 1);
     }
+
+    updateQuantity(id, variant, newQuantity);
   }
 
   const subtotal = cart.reduce((total, item) => total + item.quantity * item.price, 0);
@@ -171,11 +173,11 @@ const Cart = ({ handleClose }) => {
                         <h5 className='cart-price'>£{(item.quantity * item.price).toFixed(2)}</h5>
                         <div className='cart-quantity-and-variant'>
                           <div className='cart-quantity-handle'>
-                            <button onClick={() => handleQuantityChange(item.id, 'decrement')} className='cart-button-minus'>
+                            <button onClick={() => handleQuantityChange(item.id, item.variant, 'decrement')} className='cart-button-minus'>
                               <Minus size={10}/>
                             </button>
                              <p className='cart-quantity'>{item.quantity}</p>
-                            <button onClick={() => handleQuantityChange(item.id, 'increment')} className='cart-button-plus'>
+                            <button onClick={() => handleQuantityChange(item.id, item.variant, 'increment')} className='cart-button-plus'>
                               <Plus size={10}/>
                             </button>
                             </div>

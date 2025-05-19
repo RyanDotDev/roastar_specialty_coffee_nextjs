@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react'
 import Image from 'next/image';
 import Link from 'next/link'
-import { useDispatch, useSelector } from 'react-redux'
 import { motion } from 'framer-motion'
 import { previewAnimate } from '@/utils/popups/product_preview/animation'
-import { addToCart } from '@/store/state'
 import Backdrop from '@/utils/popups/product_preview/Backdrop'
 import { Plus, Minus, X } from 'lucide-react'
 import { showErrorToast, showSuccessToast } from '@/lib/utils/toasts/toast'
+import { useCartStore } from '@/store/cartStore';
 
 const ProductPreview = ({ handle, handleClose }) => {
-  const cart = useSelector((state) => state.cart);
-  const dispatch =  useDispatch();
+  const cart = useCartStore((state) => state.cart);
+  const addToCart = useCartStore((state) => state.addToCart);
+
   const [product, setProduct] = React.useState(null);
   const [selectedVariant, setSelectedVariant] = React.useState(null);
   const [selectedOptions, setSelectedOptions] = React.useState({})
@@ -43,20 +43,23 @@ const ProductPreview = ({ handle, handleClose }) => {
     const unselectedOption = product.options.find(
       (option) => !selectedOptions[option.name]
     );
+
     if (unselectedOption) {
       showErrorToast(`Options must be selected before proceeding to checkout.`);
       return
     }
+
     if (!selectedVariant) {
       showErrorToast("The selected variant is unavailable. Please choose a valid option");
       return // Stop execution if no valid variant is selected
     }
+
     try {
       const lineItems = [{ 
         merchandiseId: selectedVariant.id, 
         quantity: counter,
       }]
-      console.log("Line items sent to Shopify:", lineItems);
+
       const response = await fetch('/api/shopify/checkout', {
         method: 'POST',
         headers: {
@@ -64,16 +67,20 @@ const ProductPreview = ({ handle, handleClose }) => {
         },
         body: JSON.stringify({ lineItems })
       })
+
       if (!response) {
         throw new Error("Checkout URL is missing or invalid.")
       } 
+
       const { checkoutUrl } = await response.json();
+
       if (checkoutUrl) {
         console.log("Redirecting to checkout URL:", checkoutUrl);
         window.location.href = checkoutUrl;
       } else {
         showErrorToast("Failed to create checkout. Please try again")
       }
+
     } catch(error) {
       console.error("Checkout Error:", error.message || error);
       showErrorToast("Error creating checkout. Please try again later")
@@ -114,9 +121,13 @@ const ProductPreview = ({ handle, handleClose }) => {
     return [...new Set(availableValues)];
   };
 
+  const maxQuantity = 99;
+
   // Count functions for increasing or decreasing quantity
   const handleClickPlus = () => {
-    setCounter(counter + 1)
+    if (counter < maxQuantity) {
+      setCounter(counter + 1)
+    } 
   }
   const handleClickMinus = () => {
     setCounter(counter => Math.max(counter - 1, 1))
@@ -146,7 +157,7 @@ const ProductPreview = ({ handle, handleClose }) => {
     }
 
     if (selectedVariant && product) {
-      dispatch(addToCart({
+      addToCart({
         id: selectedVariant.id,
         title: product.title,
         variant: selectedVariant.title,
@@ -154,7 +165,7 @@ const ProductPreview = ({ handle, handleClose }) => {
         quantity: counter,
         image: product.images.edges[0]?.node.src,
         handle: product.handle,
-      }));
+      });
     }
     if (handleAddToCart) showSuccessToast('Item Added');
   };

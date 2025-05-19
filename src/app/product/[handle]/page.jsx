@@ -1,10 +1,10 @@
-import React from 'react'
-import ProductPage from './components/ProductPage'
+import React from 'react';
+import ProductPage from './components/ProductPage';
 
 const page = () => {
   return (
     <div>
-      <ProductPage/>
+      <ProductPage />
     </div>
   )
 }

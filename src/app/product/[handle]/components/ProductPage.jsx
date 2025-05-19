@@ -3,17 +3,17 @@ import React, { useEffect } from 'react';
 import Link from 'next/link';
 import DOMPurify from 'dompurify';
 import Image from 'next/image';
-import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '@/store/state';
 import { Minus, Plus, ChevronLeft } from 'lucide-react';
 import { useParams } from 'next/navigation';
-import { showErrorToast } from '@/lib/utils/toasts/toast';
+import { showErrorToast, showSuccessToast } from '@/lib/utils/toasts/toast';
+import { useCartStore } from '@/store/cartStore'
 import '@/styles/product.css';
 
 const ProductPage = () => {
   const { handle } = useParams();
-  const cart = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
+  const cart = useCartStore((state) => state.cart);
+  const addToCart = useCartStore((state) => state.addToCart);
+
   const [product, setProduct] = React.useState(null);
   const [relatedProducts, setRelatedProducts] = React.useState([]);
   const [selectedVariant, setSelectedVariant] = React.useState(null);
@@ -91,9 +91,13 @@ const ProductPage = () => {
     return [...new Set(availableValues)];
   };
 
+  const maxQuantity = 99;
+
   // Count functions for increasing or decreasing quantity
   const handleClickPlus = () => {
-    setCounter(counter + 1)
+    if (counter < maxQuantity) {
+      setCounter(counter + 1)
+    }
   }
   const handleClickMinus = () => {
     setCounter(counter => Math.max(counter - 1, 1))
@@ -119,7 +123,7 @@ const ProductPage = () => {
       return;
     }
     if (selectedVariant && product) {
-      dispatch(addToCart({
+      addToCart({
         id: selectedVariant.id,
         title: product.title,
         variant: selectedVariant.title,
@@ -127,7 +131,8 @@ const ProductPage = () => {
         quantity: counter,
         image: product.images.edges[0]?.node.src,
         handle: product.handle,
-      }));
+      });
+      showSuccessToast('Item Added')
     };
   };
 
@@ -154,6 +159,7 @@ const ProductPage = () => {
                 width={600}
                 height={550}
                 className='product-img'
+                priority
               />
             )}
             <div className='product-details'>

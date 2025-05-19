@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+"use client"
+import React, { useState, useEffect } from 'react';
 import { Badge } from '@mui/material';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -7,26 +8,24 @@ import { AnimatePresence } from 'framer-motion';
 import Cart from './Cart.jsx';
 import Logo from './Logo.jsx';
 import MobileNav from './MobileNav.jsx';
-import { useSelector } from 'react-redux';
+import { useCartStore } from '../store/cartStore.js';
 
 const navigation = [ 
   { _id:101, title: 'HOME', href: '/' },
   { _id:102, title: 'ABOUT US', href: '/about' },
-  { _id:103, title: 'SHOP', href: '/coming-soon' },
+  { _id:103, title: 'SHOP', href: '/shop' },
   { _id:104, title: 'MENU', href: '/menu' },
   { _id:105, title: 'CONTACT US', href: '/contact' },
 ];
 
 const Navbar = () => {
-  const cart = useSelector((state) => state.cart)
+  const cart = useCartStore((state) => state.cart)
   const pathname = usePathname();
   const [colourOnScroll, setColourOnScroll] = React.useState(false); // changes the state of colour upon scrolling
   const [cartOpen, setCartOpen] = React.useState(false) // Opens and closes cart
 
   const close = () => setCartOpen(false);
   const open = () => setCartOpen(true)
-
-
 
   useEffect(() => {
     close();   
@@ -73,7 +72,7 @@ const Navbar = () => {
       }
     };
   }, [cartOpen]);
-  
+
   return (
     <div className={`${colourOnScroll ? 'navbar navbarbg' : 'navbar'}`}>
       <div className="nav-container">
@@ -109,7 +108,7 @@ const Navbar = () => {
               badgeContent={cart.length}
               invisible={cart.length === 0}
               className='cart-badge'
-              color="secondary"
+              color='secondary'
               sx={{
                 "& .MuiBadge-badge": {
                   right: 12,
@@ -118,6 +117,7 @@ const Navbar = () => {
                   height: '14px',
                   minWidth: '13px',
                   zIndex: 100,
+                  background: 'crimson',
                   fontVariantNumeric: 'tabular-nums',
                 }
               }}
