@@ -1,37 +1,22 @@
 "use client"
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link'
 import Image from 'next/image'
 import { AnimatePresence } from 'framer-motion';
 import ProductPreview from './ProductPreview';
 import Loader from './Loader';
 
-const Products = ({ addToCart }) => {
-  const [productsList, setProductsList] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(null);
-  const [selectedProduct, setSelectedProduct] = React.useState(null);
+const Products = ({ products = [], error: serverError, addToCart }) => {
+  const [productsList, setProductsList] = useState(products);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   // handles for opening and closing preview of product
   const handleOpenModal = (handle) => setSelectedProduct(handle);
   const handleCloseModal = () => setSelectedProduct(null)
 
   useEffect(() => {
     handleCloseModal();
-    const getProducts = async () => {
-      try {
-        const response = await fetch('/api/shopify/products', { cache: 'no-cache' })
-        if (!response.ok) throw new Error('Failed to fetch products'); // Check the data structure here
-        const data = await response.json()
-        setProductsList(data.products || [])
-      } catch (error) {
-        console.error("Error fetching product list:", error);
-        setError('Sorry, something went wrong')
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    getProducts();
     const originalBackgroundColor = document.body.style.backgroundColor;
     document.body.style.backgroundColor = 'var(--main-green)';
     return () => {
@@ -55,7 +40,9 @@ const Products = ({ addToCart }) => {
     }, [selectedProduct]);
 
   if (loading) return <Loader />
-  if (error) return <div className='products-not-found'><p>{error}</p></div>
+  if (!productsList.length) {
+    return <div className='products-not-found'><p>{error}</p></div>
+  }
 
   return (
     <div className="product-container">

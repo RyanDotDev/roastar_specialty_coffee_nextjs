@@ -1,15 +1,38 @@
-import React from 'react'
-import Header from './components/Header'
-import Products from './components/Products'
-import '@/styles/shop.css'
+import React from 'react';
+import Header from './components/Header';
+import Products from './components/Products';
+import '@/styles/shop.css';
 
-const page = () => {
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+
+const getProducts = async () => {
+  const res = await fetch(`${baseUrl}/api/shopify/products`, {
+    cache: 'no-cache',
+  });
+  if (!res.ok) throw new Error('Failed to fetch products');
+  return await res.json();
+}
+
+export default async function Page() {
+  let products = null;
+  let product = null;
+  let error =  null;
+
+  try {
+    const data = await getProducts();
+    products = data.products || [];
+  } catch(err) {
+    console.error(err);
+    error = err.message || "An error occured";
+  }
+
   return (
     <div className='shop-container'>
       <Header />
-      <Products />
+      <Products 
+        products={products}
+        error={error}
+      />
     </div>
   )
 }
-
-export default page
