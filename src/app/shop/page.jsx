@@ -15,7 +15,6 @@ const getProducts = async () => {
 
 export default async function Page() {
   let products = null;
-  let product = null;
   let error =  null;
 
   try {
@@ -36,3 +35,18 @@ export default async function Page() {
     </div>
   )
 }
+
+/*
+/app
+|  |
+|  /shop
+|    |-page.jsx
+|    /components
+|      |
+Header.jsx
+|      Loader.jsx
+|      ProductPreview.jsx
+|      Products.jsx
+|  
+|
+*/

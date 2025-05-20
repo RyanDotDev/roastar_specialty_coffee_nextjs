@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -6,8 +6,8 @@ import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 
 const CartSlider = ({ initialProducts = [] }) => {
-  const [products, setProducts] = React.useState(initialProducts);
-  const [loading, setLoading] = React.useState(!initialProducts.length);
+  const [products, setProducts] = useState(initialProducts);
+  const [loading, setLoading] = useState(!initialProducts.length);
 
   useEffect(() => {
     if (products.length > 0) return;

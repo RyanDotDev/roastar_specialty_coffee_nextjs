@@ -9,7 +9,7 @@ import Loader from './Loader';
 const Products = ({ products = [], error: serverError, addToCart }) => {
   const [productsList, setProductsList] = useState(products);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(serverError || null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   // handles for opening and closing preview of product
   const handleOpenModal = (handle) => setSelectedProduct(handle);
