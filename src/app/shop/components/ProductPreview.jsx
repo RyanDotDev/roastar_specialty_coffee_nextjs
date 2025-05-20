@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image';
 import Link from 'next/link'
 import { motion } from 'framer-motion'
@@ -12,11 +12,11 @@ const ProductPreview = ({ handle, handleClose }) => {
   const cart = useCartStore((state) => state.cart);
   const addToCart = useCartStore((state) => state.addToCart);
 
-  const [product, setProduct] = React.useState(null);
-  const [selectedVariant, setSelectedVariant] = React.useState(null);
-  const [selectedOptions, setSelectedOptions] = React.useState({})
-  const [counter, setCounter] = React.useState(1);
-  const [loading, setLoading] = React.useState(true);
+  const [product, setProduct] = useState(null);
+  const [selectedVariant, setSelectedVariant] = useState(null);
+  const [selectedOptions, setSelectedOptions] = useState({})
+  const [counter, setCounter] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getProduct = async () => {
@@ -167,7 +167,7 @@ const ProductPreview = ({ handle, handleClose }) => {
         handle: product.handle,
       });
     }
-    if (handleAddToCart) showSuccessToast('Item Added');
+    showSuccessToast('Item Added');
   };
 
   if (!product) return <p></p>;
