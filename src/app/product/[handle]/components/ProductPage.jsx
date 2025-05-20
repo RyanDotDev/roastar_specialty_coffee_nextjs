@@ -1,66 +1,28 @@
 "use client"
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import DOMPurify from 'dompurify';
 import Image from 'next/image';
+import { useCartStore } from '@/store/cartStore';
+import { showErrorToast } from '@/lib/utils/toasts/toast';
 import { Minus, Plus, ChevronLeft } from 'lucide-react';
-import { useParams } from 'next/navigation';
-import { showErrorToast, showSuccessToast } from '@/lib/utils/toasts/toast';
-import { useCartStore } from '@/store/cartStore'
 import '@/styles/product.css';
 
-const ProductPage = () => {
-  const { handle } = useParams();
+const ProductPage = ({ product, relatedProducts, html }) => {
   const cart = useCartStore((state) => state.cart);
   const addToCart = useCartStore((state) => state.addToCart);
 
-  const [product, setProduct] = React.useState(null);
-  const [relatedProducts, setRelatedProducts] = React.useState([]);
-  const [selectedVariant, setSelectedVariant] = React.useState(null);
-  const [selectedOptions, setSelectedOptions] = React.useState({});
-  const [counter, setCounter] = React.useState(1);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(null);
+  const [selectedVariant, setSelectedVariant] = useState(null);
+  const [selectedOptions, setSelectedOptions] = useState({});
+  const [counter, setCounter] = useState(1);
 
   useEffect(() => { 
-    const getData = async () => {
-      setLoading(true)
-      try {
-        const [productRes, relatedRes] = await Promise.all([
-          fetch(`/api/shopify/${handle}`, { cache: 'no-cache' }),
-          fetch('/api/shopify/related-products', { cache: 'no-cache' }),
-        ]);
-        if (!productRes || !relatedRes) {
-          throw new Error('Failed to fetch data');
-        }
-        const [productData, relatedData] = await Promise.all([
-          productRes.json(),
-          relatedRes.json(),
-        ]);
-        setProduct(productData)
-
-        const validatedRelatedProducts = relatedData?.products?.filter(({ node }) => node) || [];
-        setRelatedProducts(validatedRelatedProducts);
-
-        const firstAvailableVariant = productData.variants.edges.find(
-          ({ node }) => node.availableForSale
-        )?.node;
-        setSelectedVariant(firstAvailableVariant || null)
-      } catch (error) {
-        console.error('Error fetching data:', error)
-        setError('Sorry, something went wrong')
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    getData();
-    
+    const firstAvailableVariant = product.variants.edges.find(({ node }) => node.availableForSale)?.node;
+    setSelectedVariant(firstAvailableVariant || null)
     document.body.style.backgroundColor = 'var(--main-green)';
     return () => {
       document.body.style.backgroundColor = ''
     }
-  }, [handle]);
+  }, [product]);
 
   const handleVariantChange = (option, value) => {
     const updatedOptions = { ...selectedOptions, [option]: value };
@@ -132,15 +94,8 @@ const ProductPage = () => {
         image: product.images.edges[0]?.node.src,
         handle: product.handle,
       });
-      showSuccessToast('Item Added')
     };
   };
-
-  if (loading) return <div className='pnf-container'/>;
-  if (error) return <div className='pnf-container'><p>{error}</p></div>; 
-  if (!product) return <div className='pnf-container'/>
-
-  const sanitisedHtml = DOMPurify.sanitize(product.descriptionHtml);
 
   return (
     <div className='product-page-background'>
@@ -164,7 +119,7 @@ const ProductPage = () => {
             )}
             <div className='product-details'>
               {/* PRODUCT DETAILS */}
-              <div className='product-desc' dangerouslySetInnerHTML={{ __html: sanitisedHtml }} />
+              <div className='product-desc' dangerouslySetInnerHTML={{ __html: html }} />
               {/* INGREDIENTS (IF APPLICABLE) */}
               <p>{/* product.metafield?.key */}</p>
               {/* PRODUCT PRICE */}
@@ -243,8 +198,10 @@ const ProductPage = () => {
           {/* RELATED PRODUCTS*/}
           <h2 className='related-product-title'>OTHER PRODUCTS</h2>
           <div className='related-product-list'>
-            {relatedProducts?.filter(({ node }) => node?.handle !== product?.handle)
-                .slice(0,4).map(({ node }) => (
+            {relatedProducts
+              ?.filter(({ node }) => node?.handle !== product?.handle)
+              ?.slice(0,4)
+              ?.map(({ node }) => (
                 <div 
                   className='related-product-card'
                   key={node.id}

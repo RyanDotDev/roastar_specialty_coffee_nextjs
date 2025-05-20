@@ -7,13 +7,13 @@
         /* '/src/*'' paths */
         "./src/*",
         "./src/lib/*", 
-        "./src/pages/*",
+        "src/fetch/*",
         "./src/store/*", 
         "./src/styles/*", 
         "./src/theme/*", 
         /* '/src/app/*' paths */
         "./src/app/*",
-        "./src/lib/api/*",
+        "src/pages/api/*",
         "./src/app/utils/*",
         "./src/app/pages/*",
       ]
@@ -46,6 +46,6 @@
     "src/layout.jsx",
     "src/page.jsx",
     ".next/types/**/*.ts"
-, "src/pages/api/shopify/route.js", "src/lib/api/shopify/products.js" , "next.config.mjs", "next.config.mjs" ],
+, "src/pages/api/shopify/route.js", "src/pages/api/shopify/products.js" , "next.config.mjs", "next.config.mjs" ],
   "exclude": []
 }
