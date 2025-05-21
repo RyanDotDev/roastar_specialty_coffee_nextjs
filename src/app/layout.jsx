@@ -1,6 +1,6 @@
 import { ToastContainer } from "@/lib/utils/toasts/toast";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import Navbar from '@/components/Navbar.jsx';
+import Navbar from "@/components/Navbar";
 import Footer from '@/components/Footer.jsx';
 import Maintenance from '@/components/Maintenance.jsx';
 import './globals.css';

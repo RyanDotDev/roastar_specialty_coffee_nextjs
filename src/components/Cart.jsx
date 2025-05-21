@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { showErrorToast } from '@/lib/utils/toasts/toast';
 import { useCartStore } from '@/store/cartStore';
 
-const Cart = ({ handleClose }) => {
+const Cart = ({ handleClose, cartSliderData }) => {
   const { cart, removeFromCart, clearCart, updateQuantity } = useCartStore();
   const [loading, setLoading] = useState(true);
 
@@ -153,7 +153,7 @@ const Cart = ({ handleClose }) => {
                 <div className='cart-is-empty'>
                   <p className=''>YOUR CART IS EMPTY</p>
                   <Link href='/shop'><button className='continue'>CONTINUE SHOPPING</button></Link>
-                  <CartSlider />
+                  <CartSlider data={cartSliderData} />
                 </div>
               ) : (
                 <>

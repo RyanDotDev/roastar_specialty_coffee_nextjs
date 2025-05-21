@@ -166,8 +166,8 @@ const ProductPreview = ({ handle, handleClose }) => {
         image: product.images.edges[0]?.node.src,
         handle: product.handle,
       });
+      showSuccessToast('Item Added');
     }
-    showSuccessToast('Item Added');
   };
 
   if (!product) return <p></p>;

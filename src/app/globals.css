@@ -531,7 +531,7 @@ body {
 
 .cart-slider {
   position: absolute;
-  bottom: 10rem;
+  bottom: 8rem;
   overflow: hidden;
   margin: auto;
   width: 95%;
@@ -557,31 +557,6 @@ body {
 .cart-slide:hover {
   filter: opacity(0.7);
   transition: 300ms;
-}
-
-.cart-slider-skeleton {
-  justify-content: center;
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  align-items: center;
-  width: 150px;
-  height: 200px;
-  background: #f0f0f0;
-  margin: 120px 120px;
-}
-
-.skeleton-image {
-  width: 150px;
-  height: 130px;
-  background: #ddd;
-  margin-bottom: 10px;
-}
-
-.skeleton-text {
-  width: 80px;
-  height: 15px;
-  background: #ccc;
 }
 
 /* If cart has item(s) */

@@ -2,24 +2,11 @@
 import React, { useEffect } from 'react';
 import { AdvancedMarker, Pin, APIProvider, Map } from '@vis.gl/react-google-maps'
 
-const GoogleMaps = () => {
-  const [apiKey, setApiKey] = React.useState('')
+const GoogleMaps = ({ apiKey }) => {
   const position = { lat: 51.4064, lng: 0.0158 };
   const markerPosition = { lat: 51.40643, lng: 0.01575 }
 
   useEffect(() => {
-    // Fetch API key from backend
-    const fetchApiKey = async () => {
-      try {
-        const response = await fetch('/api/google-maps/map-key', { cache: 'no-store' });
-        const data = await response.json()
-        setApiKey(data.apiKey)
-      } catch (error) {
-        console.error('Error fetching google maps api key', error)
-      }
-    }
-
-    fetchApiKey()
     const hash = window.location.hash.slice(1);
     if (hash) {
       const element = document.getElementById(hash);

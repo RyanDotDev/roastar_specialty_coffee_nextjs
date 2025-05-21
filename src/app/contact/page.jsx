@@ -1,13 +1,18 @@
 import React from 'react'
-import ContactUsContainer from './components/ContactUsContainer'
+import ContactUsPage from './components/ContactUsPage'
 import ContactUsHeader from './components/ContactUsHeader'
 import '@/styles/contact.css'
 
-const page = () => {
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
+
+const page = async () => {
+  const res = await fetch(`${baseUrl}/api/google-maps/map-key`, { cache: 'no-cache' })
+  const { apiKey } = await res.json()
+
   return (
     <div className='contact-us-container'>
       <ContactUsHeader />
-      <ContactUsContainer />
+      <ContactUsPage apiKey={apiKey}/>
     </div>
   )
 }

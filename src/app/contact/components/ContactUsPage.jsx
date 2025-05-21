@@ -2,14 +2,14 @@ import React from 'react'
 import ContactForm from './ContactForm'
 import GoogleMaps from './GoogleMaps'
 
-const ContactUsContainer = () => {
+const ContactUsPage = ({ apiKey }) => {
   return (
-    <div className='cu-container'>
+    <div className="cu-container">
       <p>Have any enquiries? Please fill in form below. We would love to get in contact with you.</p>
       <ContactForm />
-      <GoogleMaps />
+      <GoogleMaps apiKey={apiKey} />
     </div>
   )
 }
 
-export default ContactUsContainer
+export default ContactUsPage

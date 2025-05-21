@@ -36,6 +36,13 @@
   flex-wrap: wrap;
 }
 
+.menu-image-container > div {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 3 / 4;
+}
+
 .menu-image-container img {
   margin-top: 2rem;
   object-fit: contain;

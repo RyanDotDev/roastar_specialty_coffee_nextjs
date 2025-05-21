@@ -23,14 +23,14 @@ const Menu = () => {
             alt='Coffee Menu'
             height={800}
             width={600}
-            style={{ height: 'auto', width: 'auto' }}
+            style={{ height: 'auto', width: '600px' }}
           />
           <Image
             src="/images/food_menu.webp"
             alt='Food Menu'
             height={800}
             width={600}
-            style={{ height: 'auto', width: 'auto' }}
+            style={{ height: 'auto', width: '600px' }}
            />
         </div>
         <p>For allergens, please contact a member of staff.</p>
