@@ -2,7 +2,7 @@ import React from 'react';
 import xss from 'xss';
 import ProductPage from './components/ProductPage';
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
 const getProduct = async (handle) => {
   const res = await fetch(`${baseUrl}/api/shopify/${handle}`, {
@@ -23,7 +23,7 @@ const getRelatedProducts = async () => {
 }
 
 export default async function Page({ params }) {
-  const { handle } = params;
+  const { handle } = await params;
   
   let product = null;
   let relatedProducts = null;
