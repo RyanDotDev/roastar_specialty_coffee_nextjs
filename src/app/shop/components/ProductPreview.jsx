@@ -18,12 +18,19 @@ const ProductPreview = ({ handle, handleClose }) => {
   const [counter, setCounter] = useState(1);
   const [loading, setLoading] = useState(true);
 
+  const productCache = new Map();  
+  
   useEffect(() => {
     const getProduct = async () => {
+      if (productCache.has(handle)) {
+      setProduct(productCache.get(handle));
+      return;
+  }
       try {
         const res = await fetch(`/api/shopify/${handle}`, { cache: 'no-cache'});
         if (!res.ok) throw new Error ("Product not found or server error")
         const data = await res.json()
+        productCache.set(handle, data);
         setProduct(data);
         // Automatically select the first available variant
         const firstAvailableVariant = data.variants.edges.find(

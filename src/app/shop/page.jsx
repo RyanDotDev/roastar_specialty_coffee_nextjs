@@ -37,3 +37,17 @@ export default async function Page() {
     </div>
   )
 }
+
+/* This line is to get rid of that stupid "searchParams" error */
+/*const searchParams = await props.searchParams; */
+
+/*
+/shop
+|  |
+|  /components
+|    |-Header.jsx
+|    |-Loader.jsx
+|    |-ProductPreview.jsx
+|    |-Products.jsx
+|-page.jsx     
+*/
