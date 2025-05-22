@@ -1,10 +1,7 @@
 import NavbarContainer from "./NavbarContainer";
 
-const isServer = typeof window === 'undefined';
-const baseUrl = isServer
-  ? process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-  : '';
-
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  
 const getProducts = async () => {
   const res = await fetch(`${baseUrl}/api/shopify/cart-slider`, { 
     cache: 'no-store',
