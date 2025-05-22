@@ -972,7 +972,6 @@ body {
 
 /* Maintenance.jsx */
 .maintenance-container {
-  display: none;
   text-align: center;
   position: fixed;
   z-index: 200;
