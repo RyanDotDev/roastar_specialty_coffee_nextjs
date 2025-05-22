@@ -23,7 +23,7 @@ const getRelatedProducts = async () => {
 }
 
 export default async function Page({ params }) {
-  const { handle } = await params;
+  const { handle } = params;
   
   let product = null;
   let relatedProducts = null;
