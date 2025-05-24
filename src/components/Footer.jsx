@@ -11,7 +11,7 @@ import Image from 'next/image';
 const Footer = () => {
   const pathname = usePathname();
 
-  if (pathname === '/coming-soon') return null;
+  if (pathname === '/shop') return null;
 
   return (
     <footer className='footer-container'>
@@ -82,7 +82,7 @@ const Footer = () => {
           </div>
           <div className={`footer-links ${'/shop' === pathname && 'active-footer'}`}>
             <Link 
-              href={'/coming-soon'} 
+              href={'/shop'} 
             >
               SHOP
             </Link>
