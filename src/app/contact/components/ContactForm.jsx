@@ -5,8 +5,9 @@ import { useForm, Controller } from 'react-hook-form';
 
 const ContactForm = () => {
   // react states for required field inputs
-  const { control, handleSubmit, clearErrors, reset, formState: { errors, isValid } } = useForm({ 
-    mode: 'onBlur', 
+  const { control, handleSubmit, clearErrors, reset, watch, formState: { errors } } = useForm({ 
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
     defaultValues: {
       name: "",
       email: "",
@@ -14,8 +15,14 @@ const ContactForm = () => {
       message: "",
     }
   });
- 
   const [show, setShow] = React.useState(true);
+
+  const name = watch('name');
+  const email = watch('email');
+  const subject = watch('subject');
+  const message = watch('message');
+
+  const isFormReady = name && email && subject && message.length >= 100 && !Object.keys(errors).length;
 
   const onSubmit = async (formData) => {
     try {
@@ -145,7 +152,7 @@ const ContactForm = () => {
                     cols="30"
                     rows="15"
                     minLength={100}
-                    placeholder='What is your message about? Any specifics, please add here.'
+                    placeholder='What is your message about? Message needs to be at least 100 characters long.'
                     onChange={(e) => {
                       field.onChange(e);
                       clearErrors("message")
@@ -158,7 +165,7 @@ const ContactForm = () => {
             />
             <div >
               <button 
-                disabled={!isValid}
+                disabled={!isFormReady}
                 className='message-submit-btn'
                 type='submit'
               >

@@ -25,10 +25,11 @@ const ThirdSection = () => {
       <div className='third-section-images'>
         <div className='about-image-one'>
           <Image
-            src='/images/imageTwo.png'
+            src='/images/roastar_latte_photo.webp'
             alt='Image Two'
             width={350}
             height={350}
+            style={{ objectFit: 'cover'}}
           />
         </div>
         <div className='about-image-two'>

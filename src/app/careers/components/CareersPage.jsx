@@ -9,7 +9,7 @@ const CareersPage = ({ vacancy }) => {
       <div className='app-content'>
         <div className='careers-image'>
           <Image 
-            src='/images/roastar_aboutus_image.png'
+            src='/images/imageThree.webp'
             alt='Roastar Careers Image'
             width={1000}
             height={320}

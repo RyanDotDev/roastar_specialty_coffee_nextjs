@@ -6,7 +6,7 @@ const SecondSection = () => {
     <section className='second-section'>
       <div className='second-section-img'>
         <Image
-          src='/images/roastar_inside.webp'
+          src='/images/roastar_inside_photo.webp'
           alt='Roastar Shop Inside'
           width={700}
           height={500}

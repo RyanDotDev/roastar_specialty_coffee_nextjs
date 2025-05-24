@@ -13,7 +13,7 @@ import { useCartStore } from '../store/cartStore.js';
 const navigation = [ 
   { _id:101, title: 'HOME', href: '/' },
   { _id:102, title: 'ABOUT US', href: '/about' },
-  { _id:103, title: 'SHOP', href: '/shop' },
+  { _id:103, title: 'SHOP', href: '/coming-soon' },
   { _id:104, title: 'MENU', href: '/menu' },
   { _id:105, title: 'CONTACT US', href: '/contact' },
 ];
@@ -123,6 +123,7 @@ const NavbarContainer = ({ cartSliderData }) => {
               }}
             >
               <button 
+                disabled
                 className={`cart-btn ${colourOnScroll ? 'cart-white cart-black' : 'cart-white'}` }
                 onClick={() => cartOpen ? close() : open()}
               >

@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation';
 import MobileMenu from '@/utils/popups/mobilemenu/MobileMenu';
 import { AnimatePresence } from 'framer-motion';
 
 const MobileNav = () => {
-    const [colourOnScroll, setColourOnScroll] = React.useState(false);
-    const [menuOpen, setMenuOpen] = React.useState(false);
+    const [colourOnScroll, setColourOnScroll] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
     const pathname = usePathname();
 
     const close = () => setMenuOpen(false);

@@ -77,7 +77,7 @@ const Banner = () => {
         <div style={{ zIndex: 1 }}>
           <Image
             className='slider-two'
-            src='/slides/slider-two.webp'
+            src='/images/roastar_coconut_coffee_photo.webp'
             alt='slider_two'
             height={720}
             width={1440}

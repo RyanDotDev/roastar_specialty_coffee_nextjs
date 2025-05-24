@@ -45,7 +45,10 @@ const MobileMenu = ({ handleClose }) => {
   
   return (
     <Backdrop onClick={handleClose}>
-      <Link href='/'>
+      <Link 
+        href='/'
+        onClick={() => refreshPage('/')}
+      >
         <div className='roastar-logo-mobile-daytime'>
           <Image 
             src='/logo/Logo-ROASTAR-black.webp'
