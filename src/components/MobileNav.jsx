@@ -1,21 +1,55 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react';
+import { Sling as Hamburger } from 'hamburger-react';
 import { usePathname } from 'next/navigation';
 import MobileMenu from '@/utils/popups/mobilemenu/MobileMenu';
 
 const MobileNav = () => {
     const [colourOnScroll, setColourOnScroll] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
     const pathname = usePathname();
     const menuRef = useRef(null);
 
-    const open = () => setMenuOpen(true);
+    const open = () => {
+      if (menuRef.current) {
+        menuRef.current.killExit?.(); // kill closing animation if running
+      }
+      setIsClosing(false);
+      setMenuOpen(true);
+      document.documentElement.classList.add('no-scroll');
+
+      setTimeout(() => {
+        menuRef.current?.playEnter?.();
+      }, 0);
+    }
+
     const close = () => {
       if (menuRef.current) {
-        menuRef.current.playExit(() => setMenuOpen(false))
+        setIsAnimating(true)
+        setIsClosing(true);            // Start closing animation
+        setMenuOpen(false);            // Toggle hamburger immediately off
+        document.documentElement.classList.remove('no-scroll');
+
+        menuRef.current.playExit(() => {
+          setIsClosing(false);
+          setIsAnimating(false);         // After animation, finally unmount menu
+        });
       } else {
         setMenuOpen(false);
+        document.documentElement.classList.remove('no-scroll');
+        setIsAnimating(false);
       }
     }
+
+    const toggleMenu = () => {
+      if (isAnimating) return;
+      if (menuOpen) {
+        close();
+      } else {
+        open();
+      }
+    };
 
     useEffect(() => {
       close();
@@ -50,32 +84,27 @@ const MobileNav = () => {
     },[pathname]);
 
     useEffect(() => {
-      if (typeof window !== 'undefined') {
-        const htmlElement = document.documentElement
-        if (menuOpen) {
-          htmlElement.classList.add('no-scroll')
-        } else {
-          htmlElement.classList.remove('no-scroll')
-        }
-        return () => {
-          htmlElement.classList.remove('no-scroll')
-        }
+      if (menuOpen) {
+        document.documentElement.classList.add('no-scroll');
       }
     }, [menuOpen])
 
   return (
     <>
-      <button
-        className={`nav-list-mobile ${colourOnScroll ? 'nav-list-mobile-white nav-list-mobile-black' : 'nav-list-mobile-white'}`}
-        onClick={() => (menuOpen ? close() : open())} 
-      >
-        <input name='menu' type='checkbox' />
-          <span></span>
-          <span></span>
-          <span></span>
-      </button>
-
-      {menuOpen && <MobileMenu ref={menuRef} handleClose={close} />}
+      <div className='nav-list-mobile hamburger'>
+        <Hamburger
+          onClick={toggleMenu} 
+          toggled={menuOpen}
+          toggle={menuOpen ? close : open}
+          size={24}
+          duration={0.5}
+          color={menuOpen ? '#000' : (colourOnScroll ? '#000' : '#fff')}
+          className='hamburger-menu'
+        />
+      </div>
+      {(menuOpen || isClosing) && (
+        <MobileMenu ref={menuRef} handleClose={close} />
+      )}
     </>
   )
 }

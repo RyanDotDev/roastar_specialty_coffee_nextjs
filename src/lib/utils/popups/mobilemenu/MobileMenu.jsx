@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, forwardRef, useRef, useImperativeHandle } from 'react';
+import React, { forwardRef, useRef, useImperativeHandle } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Backdrop from './Backdrop';
@@ -24,21 +24,16 @@ const MobileMenu = forwardRef((props, ref) => {
     window.location.assign(href);
   }
 
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      backdropRef.current?.playEnter();
+  useImperativeHandle(ref, () => ({
+    playEnter: () => {
+      backdropRef.current?.playEnter?.();
 
       timeline.current = gsap.timeline();
       timeline.current.fromTo(containerRef.current,
         { y: '100vh', opacity: 0 },
         { y: 0, opacity: 1, duration: 0.75, ease: 'power3.out' }
       );
-    }, containerRef);
-
-    return () => ctx.revert?.();
-  }, []);
-
-  useImperativeHandle(ref, () => ({
+    },
     playExit: (onComplete) => {
       backdropRef.current?.playExit(() => {
         gsap.to(containerRef.current, {
@@ -46,9 +41,16 @@ const MobileMenu = forwardRef((props, ref) => {
           opacity: 0,
           duration: 0.65,
           ease: 'power3.inOut',
-          onComplete,
+          onComplete: () => {
+            backdropRef.current?.playExit(onComplete);
+          }
         });
       });
+    },
+    killExit: () => {
+      gsap.killTweensOf(containerRef.current);
+      gsap.set(containerRef.current, { clearProps: 'all' });
+      backdropRef.current?.killExit?.();
     }
   }));
   
