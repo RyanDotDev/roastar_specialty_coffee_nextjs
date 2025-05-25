@@ -325,11 +325,19 @@ body {
 
 .mobile-backdrop {
   position: fixed;
+  overflow-y: auto;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 105vh;
-  overflow-y: scroll;
+  height: 100vh;
+  max-height: 100vh;
   background: hsl(50, 100%, 99%);
   z-index: 101;
+  overflow-y: auto;
+}
+
+.mobile-nav-container {
+  overflow-y: auto;
 }
 
 .roastar-logo-mobile-daytime, .roastar-logo-mobile-nighttime {
@@ -350,6 +358,9 @@ body {
 .mobile-nav {
   text-align: center;
   margin-top: 6em;
+  max-height: 80vh;
+  padding-bottom: 5rem;
+  overflow-y: auto;
 }
 
 .mobile-nav-list {
@@ -369,6 +380,7 @@ body {
   overflow: hidden;
 }
 
+/* For prevent scrolling when modals are open */
 .no-scroll {
   overflow: hidden;
 }
