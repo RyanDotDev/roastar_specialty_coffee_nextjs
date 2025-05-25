@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation';
 import MobileMenu from '@/utils/popups/mobilemenu/MobileMenu';
-import { AnimatePresence } from 'framer-motion';
 
 const MobileNav = () => {
     const [colourOnScroll, setColourOnScroll] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const pathname = usePathname();
+    const menuRef = useRef(null);
 
-    const close = () => setMenuOpen(false);
     const open = () => setMenuOpen(true);
+    const close = () => {
+      if (menuRef.current) {
+        menuRef.current.playExit(() => setMenuOpen(false))
+      } else {
+        setMenuOpen(false);
+      }
+    }
 
     useEffect(() => {
       close();
@@ -69,9 +75,7 @@ const MobileNav = () => {
           <span></span>
       </button>
 
-      <AnimatePresence>
-        {menuOpen && <MobileMenu menuOpen={menuOpen} handleClose={close}/>}
-      </AnimatePresence>
+      {menuOpen && <MobileMenu ref={menuRef} handleClose={close} />}
     </>
   )
 }

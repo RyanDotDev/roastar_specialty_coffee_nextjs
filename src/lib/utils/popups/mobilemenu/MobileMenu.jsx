@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useLayoutEffect, forwardRef, useRef, useImperativeHandle } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion } from "framer-motion";
 import Backdrop from './Backdrop';
 import Image from 'next/image';
+import gsap from 'gsap';
 
 const navigation = [ 
     { _id:101, title: 'HOME', href: '/' },
@@ -14,37 +14,46 @@ const navigation = [
     { _id:106, title: 'CAREERS', href: '/careers' },
   ];
 
-const dropIn = {
-    hidden: {
-      y: "100vh",
-      opacity: 0,
-    },
-    visible: {
-      y: "0",
-      opacity: 1,
-      transition: {
-        duration: 0.01,
-        type: "spring",
-        damping: 30,
-        stiffness: 250,
-      },
-    },
-    exit: {
-      y: "100vh",
-      opacity: 0,
-    },
-  };
-
-
-const MobileMenu = ({ handleClose }) => {
+const MobileMenu = forwardRef((props, ref) => {
   const pathname = usePathname();
+  const containerRef = useRef(null);
+  const backdropRef = useRef(null);
+  const timeline = useRef(null);
 
   const refreshPage = (href) => {
     window.location.assign(href);
   }
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      backdropRef.current?.playEnter();
+
+      timeline.current = gsap.timeline();
+      timeline.current.fromTo(containerRef.current,
+        { y: '100vh', opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.75, ease: 'power3.out' }
+      );
+    }, containerRef);
+
+    return () => ctx.revert?.();
+  }, []);
+
+  useImperativeHandle(ref, () => ({
+    playExit: (onComplete) => {
+      backdropRef.current?.playExit(() => {
+        gsap.to(containerRef.current, {
+          y: '100%',
+          opacity: 0,
+          duration: 0.65,
+          ease: 'power3.inOut',
+          onComplete,
+        });
+      });
+    }
+  }));
   
   return (
-    <Backdrop onClick={handleClose}>
+    <Backdrop ref={backdropRef} onClick={() => ref?.current?.playExit(() => props.handleClose?.())}>
       <Link 
         href='/'
         onClick={() => refreshPage('/')}
@@ -68,13 +77,10 @@ const MobileMenu = ({ handleClose }) => {
           />
         </div>
       </Link>
-      <motion.div
-        onClick={(e) => e.stopPropagation()}  
-        variants={dropIn}
+      <div
+        ref={containerRef}
         className='mobile-nav'
-        initial="hidden"
-        animate="visible"
-        exit="exit"
+        onClick={(e) => e.stopPropagation()}  
       >
         <ul className='mobile-nav-list'>
           {
@@ -92,9 +98,9 @@ const MobileMenu = ({ handleClose }) => {
             ))
           }
         </ul>
-      </motion.div>
+      </div>
     </Backdrop>
   )
-}
+})
 
 export default MobileMenu
