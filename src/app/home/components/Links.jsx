@@ -43,6 +43,7 @@ const Links = () => {
               alt='Roastar Location'
               width={300}
               height={300}
+              loading='lazy'
             />
             <p>LOCATION</p>
           </Link>
@@ -58,6 +59,7 @@ const Links = () => {
             alt='Roastar Delivery'
             width={300}
             height={300}
+            loading='lazy'
           />
           <p>DELIVERY</p>
         </div>
@@ -75,6 +77,7 @@ const Links = () => {
               alt='Roastar Shop'
               width={300}
               height={300}
+              loading='lazy'
             />
             <p>SHOP</p>
           </Link>

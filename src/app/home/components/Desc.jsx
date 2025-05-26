@@ -1,5 +1,6 @@
 import React from 'react'
 import Link  from 'next/link'
+import Image from 'next/image'
 
 const Desc = () => {
   return (
@@ -18,10 +19,12 @@ const Desc = () => {
               </Link>
             </p>
           </div>
-          <img 
+          <Image 
             src='/images/roastar_desc_ad.webp'
+            alt='Roastar ad image'
             height={500}
             width={700}
+            loading='lazy'
           />
         </div>
       </div>

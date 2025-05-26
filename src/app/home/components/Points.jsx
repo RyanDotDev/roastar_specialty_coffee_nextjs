@@ -14,6 +14,7 @@ const Points = () => {
           width={800}
           height={800}
           style={{ height: 'auto', width: 'auto' }}
+          loading='lazy'
         />
       </div>
     </div>

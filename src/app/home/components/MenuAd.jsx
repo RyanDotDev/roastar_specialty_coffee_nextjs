@@ -10,6 +10,7 @@ const MenuAd = () => {
         alt='Roastar Menu'
         height={1000}
         width={1440}
+        loading='lazy'
       />
       <div className='menu-content'> 
         <div className='menu-text'>

@@ -10,6 +10,7 @@ const Specialty = () => {
           alt='Roastar Outside Image'
           height={900}
           width={900}
+          loading='lazy'
         />
       </div>
       <div className='points-title'>
