@@ -1,126 +1,108 @@
 "use client"
-import React, { useState, useEffect } from 'react'
-import Image from 'next/image';
+import React, { useState, useEffect, useRef } from "react"
+import Image from "next/image"
 
 const Banner = () => {
-  const [activeSlide, setActiveSlide] = useState(0);
+  const [activeSlide, setActiveSlide] = useState(0)
+  const timeoutRef = useRef()
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    timeoutRef.current = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % 3)
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
+    }, 5000)
+    return () => clearInterval(timeoutRef.current)
+  }, [])
 
   return (
-    <div className="banner">
+    <div className="banner" style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
       {/* SLIDE ONE */}
       <div
-        className={`slide ${activeSlide === 0 ? '' : ''}`}
+        className="slide slide-one"
         style={{
-          position: 'absolute',
-          top: '0',
-          left: '0',
-          width: '100%',
-          height: '100%',
+          ...slideStyle,
           opacity: activeSlide === 0 ? 1 : 0,
-          transition: 'opacity 1s ease-in-out',
+          zIndex: activeSlide === 0 ? 2 : 1,
         }}
       >
-        {/* SLIDER ONE IMAGE */}
+        {/* Logo + Text */}
         <Image
-          className='slider-one-image'
-          alt='roastar logo banner'
+          className="slider-one-image"
+          alt="roastar logo banner"
           width={500}
           height={180}
-          src='/logo/Logo-ROASTAR-white.webp'
+          src="/logo/Logo-ROASTAR-white.webp"
+          priority
         />
-        {/* SLIDER ONE TEXT*/}
-        <h2 className='slider-one-text' style={{ position: 'absolute', zIndex: 2 }}>Welcome!</h2>
-        {/* SLIDER ONE BACKGROUND */}
-        <div style={{ zIndex: 1 }}>
-          <Image
-            className='slider-one'
-            src='/slides/slider-one.webp'
-            alt='slider_one'
-            height={720}
-            width={1440}
-            style={{ width: '100%', objectFit: 'cover' }}
-          />
-        </div>
-      </div>
-      {/* SLIDE TWO */}
-      <div
-        className={`slide ${activeSlide === 1 ? '' : ''}`}
-        style={{
-          position: 'absolute',
-          top: '0',
-          left: '0',
-          width: '100%',
-          height: '100%',
-          opacity: activeSlide === 1 ? 1 : 0,
-          transition: 'opacity 1s ease-in-out',
-        }}
-      >
-        {/* SLIDE TWO TEXT */}
-        <div className='slider-two-container'>
-          <h1 className='slider-two-header'>
-            COCONUT 
-            <span>COFFEE</span>
-          </h1>
-          <h2 className='slider-two-text'>
-            Specially made with Vietnamese "Phin" brewed coffee.
-          </h2>
-        </div>
-        {/* SLIDE TWO BACKGROUND */}
-        <div style={{ zIndex: 1 }}>
-          <Image
-            className='slider-two'
-            src='/images/roastar_coconut_coffee_photo.webp'
-            alt='slider_two'
-            height={720}
-            width={1440}
-            style={{ width: '100%', objectFit: 'cover', }}
-          />
-        </div>
-      </div>
-      {/* SLIDE THREE */}
-      <div
-        className={`slide ${activeSlide === 2 ? '' : ''}`}
-        style={{
-          position: 'absolute',
-          top: '0',
-          left: '0',
-          width: '100%',
-          height: '100%',
-          opacity: activeSlide === 2 ? 1 : 0,
-          transition: 'opacity 1s ease-in-out',
-        }}
-      >
-        {/* SLIDE TWO TEXT */}
-        <div className='slider-three-container'>
-          <h1 className='slider-three-header'>ENJOY OUR SERVICE</h1>
-          <h2 className='slider-three-text'>
-            Eat, drink, chat and enjoy yourselves and our service.
-          </h2>
-        </div>
+        <h2 className="slider-one-text" style={{ position: "absolute", zIndex: 3 }}>Welcome!</h2>
+
+        {/* Background */}
         <Image
-          className='slider-three'
-          src='/images/roastar_social_image.webp'
-          alt='slider_three'
+          className="slider-one"
+          src="/slides/slider-one.webp"
+          alt="slider_one"
           height={720}
           width={1440}
-          style={{ width: '100%', objectFit: 'cover' }}
+          style={{ ...bgImageStyle }}
+          priority
+        />
+      </div>
+
+      {/* SLIDE TWO */}
+      <div
+        className="slide slide-two"
+        style={{
+          ...slideStyle,
+          opacity: activeSlide === 1 ? 1 : 0,
+          zIndex: activeSlide === 1 ? 2 : 1,
+        }}
+      >
+        <div className="slider-two-container">
+          <h1 className="slider-two-header">
+            COCONUT <span>COFFEE</span>
+          </h1>
+          <h2 className="slider-two-text">Specially made with Vietnamese "Phin" brewed coffee.</h2>
+        </div>
+        <Image
+          className="slider-two"
+          src="/images/roastar_coconut_coffee_photo.webp"
+          alt="slider_two"
+          height={720}
+          width={1440}
+          style={{ ...bgImageStyle }}
+          loading='lazy'
+        />
+      </div>
+
+      {/* SLIDE THREE */}
+      <div
+        className="slide slide-three"
+        style={{
+          ...slideStyle,
+          opacity: activeSlide === 2 ? 1 : 0,
+          zIndex: activeSlide === 2 ? 2 : 1,
+        }}
+      >
+        <div className="slider-three-container">
+          <h1 className="slider-three-header">ENJOY OUR SERVICE</h1>
+          <h2 className="slider-three-text">Eat, drink, chat and enjoy yourselves and our service.</h2>
+        </div>
+        <Image
+          className="slider-three"
+          src="/images/roastar_social_image.webp"
+          alt="slider_three"
+          height={720}
+          width={1440}
+          style={{ ...bgImageStyle }}
+          loading='lazy'
         />
       </div>
 
       {/* PAGINATION */}
-      <div className='pagination'>
+      <div className="pagination">
         {[0, 1, 2].map((index) => (
           <div
             key={index}
-            className={`dot ${activeSlide === index ? 'active-slide' : ''}`}
+            className={`dot ${activeSlide === index ? "active-slide" : ""}`}
             onClick={() => setActiveSlide(index)}
           ></div>
         ))}
@@ -130,3 +112,25 @@ const Banner = () => {
 }
 
 export default Banner
+
+// Styles
+const slideStyle = {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  transition: "opacity 1s ease-in-out",
+  willChange: "opacity",
+  pointerEvents: "none", // Prevent interaction with hidden slides
+}
+
+const bgImageStyle = {
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+  position: "absolute",
+  top: 0,
+  left: 0,
+  zIndex: 1,
+}
