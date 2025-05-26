@@ -25,7 +25,7 @@ const page = async () => {
       ...vacancyData,
       status: vacancyData.isOpen ? 'open' : 'closed',
       message: vacancyData.isOpen
-        ? 'Interested? Apply down below.'
+        ? 'Interested? Pass us your CV into our shop and we will contact you.'
         : 'No Vacancies Available.',
     };
   } catch (err) {

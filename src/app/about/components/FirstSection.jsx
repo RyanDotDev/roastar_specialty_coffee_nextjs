@@ -40,7 +40,7 @@ const FirstSection = () => {
         <div className='about-image-one'>
           <Image
             src='/images/roastar_origin_two.webp'
-            alt='roastar origin two'
+            alt='roastar origin one'
             width={350}
             height={350}
             priority
@@ -49,7 +49,7 @@ const FirstSection = () => {
         <div className='about-image-two'>
           <Image
             src='/images/roastar_origin_one.webp'
-            alt='roastar origin one'
+            alt='roastar origin two'
             width={350}
             height={350}
             priority

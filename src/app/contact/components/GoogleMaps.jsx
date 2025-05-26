@@ -20,7 +20,7 @@ const GoogleMaps = ({ apiKey }) => {
     <section id="location" className='map-container'>
       {/* Map title */}
       <h2 className='google-maps-title'>LOCATION</h2>
-      <h2>ROASTAR SPECIALTY COFFEE</h2>
+      <h2>ROASTAR COFFEE</h2>
       <div className='google-maps-address'>
         <p>MONDAY - FRIDAY | 7:45am - 5pm</p>
         <p>SATURDAY | 8am - 5:30pm</p>

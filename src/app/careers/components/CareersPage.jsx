@@ -30,7 +30,7 @@ const CareersPage = ({ vacancy }) => {
               <>
                 {/* If vacancies are available */}
                 <p>{vacancy?.message}</p>
-                <AppButton />
+                {/* <AppButton /> */}
               </>
             ) : (
               <p>{vacancy?.message || "No vacancies available"}</p>
