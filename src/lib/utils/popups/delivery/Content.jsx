@@ -55,6 +55,7 @@ const Content = ({ handleClose }) => {
                 alt='Deliveroo Icon'
                 width={250}
                 height={250}
+                priority
               />
             </Link>
           </div>       
@@ -65,6 +66,7 @@ const Content = ({ handleClose }) => {
                 alt='Deliveroo Icon'
                 width={250}
                 height={250}
+                priority
               />
             </Link>
           </div>

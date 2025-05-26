@@ -204,6 +204,7 @@ const ProductPreview = ({ handle, handleClose }) => {
                 width={500}
                 height={500}
                 className='product-img'
+                priority
               />
             )}
             <div className='product-preview-details'>
