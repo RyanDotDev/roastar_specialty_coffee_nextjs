@@ -24,6 +24,7 @@ const Menu = () => {
             height={800}
             width={600}
             style={{ height: 'auto', width: '600px' }}
+            priority
           />
           <Image
             src="/images/food_menu.webp"
@@ -31,6 +32,7 @@ const Menu = () => {
             height={800}
             width={600}
             style={{ height: 'auto', width: '600px' }}
+            priority
            />
         </div>
         <p>For allergens, please contact a member of staff.</p>
