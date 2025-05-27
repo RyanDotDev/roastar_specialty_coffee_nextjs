@@ -5,6 +5,7 @@ import Image from "next/image"
 const Banner = () => {
   const [activeSlide, setActiveSlide] = useState(0);
   const timeoutRef = useRef();
+  const hasMounted = useRef(false);
 
   const slideStyle = {
     position: "absolute",
@@ -28,6 +29,7 @@ const Banner = () => {
   }
 
   useEffect(() => {
+    hasMounted.current = true
     timeoutRef.current = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % 3)
     }, 5000)
@@ -50,8 +52,9 @@ const Banner = () => {
         className="slide slide-one"
         style={{
           ...slideStyle,
-          opacity: activeSlide === 0 ? 1 : 0,
-          zIndex: activeSlide === 0 ? 2 : 1,
+          opacity: !hasMounted.current || activeSlide === 0 ? 1 : 0,
+          zIndex: !hasMounted.current || activeSlide === 0 ? 2 : 1,
+          transition: !hasMounted.current ? "none" : "opacity 1s ease-in-out",
         }}
       >
         {/* Logo + Text */}

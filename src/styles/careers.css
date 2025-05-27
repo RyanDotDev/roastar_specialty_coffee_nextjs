@@ -52,6 +52,7 @@
 }
 
 .careers-image img {
+  background: var(--main-beige);
   margin-top: 3rem;
   width: 90%;
   object-fit: cover;
