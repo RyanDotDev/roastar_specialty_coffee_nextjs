@@ -204,7 +204,7 @@ const ProductPreview = ({ handle, handleClose }) => {
                 width={500}
                 height={500}
                 className='product-img'
-                priority
+                loading='lazy'
               />
             )}
             <div className='product-preview-details'>

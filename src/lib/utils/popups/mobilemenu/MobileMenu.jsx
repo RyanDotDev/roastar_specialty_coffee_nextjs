@@ -66,7 +66,7 @@ const MobileMenu = forwardRef((props, ref) => {
             alt='Roastar Logo Mobile Daytime'
             height={50}
             width={150}
-            priority
+            loading='lazy'
           />
         </div>
         <div className='roastar-logo-mobile-nighttime'>
@@ -75,7 +75,7 @@ const MobileMenu = forwardRef((props, ref) => {
             alt='Roastar Logo Mobile Daytime'
             height={50}
             width={150}
-            priority
+            loading='lazy'
           />
         </div>
       </Link>

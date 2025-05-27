@@ -21,6 +21,7 @@ const ThirdSection = () => {
           width={400}
           height={400}
           className='roastar-lettermark'
+          loading='lazy'
         />
       </div>
       <div className='third-section-images'>
@@ -32,6 +33,7 @@ const ThirdSection = () => {
             height={350}
             style={{ objectFit: 'cover', transform: 'rotate(270deg)' }}
             className='latte-img'
+            loading='lazy'
           />
         </div>
         <div className='about-image-two'>
@@ -41,6 +43,7 @@ const ThirdSection = () => {
             width={350}
             height={350}
             style={{ objectFit: 'cover'}}
+            loading='lazy'
           />
         </div>
       </div>

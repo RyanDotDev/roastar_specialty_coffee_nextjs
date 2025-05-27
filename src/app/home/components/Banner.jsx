@@ -3,8 +3,29 @@ import React, { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 
 const Banner = () => {
-  const [activeSlide, setActiveSlide] = useState(0)
-  const timeoutRef = useRef()
+  const [activeSlide, setActiveSlide] = useState(0);
+  const timeoutRef = useRef();
+
+  const slideStyle = {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    transition: "opacity 1s ease-in-out",
+    willChange: "opacity",
+    pointerEvents: "none",
+  }
+
+  const bgImageStyle = {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    zIndex: 1,
+  }
 
   useEffect(() => {
     timeoutRef.current = setInterval(() => {
@@ -21,8 +42,9 @@ const Banner = () => {
         width: "100%", 
         height: "720px", 
         overflow: "hidden" 
-        }}
-      >
+      }}
+    >
+      
       {/* SLIDE ONE */}
       <div
         className="slide slide-one"
@@ -120,25 +142,3 @@ const Banner = () => {
 }
 
 export default Banner
-
-// Styles
-const slideStyle = {
-  position: "absolute",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  transition: "opacity 1s ease-in-out",
-  willChange: "opacity",
-  pointerEvents: "none", // Prevent interaction with hidden slides
-}
-
-const bgImageStyle = {
-  width: "100%",
-  height: "100%",
-  objectFit: "cover",
-  position: "absolute",
-  top: 0,
-  left: 0,
-  zIndex: 1,
-}

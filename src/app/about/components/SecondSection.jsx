@@ -10,6 +10,7 @@ const SecondSection = () => {
           alt='Roastar Shop Inside'
           width={700}
           height={500}
+          loading='lazy'
         />
       </div>
       <div className='second-section-text'>

@@ -5,13 +5,13 @@ import Image from 'next/image';
 const MenuAd = () => {
   return (
     <div className="menu-container">
-      <Image
+      {<Image
         src="/images/roastar_menu_image.webp"
         alt='Roastar Menu'
         height={1000}
         width={1440}
         loading='lazy'
-      />
+      />}
       <div className='menu-content'> 
         <div className='menu-text'>
           <h3>OUR MENU</h3>

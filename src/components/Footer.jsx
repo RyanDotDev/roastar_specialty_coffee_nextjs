@@ -22,6 +22,7 @@ const Footer = () => {
             alt='Roastar Footer Image'
             height={80}
             width={180}
+            loading='lazy'
           />
           <ul className='address'>
             <li>8 EAST ST</li>

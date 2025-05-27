@@ -55,18 +55,18 @@ const Content = ({ handleClose }) => {
                 alt='Deliveroo Icon'
                 width={250}
                 height={250}
-                priority
+                loading='lazy'
               />
             </Link>
           </div>       
           <div className='uber-eats'>
             <Link href='https://www.ubereats.com/gb/store/roastar-speciality-coffee/0oJZk_Y8WdGYpXWoQ1Qe_Q'>
-            <Image
+              <Image
                 src='/icon/uber_eats_icon.svg'
                 alt='Deliveroo Icon'
                 width={250}
                 height={250}
-                priority
+                loading='lazy'
               />
             </Link>
           </div>
