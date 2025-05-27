@@ -52,7 +52,7 @@ const FirstSection = () => {
             alt='roastar origin two'
             width={350}
             height={350}
-            loading='lazy'
+            priority
           />
         </div>
       </div>
