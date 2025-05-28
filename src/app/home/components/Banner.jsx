@@ -52,9 +52,8 @@ const Banner = () => {
         className="slide slide-one"
         style={{
           ...slideStyle,
-          opacity: !hasMounted.current || activeSlide === 0 ? 1 : 0,
-          zIndex: !hasMounted.current || activeSlide === 0 ? 2 : 1,
-          transition: !hasMounted.current ? "none" : "opacity 1s ease-in-out",
+          opacity: activeSlide === 0 ? 1 : 0,
+          transition: hasMounted.current ? "opacity 1s ease-in-out" : "none"
         }}
       >
         {/* Logo + Text */}
@@ -64,6 +63,7 @@ const Banner = () => {
           width={500}
           height={180}
           src="/logo/Logo-ROASTAR-white.webp"
+          aria-hidden="true"
           priority
         />
         <h2 className="slider-one-text" style={{ position: "absolute", zIndex: 3 }}>Welcome!</h2>
