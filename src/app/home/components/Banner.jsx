@@ -42,7 +42,7 @@ const Banner = () => {
       style={{ 
         position: "relative",
         width: "100%", 
-        height: "720px", 
+        height: "100vh", 
         overflow: "hidden" 
       }}
     >

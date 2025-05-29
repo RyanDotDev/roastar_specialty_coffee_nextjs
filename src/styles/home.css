@@ -6,7 +6,6 @@
 /* Banner.jsx */
 .banner {
   width: 100%;
-  height: 720px;
   background: var(--main-beige);
   will-change: opacity;
   contain: paint;
@@ -20,7 +19,7 @@
 /* slider one selectors */
 .slider-one-image {
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   margin-inline: auto ;
   margin: auto;
   left: 0;
@@ -1001,12 +1000,6 @@
 }
 
 @media all and (max-width: 600px) {
-  .slider-one-image {
-    top: -1rem;
-    height: auto;
-    width: 90%;
-  }
-
   .delivery-text h3 {
     margin-top: 2rem;
     font-weight: 400;
