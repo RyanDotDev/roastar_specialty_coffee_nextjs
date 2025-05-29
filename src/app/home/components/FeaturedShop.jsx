@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import Image from 'next/image';
 
 const FeaturedShop = () => {
   return (
@@ -10,9 +11,12 @@ const FeaturedShop = () => {
           <h4>COMING SOON</h4>
         </div>
         <div className='fs-image'>
-          <img 
+          <Image 
             src='/images/roastar_products.webp'
+            alt="Roastar Product Ad Image"
+            height={600}
             width={700}
+            loading='lazy'
           />
         </div>
       </div>
