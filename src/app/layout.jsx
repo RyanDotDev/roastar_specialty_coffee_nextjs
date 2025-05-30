@@ -6,6 +6,7 @@ import './globals.css';
 
 export const metadata = {
   title: 'Roastar Coffee',
+  description: 'Vietnamese Specialty Coffee',
   icons: {
     icon: '/favicon.ico'
   }
