@@ -1058,7 +1058,7 @@
 @media all and (max-width: 400px) {
   .slider-one-image {
     top: 1.5rem;
-    height: 140px;
+    height: auto;
     width: 95%;
   }
   .home-container {
