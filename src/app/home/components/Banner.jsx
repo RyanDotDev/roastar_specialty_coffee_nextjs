@@ -64,6 +64,7 @@ const Banner = () => {
           height={180}
           src="/logo/Logo-ROASTAR-white.webp"
           aria-hidden="true"
+          fetchPriority="high"
           priority
         />
         <h2 className="slider-one-text" style={{ position: "absolute", zIndex: 3 }}>Welcome!</h2>

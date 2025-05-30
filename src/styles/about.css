@@ -16,14 +16,16 @@
 
 .about-us-header {
   background: rgb(165, 106, 42);
+  text-align: center;
   height: 400px;
 }
 
-.about-us-header-background {
-  filter: contrast(0.5) saturate(2.5);
-  height: 400px;
-  background: center / cover no-repeat url("/images/roastar_aboutus_two.webp");
+.about-us-header img {
   text-align: center;
+  filter: contrast(0.5) saturate(2.5);
+  object-fit: cover;
+  height: 400px;
+  width: 100%;
 }
 
 .about-us-header h1 {
