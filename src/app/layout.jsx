@@ -14,13 +14,6 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        <link 
-          rel="preload"
-          as="image"
-          href="/logo/Logo-ROASTAR-white.webp"
-        />
-      </head>
       <body style={{ background: 'white' }}>
         <header><Navbar /></header>
         <main>{children}</main>
