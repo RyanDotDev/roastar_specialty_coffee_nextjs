@@ -77,7 +77,6 @@ const Banner = () => {
           height={720}
           width={1440}
           style={{ ...bgImageStyle }}
-          priority
         />
       </div>
 
