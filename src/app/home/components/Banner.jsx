@@ -37,16 +37,7 @@ const Banner = () => {
   }, [])
 
   return (
-    <div 
-      className="banner" 
-      style={{ 
-        position: "relative",
-        width: "100%", 
-        height: "100vh", 
-        overflow: "hidden" 
-      }}
-    >
-      
+    <div className="banner">
       {/* SLIDE ONE */}
       <div
         className="slide slide-one"
