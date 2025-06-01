@@ -50,12 +50,10 @@ const Banner = () => {
         {/* Logo + Text */}
         <Image
           className="slider-one-image"
-          alt="roastar logo banner"
+          alt="Roastar Vietnamese Logo"
           width={500}
           height={180}
           src="/logo/Logo-ROASTAR-white.webp"
-          aria-hidden="true"
-          fetchPriority="high"
           priority
         />
         <h2 className="slider-one-text" style={{ position: "absolute", zIndex: 3 }}>Welcome!</h2>
