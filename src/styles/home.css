@@ -1080,13 +1080,13 @@
 
 @media all and (max-width: 400px) {
   .slider-one-image {
-    top: 1.5rem;
+    top: 0rem;
     height: 140px;
     width: 95%;
   }
 
   .slider-one-text {
-    margin-top: 2rem 
+    margin-top: 0rem 
   }
 
   .home-container {

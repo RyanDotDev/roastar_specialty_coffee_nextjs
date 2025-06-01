@@ -21,7 +21,7 @@ const Desc = () => {
           </div>
           <Image 
             src='/images/roastar_desc_ad.webp'
-            alt='Roastar ad image'
+            alt='Iced Latte Image'
             height={500}
             width={700}
             loading='lazy'
