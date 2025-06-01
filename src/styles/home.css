@@ -1084,6 +1084,11 @@
     height: 140px;
     width: 95%;
   }
+
+  .slider-one-text {
+    margin-top: 2rem 
+  }
+
   .home-container {
     position: relative;
   }  
