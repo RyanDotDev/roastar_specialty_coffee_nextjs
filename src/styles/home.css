@@ -19,15 +19,18 @@
 }
 
 /* slider one selectors */
+.slider-one-container {
+  margin-top: 22vh; /* original margin-top: 10rem */
+}
+
 .slider-one-image {
-  position: absolute;
+  position: relative;
   z-index: 3;
   margin-inline: auto ;
   margin: auto;
   left: 0;
   right: 0;
   width: 500px;
-  margin-top: 10rem;
   max-width: 100%;
   aspect-ratio: 5 / 2;
   display: block;
@@ -41,7 +44,7 @@
   left: 0;
   right: 0;
   width: fit-content;
-  margin-top: 21rem;
+  /* margin-top: 48vh  original margin-top: 21rem */
 }
 
 .slider-one {
@@ -56,7 +59,7 @@
   margin-inline: auto;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
-  top: 16rem;
+  top: 36.5vh; /* 16rem */
   left: 0;
   right: 0;
   width: fit-content;
@@ -96,7 +99,7 @@
   margin-inline: auto;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
-  top: 16rem;
+  top: 36.5vh;
   left: 0;
   right: 0;
   width: fit-content;
@@ -125,7 +128,7 @@
 /* Pagination */
 .pagination {
   position: relative;
-  top: 24rem;
+  top: 55vh; /* top: 24rem */
   left: 0;
   display: flex;
   justify-content: center;

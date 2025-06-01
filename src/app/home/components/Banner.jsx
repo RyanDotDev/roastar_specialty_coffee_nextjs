@@ -48,15 +48,17 @@ const Banner = () => {
         }}
       >
         {/* Logo + Text */}
-        <Image
-          className="slider-one-image"
-          alt="Roastar Vietnamese Logo"
-          width={500}
-          height={180}
-          src="/logo/Logo-ROASTAR-white.webp"
-          priority
-        />
-        <h2 className="slider-one-text" style={{ position: "absolute", zIndex: 3 }}>Welcome!</h2>
+        <div className='slider-one-container'>
+          <Image
+            className="slider-one-image"
+            alt="Roastar Vietnamese Logo"
+            width={500}
+            height={180}
+            src="/logo/Logo-ROASTAR-white.webp"
+            priority
+          />
+          <h2 className="slider-one-text" style={{ position: "absolute", zIndex: 3 }}>Welcome!</h2>
+        </div>
 
         {/* Background */}
         <Image
