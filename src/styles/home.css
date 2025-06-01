@@ -771,7 +771,11 @@
   }
 
   .banner {
-    height: 720px;
+    height: 741px;
+  }
+
+  .slider-one-container {
+    margin-top: 10rem; /* original margin-top: 10rem */
   }
 
   .slider-two-container {
@@ -791,6 +795,10 @@
     display: block;
     margin-left: auto;
   } 
+
+  .slider-three-container {
+    top: 16rem;
+  }
 
   .link-images {
     display:inline-flex;
