@@ -47,17 +47,12 @@ const Banner = () => {
           transition: hasMounted.current ? "opacity 1s ease-in-out" : "none"
         }}
       >
-        {/* Logo + Text */}
+        {/* Banner Text */}
         <div className='slider-one-container'>
-          <Image
-            className="slider-one-image"
-            alt="Roastar Vietnamese Logo"
-            width={500}
-            height={180}
-            src="/logo/Logo-ROASTAR-white.webp"
-            priority
-          />
-          <h2 className="slider-one-text" style={{ position: "absolute", zIndex: 3 }}>Welcome!</h2>
+          <h1 className="slider-one-header">
+            ROASTAR COFFEE
+          </h1>
+          <h2 className="slider-one-text">First Vietnamese specialty café in London.</h2>
         </div>
 
         {/* Background */}
@@ -81,6 +76,7 @@ const Banner = () => {
           zIndex: activeSlide === 1 ? 2 : 1,
         }}
       >
+        {/* Banner Text */}
         <div className="slider-two-container">
           <h1 className="slider-two-header">
             COCONUT <span>COFFEE</span>
@@ -107,6 +103,7 @@ const Banner = () => {
           zIndex: activeSlide === 2 ? 2 : 1,
         }}
       >
+        {/* Banner Text */}
         <div className="slider-three-container">
           <h1 className="slider-three-header">ENJOY OUR SERVICE</h1>
           <h2 className="slider-three-text">Eat, drink, chat and enjoy yourselves and our service.</h2>

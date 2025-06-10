@@ -1,10 +1,9 @@
 import React from 'react';
 import Image from 'next/image';
-import '@/styles/coming-soon.css';
 
 const ShopMaintenance = () => {
   return (
-    <div className='coming-soon-container'>
+    <div className='shop-maintenance-container'>
       <h1>SHOP IS COMING SOON</h1>
       <Image 
         src='/images/roastar_shop_ad.webp'

@@ -1,10 +1,10 @@
 export const dynamic = 'force-dynamic';
 
 import React from 'react';
-/* import Header from './components/Header'; */
-/* import Products from './components/Products'; */
-import '@/styles/shop.css';
+import Header from './components/Header'; 
+import Products from './components/Products'; 
 import ShopMaintenance from './components/ShopMaintenance';
+import '@/styles/shop.css';
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
@@ -31,11 +31,11 @@ export default async function Page() {
   return (
     <div className='shop-container'>
       <ShopMaintenance />
-      {/*<Header />
+      {/* <Header />
       <Products 
         products={products}
         error={error}
-      />*/}
+      /> */}
     </div>
   )
 }

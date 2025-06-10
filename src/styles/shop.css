@@ -465,6 +465,28 @@
   font-size: 1rem;
 }
 
+.shop-maintenance-container {
+  background: #e1e1e1;
+  height: 1000px;
+}
+
+.shop-maintenance-container h1 {
+  font-size: 3rem;
+  padding-top: 15rem;
+  position: relative;
+  text-align: center;
+  z-index: 101;
+  color: var(--main-beige);
+}
+
+.shop-maintenance-container img {
+  object-fit: cover;
+  object-position: 50% 80%;
+  position: absolute;
+  z-index: 100;
+  top: -4rem;
+}
+
 /* Safari */
 @-webkit-keyframes spin {
   0% { -webkit-transform: rotate(0deg); }
