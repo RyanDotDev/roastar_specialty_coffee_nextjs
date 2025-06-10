@@ -56,15 +56,17 @@ const Banner = () => {
         </div>
 
         {/* Background */}
-        <Image
-          className="slider-one"
-          src="/slides/slider-one.webp"
-          alt="slider_one"
-          height={720}
-          width={1440}
-          style={{ ...bgImageStyle }}
-          priority
-        />
+        <div style={{ position: "relative", width: "100%", height: "100%" }}>
+          <Image
+            className="slider-one"
+            src="/slides/slider-one.webp"
+            alt="slider_one"
+            height={720}
+            width={1440}
+            style={{ ...bgImageStyle }}
+            priority
+          />
+        </div>
       </div>
 
       {/* SLIDE TWO */}
