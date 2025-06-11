@@ -1,9 +1,8 @@
-"use client"
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
-import AppButton from './AppButton';
+import Vacancy from './Vacancy';
 
-const CareersPage = ({ vacancy }) => {
+const CareersPage = () => {
   return (
     <div className='app-container'>
       <div className='app-content'>
@@ -25,24 +24,12 @@ const CareersPage = ({ vacancy }) => {
              friendly and enthusiastic workplace that we make sure you want to come back to whilst teaching
              you the ways of roastery styled coffee.
           </p>
-          <div className='apply'>
-            {vacancy?.status === "open" ? (
-              <>
-                {/* If vacancies are available */}
-                <p>{vacancy?.message}</p>
-                {/* <AppButton /> */}
-              </>
-            ) : (
-              <p>{vacancy?.message || "No vacancies available"}</p>
-            )}
-            {vacancy?.error && (
-              <p className='error'>Error: {vacancy.error}</p>
-            )}
-          </div>
+          {/* Vacancy logic happens here */}   
+          <Vacancy/>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default CareersPage
+export default CareersPage;

@@ -1,51 +1,55 @@
 import { db } from './firebase';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
 export default async function handler(req, res) {
-  const { method, query, body } = req;
+  const { jobId } = req.method === 'GET' ? req.query : req.body;
 
-  if (method === "GET") {
-    const { jobId } = query;
-
-    if (!jobId) {
-      return res.status(400).json({ message: "Job ID is required" });
-    }
-
-    try {
-      console.log("Fetching vacancy for jobId:", jobId);
-      const docRef = doc(db, "vacancies", jobId);
-      const docSnap = await getDoc(docRef);
-
-      if (!docSnap.exists()) {
-        console.error(`Vacancy for jobId ${jobId} not found.`);
-        return res.status(404).json({ isOpen: false, message: "No vacancies available" });
-      }
-
-      const data = docSnap.data();
-      return res.status(200).json(data);
-    } catch (error) {
-      console.error("Error fetching vacancy:", error);
-      return res.status(500).json({ message: "Internal Server Error" });
-    }
+  if (!jobId) {
+    return res.status(400).json({ error: 'Missing jobId parameter' });
   }
 
-  if (method === "POST") {
-    const { jobId, isOpen } = body;
+  try {
+    const snapshot = await db
+      .collection('vacancies')
+      .where('jobId', '==', jobId)
+      .limit(1)
+      .get({ source: 'server' });
 
-    if (!jobId || typeof isOpen !== "boolean") {
-      return res.status(400).json({ message: "Missing required fields" });
+    if (snapshot.empty) {
+      return res.status(404).json({ error: 'Vacancy not found' });
     }
 
-    try {
-      const jobRef = doc(db, "vacancies", jobId);
-      await updateDoc(jobRef, { isOpen });
+    const doc = snapshot.docs[0];
+    const data = doc.data();
 
-      return res.status(200).json({ success: true });
-    } catch (error) {
-      console.error("Error updating vacancy:", error);
-      return res.status(500).json({ message: "Internal Server Error" });
+    if (req.method === 'GET') {
+      // Just return the vacancy info
+      return res.status(200).json({
+        isOpen: data.isOpen,
+        role: data.role,
+      });
+    } 
+    
+    else if (req.method === 'POST') {
+      // Toggle isOpen if client sends { isOpen: true/false } in body
+      const { isOpen } = req.body;
+
+      // If no explicit isOpen given, toggle current isOpen
+      const newIsOpen = typeof isOpen === 'boolean' ? isOpen : !data.isOpen;
+
+      await doc.ref.update({ isOpen: newIsOpen });
+
+      return res.status(200).json({
+        message: `Vacancy ${jobId} updated`,
+        isOpen: newIsOpen,
+        role: data.role,
+      });
     }
+
+    else {
+      return res.status(405).json({ error: 'Method not allowed' });
+    }
+  } catch (error) {
+    console.error('API /vacancies error:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
-
-  return res.status(405).json({ message: "Method Not Allowed" });
 }
