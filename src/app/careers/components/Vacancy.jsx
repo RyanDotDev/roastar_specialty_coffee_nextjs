@@ -21,7 +21,7 @@ const Vacancy = () => {
           isOpen: data.isOpen ? 'open' : 'closed',
           message: data.isOpen
             ? 'Interested? Apply down below.'
-            : 'No vacancies available.',
+            : 'No vacancies available at the moment.',
         });
       } catch (err) {
           setError(err.message);
@@ -38,7 +38,7 @@ const Vacancy = () => {
   }, []);
   
   if (loading) return <div className='apply'><p>Loading vacancies...</p></div>;
-  if (error) return <div className='apply'><p className="error">Error: {error}</p></div>
+  if (error) return <div className='apply'><p className="error">{/* Error: {error} */}Interested? Please hand in CV at our shop.</p></div>
   
   return (
     <div className='apply'>
