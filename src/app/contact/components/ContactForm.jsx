@@ -1,6 +1,5 @@
 "use client"
 import React, { useState, useRef } from 'react';
-import ReCAPTCHA from 'react-google-recaptcha';
 import { CircleCheckBig } from 'lucide-react';
 import { useForm, Controller } from 'react-hook-form';
 import { showErrorToast } from '@/lib/utils/toasts/toast';
@@ -45,6 +44,7 @@ const ContactForm = () => {
       setShow(false); // Displays confirmation once form is submitted
     } catch (error) {
       console.error('Error sending email', error)
+      showErrorToast('There was an error. Please try again.')
     }
   };
 
