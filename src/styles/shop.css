@@ -466,6 +466,7 @@
 }
 
 .shop-maintenance-container {
+  color: var(--main-beige);
   background: #e1e1e1;
   height: 1000px;
 }
