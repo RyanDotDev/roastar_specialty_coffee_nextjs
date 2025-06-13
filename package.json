@@ -8,8 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "compile": "node --trace-deprecation",
-    "audit:clean": "npm audit --omit=dev"
+    "compile": "node --trace-deprecation"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
