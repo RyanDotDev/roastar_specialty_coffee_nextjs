@@ -28,7 +28,7 @@ const ContactForm = () => {
 
   const onSubmit = async (formData) => {
     try {
-      const response = await fetch('/api/nodemailer/contact', {
+      const response = await fetch('/api/web3forms/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
