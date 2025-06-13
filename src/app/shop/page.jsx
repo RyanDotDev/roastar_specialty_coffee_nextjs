@@ -31,7 +31,7 @@ export default async function Page() {
   return (
     <div className='shop-container'>
       <ShopMaintenance />
-      {/*<Header />
+      {/* <Header />
       <Products 
         products={products}
         error={error}

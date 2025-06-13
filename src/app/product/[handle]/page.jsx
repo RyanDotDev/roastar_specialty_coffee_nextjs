@@ -1,6 +1,7 @@
 import React from 'react';
 import xss from 'xss';
-import ProductPage from './components/ProductPage';
+import ProductPage from './components/Product';
+import '@/styles/product.css';
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
@@ -42,7 +43,7 @@ export default async function Page({ params }) {
   /* if (loading) return <div className='pnf-container'/>; */
   if (error) return <div className='pnf-container'><p>{error}</p></div>; 
   if (!handle) return <div className="pnf-container"><p>Invalid product handle.</p></div>;
-  if (!product) return <div className='pnf-container'/>
+  if (!product) return <div className='pnf-container'>Product Not Found</div>
 
   return (
     <div>

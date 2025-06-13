@@ -26,7 +26,7 @@ const Vacancy = () => {
       } catch (err) {
           setError(err.message);
       } finally {
-        setLoading(false);
+          setLoading(false);
       }
     };
   

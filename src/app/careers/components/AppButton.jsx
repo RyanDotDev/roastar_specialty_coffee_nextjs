@@ -33,7 +33,12 @@ const AppButton = () => {
       </button>
        
       <AnimatePresence>
-        {applicationOpen && <AppForm applicationOpen={applicationOpen} handleClose={toggleApplication}/>}
+        {applicationOpen && 
+          <AppForm 
+            applicationOpen={applicationOpen} 
+            handleClose={toggleApplication}
+          />
+        }
       </AnimatePresence>
     </>
   )

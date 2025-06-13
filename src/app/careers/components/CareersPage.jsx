@@ -25,7 +25,7 @@ const CareersPage = () => {
              you the ways of roastery styled coffee.
           </p>
           {/* Vacancy logic happens here */}   
-          <Vacancy/>
+          <Vacancy />
         </div>
       </div>
     </div>

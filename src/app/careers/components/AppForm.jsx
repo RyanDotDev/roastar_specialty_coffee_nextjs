@@ -51,45 +51,44 @@ const AppForm = ({ handleClose }) => {
   // Handles the submission of data to backend
   const onSubmit = async (data) => {
     setLoading(true);
-  if (!data.resume) {
-    showErrorToast('Please upload a valid CV before submitting.');
-    return;
-  }
-
-  try {
-    const formData = new FormData();
-    formData.append('firstName', data.firstName);
-    formData.append('lastName', data.lastName);
-    formData.append('email', data.email);
-    formData.append('phoneNumber', data.phoneNumber);
-    formData.append('job', data.job);
-    formData.append('rightToWork', data.rightToWork);
-    formData.append('resume', data.resume);
-
-    const response = await fetch('/api/web3forms/application', {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to submit application');
+    if (!data.resume) {
+      showErrorToast('Please upload a valid CV before submitting.');
+      return;
     }
 
-    const result = await response.json();
-    if (result.success) {
-      console.log('Application submitted successfully');
-      router.push('/submit');
-    } else {
-      throw new Error(result.message || 'Submission failed');
-    }
-  } catch (error) {
-    console.error('Error submitting application:', error);
-    showErrorToast('Error submitting application. Please try again later.');
-  } finally {
-    setLoading(false);
-  }
+    try {
+      const formData = new FormData();
+      formData.append('firstName', data.firstName);
+      formData.append('lastName', data.lastName);
+      formData.append('email', data.email);
+      formData.append('phoneNumber', data.phoneNumber);
+      formData.append('job', data.job);
+      formData.append('rightToWork', data.rightToWork);
+      formData.append('resume', data.resume);
 
-    router.push('/submit');
+      const response = await fetch('/api/nodemailer/application', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit application');
+      }
+
+      const result = await response.json();
+      if (response.ok) {
+        console.log('Application submitted successfully');
+        router.push('/submit');
+      } else {
+        const errorMessage = result?.message || 'Submission failed';
+        throw new Error(errorMessage);
+      }
+    } catch (error) {
+      console.error('Error submitting application:', error);
+      showErrorToast('Error submitting application. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -299,7 +298,7 @@ const AppForm = ({ handleClose }) => {
               disabled={!watch("resume") }
               className='submit-btn'
             >
-              {loading ? 'SUBMIT APPLICATION' : 'Processing...'}
+              {loading ? 'SUBMIT APPLICATION': 'Processing...' }
             </button>
           </div>
         </form>
@@ -308,4 +307,4 @@ const AppForm = ({ handleClose }) => {
   )
 }
 
-export default AppForm
+export default AppForm;

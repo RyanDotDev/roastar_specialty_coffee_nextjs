@@ -1,7 +1,9 @@
 "use client"
-import React from 'react';
+import React, { useState, useRef } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { CircleCheckBig } from 'lucide-react';
 import { useForm, Controller } from 'react-hook-form';
+import { showErrorToast } from '@/lib/utils/toasts/toast';
 
 const ContactForm = () => {
   // react states for required field inputs
@@ -15,7 +17,7 @@ const ContactForm = () => {
       message: "",
     }
   });
-  const [show, setShow] = React.useState(true);
+  const [show, setShow] = useState(true);
 
   const name = watch('name');
   const email = watch('email');
@@ -26,7 +28,7 @@ const ContactForm = () => {
 
   const onSubmit = async (formData) => {
     try {
-      const response = await fetch('/api/web3forms/contact', {
+      const response = await fetch('/api/nodemailer/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -163,7 +165,7 @@ const ContactForm = () => {
                </div>
               )}
             />
-            <div >
+            <div>
               <button 
                 disabled={!isFormReady}
                 className='message-submit-btn'
