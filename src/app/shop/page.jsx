@@ -6,8 +6,9 @@ import ShopMaintenance from './components/ShopMaintenance';
 import '@/styles/shop.css';
 
 const getProducts = async () => {
+  const headersList = headers();
+  const host = headersList.get('host') || 'localhost:3000'; // fallback for safety
   const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const host = headers().get('host');
   const baseUrl = `${protocol}://${host}`;
 
   const res = await fetch(`${baseUrl}/api/new-shopify/storefront/products?nocache=${Date.now()}`, {

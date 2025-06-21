@@ -6,8 +6,9 @@ import { headers } from 'next/headers';
 import '@/styles/product.css';
 
 const getProduct = async (handle) => {
+  const headersList = headers();
+  const host = headersList.get('host') || 'localhost:3000'; // fallback for safety
   const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const host = headers().get('host');
   const baseUrl = `${protocol}://${host}`;
   
   const res = await fetch(`${baseUrl}/api/new-shopify/storefront/${handle}`, {
