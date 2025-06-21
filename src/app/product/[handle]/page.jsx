@@ -1,13 +1,12 @@
 import React from 'react';
 import xss from 'xss';
 import Product from './components/Product';
-
 import '@/styles/product.css';
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-
 const getProduct = async (handle) => {
-  const res = await fetch(`${baseUrl}/api/new-shopify/storefront/${handle}`, {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+
+  const res = await fetch(`http://127.0.0.1:3000/api/new-shopify/storefront/${handle}`, {
     cache: 'no-store',
   });
   if (!res.ok) throw new Error('Failed to fetch product');
@@ -16,7 +15,7 @@ const getProduct = async (handle) => {
 };
 
 const getRelatedProducts = async () => {
-  const res = await fetch(`${baseUrl}/api/new-shopify/storefront/related-products`, {
+  const res = await fetch(`http://127.0.0.1:3000/api/new-shopify/storefront/related-products`, {
     cache: 'no-store',
   });
   if (!res.ok) throw new Error('Failed to fetch related products');
