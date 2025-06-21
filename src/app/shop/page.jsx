@@ -1,16 +1,12 @@
 import React from 'react';
-// import Header from './components/Header'; 
-// import Products from './components/Products'; 
-import { headers } from 'next/headers';
+import Header from './components/Header'; 
+import Products from './components/Products'; 
 import ShopMaintenance from './components/ShopMaintenance';
 import '@/styles/shop.css';
 
-const getProducts = async () => {
-  const headersList = headers();
-  const host = headersList.get('host') || 'localhost:3000'; // fallback for safety
-  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const baseUrl = `${protocol}://${host}`;
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
+const getProducts = async () => {
   const res = await fetch(`${baseUrl}/api/new-shopify/storefront/products?nocache=${Date.now()}`, {
     cache: 'no-store',
   });
