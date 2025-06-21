@@ -1,13 +1,17 @@
 import React from 'react';
-import Header from './components/Header'; 
-import Products from './components/Products'; 
+// import Header from './components/Header'; 
+// import Products from './components/Products'; 
+import { headers } from 'next/headers';
 import ShopMaintenance from './components/ShopMaintenance';
 import '@/styles/shop.css';
 
 const getProducts = async () => {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const headersList = headers();
+  const host = headersList.get('host');
+  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+  const baseUrl = `${protocol}://${host}`;
 
-  const res = await fetch(`http://127.0.0.1:3000/api/new-shopify/storefront/products?nocache=${Date.now()}`, {
+  const res = await fetch(`${baseUrl}/api/new-shopify/storefront/products?nocache=${Date.now()}`, {
     cache: 'no-store',
   });
   if (!res.ok) throw new Error('Failed to fetch products');
