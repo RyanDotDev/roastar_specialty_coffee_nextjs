@@ -389,7 +389,7 @@ body {
   position: absolute;
   right: 0;
   bottom: 0;
-  width: max(400px, 30%);
+  width: max(400px, 0%);
   height: 106vh;
   z-index: 102;
   box-shadow: 1px 1px 10px 1px hsl(0, 0%, 0%);
@@ -447,7 +447,7 @@ body {
 /* If cart is EMPTY */
 .cart-content .cart-is-empty {
   margin: 5rem 1rem;
-  letter-spacing: 1.5px;
+  letter-spacing: 0.5px;
 }
 
 .cart-is-empty button {
@@ -1001,7 +1001,7 @@ body {
   }
 
   .hamburger {
-    z-index: 999 !important;
+    z-index: 103;
   }
 
   .logo {

@@ -23,11 +23,11 @@ const ProductPreview = ({ handle, handleClose }) => {
   useEffect(() => {
     const getProduct = async () => {
       if (productCache.has(handle)) {
-      setProduct(productCache.get(handle));
-      return;
-  }
+        setProduct(productCache.get(handle));
+        return;
+      }
       try {
-        const res = await fetch(`/api/shopify/${handle}`, { cache: 'no-cache'});
+        const res = await fetch(`/api/new-shopify/storefront/${handle}`, { cache: 'no-store'});
         if (!res.ok) throw new Error ("Product not found or server error")
         const data = await res.json()
         productCache.set(handle, data);
@@ -67,7 +67,7 @@ const ProductPreview = ({ handle, handleClose }) => {
         quantity: counter,
       }]
 
-      const response = await fetch('/api/shopify/checkout', {
+      const response = await fetch('/api/new-shopify/storefront/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,4 +1,4 @@
-import { fetchShopifyData } from "./route";
+import { fetchShopifyData } from "../shopify";
 
 export default async function fetchProduct(req, res) {
   const { handle } = req.query;

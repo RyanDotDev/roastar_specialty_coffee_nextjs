@@ -13,7 +13,7 @@ const FeaturedShop = () => {
         <div className='fs-image'>
           <Image 
             src='/images/roastar_products.webp'
-            alt="Roastar Product Ad Image"
+            alt="Roastar Coffee Shop Products Image"
             height={600}
             width={700}
             loading='lazy'

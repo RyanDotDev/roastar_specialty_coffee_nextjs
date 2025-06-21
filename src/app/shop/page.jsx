@@ -1,16 +1,17 @@
-export const dynamic = 'force-dynamic';
-
 import React from 'react';
-import Header from './components/Header'; 
-import Products from './components/Products'; 
+// import Header from './components/Header'; 
+// import Products from './components/Products'; 
+import { headers } from 'next/headers';
 import ShopMaintenance from './components/ShopMaintenance';
 import '@/styles/shop.css';
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-
 const getProducts = async () => {
-  const res = await fetch(`${baseUrl}/api/shopify/products`, {
-    cache: 'no-cache',
+  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+  const host = headers().get('host');
+  const baseUrl = `${protocol}://${host}`;
+
+  const res = await fetch(`${baseUrl}/api/new-shopify/storefront/products?nocache=${Date.now()}`, {
+    cache: 'no-store',
   });
   if (!res.ok) throw new Error('Failed to fetch products');
   return await res.json();
@@ -35,13 +36,13 @@ export default async function Page() {
       <Products 
         products={products}
         error={error}
-      />*/}
+      /> */}
     </div>
   )
 }
 
 /* This line is to get rid of that stupid "searchParams" error */
-/*const searchParams = await props.searchParams; */
+/* const searchParams = await props.searchParams; */
 
 /*
 /shop

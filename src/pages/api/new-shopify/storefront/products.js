@@ -1,12 +1,11 @@
-import { fetchShopifyData } from "./route";
+import { fetchShopifyData } from "../shopify";
 
 export default async function fetchProducts(req, res) {
-  const { handle } = req.query;
-  const variables = { handle }
+  console.log("🔥 Shopify API hit at", new Date().toISOString());
   try {
     const query = `
       {
-        products(first: 5) {
+        products(first: 11) {
           edges {
             node {
               id
@@ -37,12 +36,12 @@ export default async function fetchProducts(req, res) {
       }
     `;
 
-    const data = await fetchShopifyData(query, variables);
+    const data = await fetchShopifyData(query);
+    console.log("✅ Shopify returned products:", data?.products?.edges.length);
     if (!data || !data.products || !data?.products?.edges) {
       throw new Error("Invalid response from Shopify");
     }
     res.setHeader('Cache-Control', 'no-store');
-    // res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
     res.status(200).json({ products: data?.products?.edges });
   } catch (error) {
     console.error("Error in API route:", error);

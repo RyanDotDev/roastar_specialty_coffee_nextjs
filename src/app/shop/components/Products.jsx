@@ -16,6 +16,10 @@ const Products = ({ products = [], error: serverError, addToCart }) => {
   const handleCloseModal = () => setSelectedProduct(null)
 
   useEffect(() => {
+    setProductsList(products);
+  }, [products]);
+
+  useEffect(() => {
     handleCloseModal();
     const originalBackgroundColor = document.body.style.backgroundColor;
     document.body.style.backgroundColor = 'var(--main-green)';
@@ -40,7 +44,7 @@ const Products = ({ products = [], error: serverError, addToCart }) => {
     }, [selectedProduct]);
 
   if (loading) return <Loader />
-  if (!productsList.length) {
+  if (!productsList) {
     return <div className='products-not-found'><p>{error}</p></div>
   }
 
@@ -59,7 +63,7 @@ const Products = ({ products = [], error: serverError, addToCart }) => {
                 <Image 
                   src={node.images.edges[0].node.src} 
                   alt={node.title} 
-                  width={300}
+                  width={250}
                   height={250}
                   priority
                 />

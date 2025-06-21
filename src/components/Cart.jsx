@@ -25,7 +25,7 @@ const Cart = ({ handleClose, cartSliderData }) => {
         quantity: item.quantity,
       }));
       console.log("Line items sent to Shopify:", lineItems);
-      const response = await fetch('/api/shopify/checkout', {
+      const response = await fetch('/api/new-shopify/storefront/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

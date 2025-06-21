@@ -7,7 +7,7 @@ import { showErrorToast } from '@/lib/utils/toasts/toast';
 import { Minus, Plus, ChevronLeft } from 'lucide-react';
 import RelatedProducts from './RelatedProducts';
 
-const ProductPage = ({ product, relatedProducts, html }) => {
+const Product = ({ product, relatedProducts, html }) => {
   const cart = useCartStore((state) => state.cart);
   const addToCart = useCartStore((state) => state.addToCart);
 
@@ -98,111 +98,113 @@ const ProductPage = ({ product, relatedProducts, html }) => {
   };
 
   return (
-    <div className='product-page-container'>
-      <Link href='/shop'>
-        <ChevronLeft style={{ position: 'relative', top: '0.45rem', color: 'white' }}/><h5>BACK TO SHOP</h5>
-      </Link>
-      <div className='product-content'>
-        <h1>{product.title}</h1>
-        <div className='product-main'>
-          {/* PRODUCT IMAGE */}
-          {product.images.edges.length > 0 && (
-            <Image
-              src={product.images.edges[0].node.src} 
-              alt={product.title} 
-              width={600}
-              height={550}
-              className='product-img'
-              priority
-            />
-          )}
-          <div className='product-details'>
-            {/* PRODUCT DETAILS */}
-            <div className='product-desc' dangerouslySetInnerHTML={{ __html: html }} />
-            {/* INGREDIENTS (IF APPLICABLE) */}
-            <p>{/* product.metafield?.key */}</p>
-            {/* PRODUCT PRICE */}
-            <h2>
-              £{
-                selectedVariant && selectedOptions ? 
-                parseFloat(selectedVariant.priceV2.amount).toFixed(2) : 
-                parseFloat(product.variants.edges[0].node.priceV2.amount || 0).toFixed(2)
-              }
-            </h2>
-            {product.totalInventory === 0 && <h3 style={{ color: 'white', letterSpacing: '1.5px'}}>SOLD OUT</h3>}
-            {/* QUANTITY/AMOUNT */}
-            <div className={product.totalInventory === 0 ? 'product-quantity disabled' : 'product-quantity'}>
-              <button className='product-quantity-minus' onClick={handleClickMinus}>
-                <Minus size={15}/>
-              </button>
-                <p>{counter}</p>
-              <button className='product-quantity-plus' onClick={handleClickPlus}>
-                <Plus size={15}/>
-              </button>
-            </div>
-            {/* CHOICE OF TYPE(GRIND) */}
-            <div className={`product-coffee-grind ${
-                product.options.length === 1 ? 'single-variant' : ''
-              }`}
-            >
-              {product.options.map((option, index) => (
-                <div key={index} className={`variant-dropdown ${
-                  product.options.length === 1 
-                    ? 'variant-full-width' 
-                    : index === 2
-                    ? 'variant-full-width' 
-                    : 'variant-half-width'
-                  }`}
-                >
-                  <select
-                    id={`variant-option-${index}`}
-                    value={selectedOptions[option.name] || ''}
-                    name='option'
-                    onChange={(e) => handleVariantChange(option.name, e.target.value)}
-                    disabled={product.totalInventory === 0}
+    <div className='product-page-background'>
+      <div className='product-page-container'>
+        <Link href='/shop'>
+          <ChevronLeft style={{ position: 'relative', top: '0.45rem', color: 'white' }}/><h5>BACK TO SHOP</h5>
+        </Link>
+        <div className='product-content'>
+          <h1>{product.title}</h1>
+          <div className='product-main'>
+            {/* PRODUCT IMAGE */}
+            {(selectedVariant?.image?.src || product.images.edges[0]?.node?.src) && (
+              <Image
+                src={selectedVariant?.image?.src || product.images.edges[0].node.src} 
+                alt={product.title} 
+                width={600}
+                height={550}
+                className='product-img'
+                priority
+              />
+            )}
+            <div className='product-details'>
+              {/* PRODUCT DETAILS */}
+              <div className='product-desc' dangerouslySetInnerHTML={{ __html: html }} />
+              {/* INGREDIENTS (IF APPLICABLE) */}
+              <p>{/* product.metafield?.key */}</p>
+              {/* PRODUCT PRICE */}
+              <h2>
+                £{
+                  selectedVariant && selectedOptions ? 
+                  parseFloat(selectedVariant.priceV2.amount).toFixed(2) : 
+                  parseFloat(product.variants.edges[0].node.priceV2.amount || 0).toFixed(2)
+                }
+              </h2>
+              {product.totalInventory === 0 && <h3 style={{ color: 'white', letterSpacing: '1.5px'}}>SOLD OUT</h3>}
+              {/* QUANTITY/AMOUNT */}
+              <div className={product.totalInventory === 0 ? 'product-quantity disabled' : 'product-quantity'}>
+                <button className='product-quantity-minus' onClick={handleClickMinus}>
+                  <Minus size={15}/>
+                </button>
+                  <p>{counter}</p>
+                <button className='product-quantity-plus' onClick={handleClickPlus}>
+                  <Plus size={15}/>
+                </button>
+              </div>
+              {/* CHOICE OF TYPE(GRIND) */}
+              <div className={`product-coffee-grind ${
+                  product.options.length === 1 ? 'single-variant' : ''
+                }`}
+              >
+                {product.options.map((option, index) => (
+                  <div key={index} className={`variant-dropdown ${
+                    product.options.length === 1 
+                      ? 'variant-full-width' 
+                      : index === 2
+                      ? 'variant-full-width' 
+                      : 'variant-half-width'
+                    }`}
                   >
-                    <option value='' disabled>
-                      SELECT {option.name.toUpperCase()}
-                    </option>
-                    {Array.from(new Set(option.values)).map((value, index) => {
-                      // Check if this value is available
-                      const isAvailable = getAvailableOptions(option.name).includes(value);
-                      return (
-                        <option key={`${option.name}-${value}-${index}`} value={value} disabled={!isAvailable}>
-                          {value.toUpperCase()}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-              ))}
-            </div>
-            {/* ADD TO CART/CHECKOUT */}
-            <button 
-              onClick={handleAddToCart}
-              className='add-to-cart'
-              disabled={product.totalInventory === 0}
-              aria-label="Add this product to the cart"
-            >
-              ADD TO CART
-            </button>
-            {/* DELIVERY & SHIPPING INFORMATION */}
-            <div className='product-delivery-info'>
-              <h2>DELIVERY & SHIPPING</h2>
-              <p style={{ color: 'white', marginTop: '1rem'}}>Shipping is processed within 24 hours and we aim to deliver between 3 - 5 days.</p>
-              <p style={{ color: 'white', marginTop: '1rem' }}>Free delivery for orders above £25.</p>
+                    <select
+                      id={`variant-option-${index}`}
+                      value={selectedOptions[option.name] || ''}
+                      name='option'
+                      onChange={(e) => handleVariantChange(option.name, e.target.value)}
+                      disabled={product.totalInventory === 0}
+                    >
+                      <option value='' disabled>
+                        SELECT {option.name.toUpperCase()}
+                      </option>
+                      {Array.from(new Set(option.values)).map((value, index) => {
+                        // Check if this value is available
+                        const isAvailable = getAvailableOptions(option.name).includes(value);
+                        return (
+                          <option key={`${option.name}-${value}-${index}`} value={value} disabled={!isAvailable}>
+                            {value.toUpperCase()}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                ))}
+              </div>
+              {/* ADD TO CART/CHECKOUT */}
+              <button 
+                onClick={handleAddToCart}
+                className='add-to-cart'
+                disabled={product.totalInventory === 0}
+                aria-label="Add this product to the cart"
+              >
+                ADD TO CART
+              </button>
+              {/* DELIVERY & SHIPPING INFORMATION */}
+              <div className='product-delivery-info'>
+                <h2>DELIVERY & SHIPPING</h2>
+                <p style={{ color: 'white', marginTop: '1rem'}}>Shipping is processed within 24 hours and we aim to deliver between 3 - 5 days.</p>
+                <p style={{ color: 'white', marginTop: '1rem' }}>Free delivery for orders above £25.</p>
+              </div>
             </div>
           </div>
+          {/* RELATED PRODUCTS*/}
+          <h2 className='related-product-title'>OTHER PRODUCTS</h2>
+          <RelatedProducts 
+            relatedProducts={relatedProducts} 
+            product={product}
+          />
         </div>
-        {/* RELATED PRODUCTS*/}
-        <h2 className='related-product-title'>OTHER PRODUCTS</h2>
-        <RelatedProducts 
-          relatedProducts={relatedProducts} 
-          product={product}
-        />
       </div>
     </div>
   )
 }
 
-export default ProductPage;
+export default Product;

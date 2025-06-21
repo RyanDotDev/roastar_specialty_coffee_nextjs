@@ -39,6 +39,7 @@
 .product-page-container a {
   text-decoration: none;
   padding-left: 0.5rem;
+  padding-top: 7rem;
 }
 
 .product-content {
@@ -47,6 +48,7 @@
 
 .product-content h1 {
   color: white;
+  padding-left: 1rem;
 }
 
 .product-content .product-img {
@@ -319,6 +321,7 @@
 .related-product-card h3 {
   margin-right: 0.8em;
   margin-left: 0.8em;
+  margin-top: 1rem;
   font-size: 1em;
   color: white;
 }

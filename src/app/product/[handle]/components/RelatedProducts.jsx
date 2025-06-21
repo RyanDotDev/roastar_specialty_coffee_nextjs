@@ -17,7 +17,7 @@ const RelatedProducts = ({ product, relatedProducts }) => {
                   src={node.images.edges[0].node.src} 
                   alt={node.title} 
                   width={200}
-                  height={180}
+                  height={200}
                 />
               )}
               <h3>{node.title}</h3>

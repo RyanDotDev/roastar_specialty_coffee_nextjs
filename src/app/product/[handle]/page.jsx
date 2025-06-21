@@ -1,13 +1,17 @@
 import React from 'react';
 import xss from 'xss';
-import ProductPage from './components/Product';
+import Product from './components/Product';
+import { headers } from 'next/headers';
+
 import '@/styles/product.css';
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-
 const getProduct = async (handle) => {
-  const res = await fetch(`${baseUrl}/api/shopify/${handle}`, {
-    cache: 'no-cache',
+  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+  const host = headers().get('host');
+  const baseUrl = `${protocol}://${host}`;
+  
+  const res = await fetch(`${baseUrl}/api/new-shopify/storefront/${handle}`, {
+    cache: 'no-store',
   });
   if (!res.ok) throw new Error('Failed to fetch product');
 
@@ -15,8 +19,8 @@ const getProduct = async (handle) => {
 };
 
 const getRelatedProducts = async () => {
-  const res = await fetch(`${baseUrl}/api/shopify/related-products`, {
-    cache: 'no-cache',
+  const res = await fetch(`${baseUrl}/api/new-shopify/storefront/related-products`, {
+    cache: 'no-store',
   });
   if (!res.ok) throw new Error('Failed to fetch related products');
 
@@ -38,16 +42,15 @@ export default async function Page({ params }) {
     error = err.message || 'An error occured';
   }
 
-  const sanitisedDescription = xss(product.descriptionHtml);
+  const sanitisedDescription = xss(product.descriptionHtml.replace(/<meta[^>]*>/g, ''));
 
-  /* if (loading) return <div className='pnf-container'/>; */
-  if (error) return <div className='pnf-container'><p>{error}</p></div>; 
-  if (!handle) return <div className="pnf-container"><p>Invalid product handle.</p></div>;
-  if (!product) return <div className='pnf-container'>Product Not Found</div>
+  if (error) return <div className='product-page-background pnf-container'><p>{error}</p></div>; 
+  if (!handle) return <div className="product-page-background pnf-container"><p>Invalid product handle.</p></div>;
+  if (!product) return <div className='product-page-background pnf-container'>Product Not Found</div>
 
   return (
     <div>
-      <ProductPage 
+      <Product
         product={product}
         relatedProducts={relatedProducts.products}
         html={sanitisedDescription}

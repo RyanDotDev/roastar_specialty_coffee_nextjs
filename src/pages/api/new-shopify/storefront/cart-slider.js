@@ -1,4 +1,4 @@
-import { fetchShopifyData } from "./route";
+import { fetchShopifyData } from "../shopify";
 
 export default async function fetchCartSlideProducts(req, res) {
   try {
@@ -34,5 +34,3 @@ export default async function fetchCartSlideProducts(req, res) {
     res.status(500).json({ error: "Failed to fetch products" });
   }
 }
-
-/*public, max-age=3600, stale-while-revalidate=86400*/
