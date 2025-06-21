@@ -5,7 +5,11 @@ import xss from 'xss';
 import Product from './components/Product';
 import '@/styles/product.css';
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://roastarcoffee.co.uk';
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.startsWith('http')
+  ? process.env.NEXT_PUBLIC_SITE_URL
+  : process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : 'http://localhost:3000';
 
 const getProduct = async (handle) => {
   const res = await fetch(`${baseUrl}/api/new-shopify/storefront/${handle}`, {

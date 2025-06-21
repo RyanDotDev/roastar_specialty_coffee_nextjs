@@ -6,7 +6,11 @@ import Products from './components/Products';
 import ShopMaintenance from './components/ShopMaintenance';
 import '@/styles/shop.css';
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://roastarcoffee.co.uk'
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.startsWith('http')
+  ? process.env.NEXT_PUBLIC_SITE_URL
+  : process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : 'http://localhost:3000';
 
 if (!baseUrl) {
   throw new Error('Missing NEXT_PUBLIC_SITE_URL environment variable');
@@ -23,7 +27,7 @@ const getProducts = async () => {
 const SHOP_READY = process.env.SHOP_READY === 'true';
 
 export default async function Page() {
-  if (SHOP_READY) {
+  if (!SHOP_READY) {
     return (
       <div className='shop-container'>
         <ShopMaintenance />
