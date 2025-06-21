@@ -4,12 +4,15 @@ import Product from './components/Product';
 import { headers } from 'next/headers';
 import '@/styles/product.css';
 
-const getProduct = async (handle) => {
-  const headersList = await headers();
+const getBaseUrl = () => {
+  const headersList = headers();
   const host = headersList.get('host');
   const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const baseUrl = `${protocol}://${host}`;
+  return `${protocol}://${host}`;
+};
 
+const getProduct = async (handle) => {
+  const baseUrl = getBaseUrl();
   const res = await fetch(`${baseUrl}/api/new-shopify/storefront/${handle}`, {
     cache: 'no-store',
   });
