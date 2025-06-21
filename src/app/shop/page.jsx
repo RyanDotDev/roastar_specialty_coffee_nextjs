@@ -6,7 +6,7 @@ import Products from './components/Products';
 import ShopMaintenance from './components/ShopMaintenance';
 import '@/styles/shop.css';
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
 if (!baseUrl) {
   throw new Error('Missing NEXT_PUBLIC_SITE_URL environment variable');
