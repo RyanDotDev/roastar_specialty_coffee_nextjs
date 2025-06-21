@@ -5,7 +5,7 @@ import xss from 'xss';
 import Product from './components/Product';
 import '@/styles/product.css';
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
 if (!baseUrl) {
   throw new Error('Missing NEXT_PUBLIC_SITE_URL environment variable');
