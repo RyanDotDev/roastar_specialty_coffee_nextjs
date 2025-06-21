@@ -6,7 +6,7 @@ import ShopMaintenance from './components/ShopMaintenance';
 import '@/styles/shop.css';
 
 const getProducts = async () => {
-  const headersList = headers();
+  const headersList = await headers();
   const host = headersList.get('host');
   const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
   const baseUrl = `${protocol}://${host}`;

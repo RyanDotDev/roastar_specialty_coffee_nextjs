@@ -6,7 +6,7 @@ import { headers } from 'next/headers';
 import '@/styles/product.css';
 
 const getProduct = async (handle) => {
-  const headersList = headers();
+  const headersList = await headers();
   const host = headersList.get('host');
   const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
   const baseUrl = `${protocol}://${host}`;
