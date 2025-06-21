@@ -5,7 +5,7 @@ import ContactUsPage from './components/ContactUsPage'
 import ContactUsHeader from './components/ContactUsHeader'
 import '@/styles/contact.css'
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+const baseUrl = 'https://roastarcoffee.co.uk' || 'http://localhost:3000';
 
 if (!baseUrl) {
   throw new Error('Missing NEXT_PUBLIC_SITE_URL environment variable');
