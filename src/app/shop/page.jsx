@@ -1,33 +1,34 @@
 import React from 'react';
-// import Header from './components/Header'; 
-// import Products from './components/Products'; 
 import { headers } from 'next/headers';
 import ShopMaintenance from './components/ShopMaintenance';
 import '@/styles/shop.css';
 
-const getProducts = async () => {
+const getBaseUrl = async () => {
   const headersList = await headers();
   const host = headersList.get('host');
   const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const baseUrl = `${protocol}://${host}`;
+  return `${protocol}://${host}`;
+};
 
+const getProducts = async () => {
+  const baseUrl = await getBaseUrl();
   const res = await fetch(`${baseUrl}/api/new-shopify/storefront/products?nocache=${Date.now()}`, {
     cache: 'no-store',
   });
   if (!res.ok) throw new Error('Failed to fetch products');
   return await res.json();
-}
+};
 
 export default async function Page() {
   let products = null;
-  let error =  null;
+  let error = null;
 
   try {
     const data = await getProducts();
     products = data.products || [];
-  } catch(err) {
+  } catch (err) {
     console.error(err);
-    error = err.message || "An error occured";
+    error = err.message || "An error occurred";
   }
 
   return (
@@ -39,9 +40,8 @@ export default async function Page() {
         error={error}
       /> */}
     </div>
-  )
+  );
 }
-
 /* This line is to get rid of that stupid "searchParams" error */
 /* const searchParams = await props.searchParams; */
 

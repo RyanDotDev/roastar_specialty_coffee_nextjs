@@ -2,7 +2,6 @@ import React from 'react';
 import xss from 'xss';
 import Product from './components/Product';
 import { headers } from 'next/headers';
-
 import '@/styles/product.css';
 
 const getProduct = async (handle) => {
@@ -15,22 +14,25 @@ const getProduct = async (handle) => {
     cache: 'no-store',
   });
   if (!res.ok) throw new Error('Failed to fetch product');
-
   return res.json();
 };
 
 const getRelatedProducts = async () => {
-  const res = await fetch(`/api/new-shopify/storefront/related-products`, {
+  const headersList = await headers();
+  const host = headersList.get('host');
+  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+  const baseUrl = `${protocol}://${host}`;
+
+  const res = await fetch(`${baseUrl}/api/new-shopify/storefront/related-products`, {
     cache: 'no-store',
   });
   if (!res.ok) throw new Error('Failed to fetch related products');
-
   return res.json();
-}
+};
 
 export default async function Page({ params }) {
-  const { handle } = await params;
-  
+  const { handle } = params;
+
   let product = null;
   let relatedProducts = null;
   let error = null;
@@ -38,16 +40,18 @@ export default async function Page({ params }) {
   try {
     product = await getProduct(handle);
     relatedProducts = await getRelatedProducts();
-  } catch(err) {
+  } catch (err) {
     console.error(err);
-    error = err.message || 'An error occured';
+    error = err.message || 'An error occurred';
   }
-
-  const sanitisedDescription = xss(product.descriptionHtml.replace(/<meta[^>]*>/g, ''));
 
   if (error) return <div className='product-page-background pnf-container'><p>{error}</p></div>; 
   if (!handle) return <div className="product-page-background pnf-container"><p>Invalid product handle.</p></div>;
-  if (!product) return <div className='product-page-background pnf-container'>Product Not Found</div>
+  if (!product) return <div className='product-page-background pnf-container'>Product Not Found</div>;
+
+  const sanitisedDescription = xss(
+    product.descriptionHtml?.replace(/<meta[^>]*>/g, '') || ''
+  );
 
   return (
     <div>
@@ -57,5 +61,5 @@ export default async function Page({ params }) {
         html={sanitisedDescription}
       />
     </div>
-  )
+  );
 }
