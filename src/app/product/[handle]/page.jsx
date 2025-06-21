@@ -7,6 +7,10 @@ import '@/styles/product.css';
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
+if (!baseUrl) {
+  throw new Error('Missing NEXT_PUBLIC_SITE_URL environment variable');
+}
+
 const getProduct = async (handle) => {
   const res = await fetch(`${baseUrl}/api/new-shopify/storefront/${handle}`, {
     cache: 'no-store',
