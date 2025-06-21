@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import React from 'react';
 import ShopMaintenance from './components/ShopMaintenance';
 import { headers } from 'next/headers';

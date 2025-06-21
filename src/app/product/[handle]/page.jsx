@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import React from 'react';
 import xss from 'xss';
 import Product from './components/Product';
