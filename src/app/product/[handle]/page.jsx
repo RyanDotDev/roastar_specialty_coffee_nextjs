@@ -1,3 +1,5 @@
+import { headers } from 'next/headers';
+
 export const dynamic = 'force-dynamic';
 
 import React from 'react';
@@ -5,9 +7,11 @@ import xss from 'xss';
 import Product from './components/Product';
 import '@/styles/product.css';
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-
 const getProduct = async (handle) => {
+  const headersList = await headers();
+  const host = headersList.get('host');
+  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+  const baseUrl = `${protocol}://${host}`;
   const res = await fetch(`${baseUrl}/api/new-shopify/storefront/${handle}`, {
     cache: 'no-store',
   });
