@@ -5,7 +5,7 @@ import ContactUsPage from './components/ContactUsPage'
 import ContactUsHeader from './components/ContactUsHeader'
 import '@/styles/contact.css'
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
 const page = async () => {
   const googleMapsRes = await fetch(`${baseUrl}/api/google-maps/map-key`, { cache: 'no-cache' })
