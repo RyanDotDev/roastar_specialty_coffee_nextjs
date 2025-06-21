@@ -9,7 +9,7 @@ import '@/styles/shop.css';
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
 const getProducts = async () => {
-  const res = await fetch(`${baseUrl}/api/new-shopify/storefront/products?nocache=${Date.now()}`, {
+  const res = await fetch(`${baseUrl}/api/new-shopify/storefront/products`, {
     cache: 'no-store',
   });
   if (!res.ok) throw new Error('Failed to fetch products');
