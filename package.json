@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "doppler run -- next dev",
-    "build": "next build",
-    "start": "next start",
+    "build": "doppler run -- next build",
+    "start": "doppler run -- next start",
     "lint": "next lint",
     "compile": "node --trace-deprecation",
     "audit:clean": "npm audit --omit=dev"

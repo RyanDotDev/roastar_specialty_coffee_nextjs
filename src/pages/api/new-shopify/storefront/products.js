@@ -1,7 +1,12 @@
 import { fetchShopifyData } from "../shopify";
 
-export default async function fetchProducts(req, res) {
+export default async function handler(req, res) {
   console.log("🔥 Shopify API hit at", new Date().toISOString());
+  if (!req || !res) {
+    console.error("❌ req/res undefined – this API route was probably called incorrectly");
+    return new Response("Invalid invocation", { status: 500 });
+  }
+  
   try {
     const query = `
       {
