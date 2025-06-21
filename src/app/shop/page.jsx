@@ -6,15 +6,7 @@ import Products from './components/Products';
 import ShopMaintenance from './components/ShopMaintenance';
 import '@/styles/shop.css';
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.startsWith('http')
-  ? process.env.NEXT_PUBLIC_SITE_URL
-  : process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : 'http://localhost:3000';
-
-if (!baseUrl) {
-  throw new Error('Missing NEXT_PUBLIC_SITE_URL environment variable');
-}
+const baseUrl = 'https://roastarcoffee.co.uk';
 
 const getProducts = async () => {
   const res = await fetch(`${baseUrl}/api/new-shopify/storefront/products?nocache=`, {
