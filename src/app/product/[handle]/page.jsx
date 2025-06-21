@@ -5,11 +5,7 @@ import xss from 'xss';
 import Product from './components/Product';
 import '@/styles/product.css';
 
-const baseUrl = 'https://roastarcoffee.co.uk' || 'http://localhost:3000';
-
-if (!baseUrl) {
-  throw new Error('Missing NEXT_PUBLIC_SITE_URL environment variable');
-}
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://roastarcoffee.co.uk';
 
 const getProduct = async (handle) => {
   const res = await fetch(`${baseUrl}/api/new-shopify/storefront/${handle}`, {
@@ -28,7 +24,7 @@ const getRelatedProducts = async () => {
 };
 
 export default async function Page({ params }) {
-  const { handle } = params;
+  const { handle } = await params;
 
   let product = null;
   let relatedProducts = null;

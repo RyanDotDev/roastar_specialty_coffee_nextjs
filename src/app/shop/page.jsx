@@ -6,14 +6,14 @@ import Products from './components/Products';
 import ShopMaintenance from './components/ShopMaintenance';
 import '@/styles/shop.css';
 
-const baseUrl = 'https://roastarcoffee.co.uk' || 'http://localhost:3000';
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://roastarcoffee.co.uk'
 
 if (!baseUrl) {
   throw new Error('Missing NEXT_PUBLIC_SITE_URL environment variable');
 }
 
 const getProducts = async () => {
-  const res = await fetch(`${baseUrl}/api/new-shopify/storefront/products`, {
+  const res = await fetch(`${baseUrl}/api/new-shopify/storefront/products?nocache=`, {
     cache: 'no-store',
   });
   if (!res.ok) throw new Error('Failed to fetch products');
@@ -23,7 +23,7 @@ const getProducts = async () => {
 const SHOP_READY = process.env.SHOP_READY === 'true';
 
 export default async function Page() {
-  if (!SHOP_READY) {
+  if (SHOP_READY) {
     return (
       <div className='shop-container'>
         <ShopMaintenance />
