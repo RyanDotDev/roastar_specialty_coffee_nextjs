@@ -14,7 +14,10 @@ export async function fetchProduct(handle) {
         totalInventory
         productType
         descriptionHtml
-        metafield(namespace: "custom", key: "ingredients") {
+        metafields(identifiers: [
+          { namespace: "custom", key: "discountPercentage" },
+          { namespace: "custom", key: "discountedVariant" }
+        ]) {
           namespace
           key
           value

@@ -458,14 +458,25 @@ body {
 
 .cart-slider {
   position: absolute;
-  bottom: 8rem;
+  bottom: 7rem;
   overflow: hidden;
   margin: auto;
   width: 95%;
   margin-top: 5rem;
 }
 
+.cart-slide-card {
+  padding: 1rem;
+  margin-inline: auto;
+  left: 0;
+  right: 0;
+  background-image: linear-gradient(1turn, hsl(0, 0%, 100%, 20%), hsla(0, 0%, 74%, 20%), hsl(0, 0%, 100%, 20%));
+  width: 170px;
+  height: 220px;
+}
+
 .cart-track p {
+  margin-top: 1rem;
   text-align: center;
   color: black;
   transition: color 300ms;
@@ -1037,15 +1048,16 @@ body {
     display: block;
   }
 
+  /* Cart.jsx (if cart is empty) */
   .cart-slider {
+    display: flex;
     position: relative;
-    bottom: -2rem;
-    margin-top: 7.5rem;
     margin-left: 0.5rem;
-    padding-bottom: 3rem;
+    padding-bottom: 2rem;
     width: 100%;
   }
 
+  /* Cart.jsx (if cart has item(s)) */
   .cart-bottom-section {
     position: relative;
     margin-top: 17rem;

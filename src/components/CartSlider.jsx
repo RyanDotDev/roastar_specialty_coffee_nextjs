@@ -26,17 +26,19 @@ const CartSlider = ({ data }) => {
               style={{ textAlign: 'center'}}
             >
               <Link href={`/product/${node.handle}`} style={{ textDecoration: 'none', color: 'black' }}>
-                {node.images.edges.length > 0 && (
-                  <Image 
-                    src={node.images.edges[0].node.src}
-                    alt={node.title}
-                    width={150}
-                    height={130}
-                    className='cart-slide swiper-lazy'
-                    data-src={node.images.edges[0].node.src}
-                  />
-                )}
-                <p>{node.title}</p>
+                <div className='cart-slide-card'>
+                  {node.images.edges.length > 0 && (
+                    <Image 
+                      src={node.images.edges[0].node.src}
+                      alt={node.title}
+                      width={130}
+                      height={130}
+                      className='cart-slide swiper-lazy'
+                      data-src={node.images.edges[0].node.src}
+                    />
+                  )}
+                  <p>{node.title}</p>
+                </div>
               </Link>
             </SwiperSlide>
         ))}

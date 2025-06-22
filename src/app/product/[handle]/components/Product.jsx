@@ -12,7 +12,7 @@ const Product = ({ product, relatedProducts, html }) => {
   const addToCart = useCartStore((state) => state.addToCart);
 
   const [selectedVariant, setSelectedVariant] = useState(null);
-  const [selectedOptions, setSelectedOptions] = useState({});
+  const [selectedOptions, setSelectedOptions] = useState({}); 
   const [counter, setCounter] = useState(1);
 
   useEffect(() => { 
@@ -97,6 +97,40 @@ const Product = ({ product, relatedProducts, html }) => {
     };
   };
 
+  const discountPercentageField = product.metafields.find(
+    (mf) =>
+      mf.key.toLowerCase() === "discountpercentage" &&
+      (!mf.namespace || mf.namespace.toLowerCase() === "custom")
+  );
+
+  const discountedVariantField = product.metafields.find(
+    (mf) =>
+      mf.key.toLowerCase() === "discountedvariant" &&
+      (!mf.namespace || mf.namespace.toLowerCase() === "custom")
+  );
+
+  const discount = discountPercentageField ? parseFloat(discountPercentageField.value) : null;
+  const discountedVariantTitle = discountedVariantField?.value?.trim().toLowerCase();
+  const currentVariantTitle = selectedVariant?.title?.trim().toLowerCase();
+  const isDiscounted = currentVariantTitle === discountedVariantTitle;
+
+  const price = selectedVariant 
+    ? parseFloat(selectedVariant.priceV2.amount) 
+    : parseFloat(product.variants.edges[0].node.priceV2.amount);
+
+  const discountedPrice = isDiscounted && discount
+    ? (price * (1 - discount / 100)).toFixed(2)
+    : price.toFixed(2);
+
+  const originalPrice = isDiscounted && discount
+    ? price.toFixed(2)
+    : null;
+
+  console.log("Selected variant title:", selectedVariant?.title);
+  console.log("Discounted variant title from metafield:", discountedVariantField?.value);
+  console.log("Discount % from metafield:", discount);
+  console.log("isDiscounted:", isDiscounted);
+
   return (
     <div className='product-page-background'>
       <div className='product-page-container'>
@@ -106,6 +140,7 @@ const Product = ({ product, relatedProducts, html }) => {
         <div className='product-content'>
           <h1>{product.title}</h1>
           <div className='product-main'>
+
             {/* PRODUCT IMAGE */}
             {(selectedVariant?.image?.src || product.images.edges[0]?.node?.src) && (
               <Image
@@ -117,20 +152,30 @@ const Product = ({ product, relatedProducts, html }) => {
                 priority
               />
             )}
+
             <div className='product-details'>
               {/* PRODUCT DETAILS */}
               <div className='product-desc' dangerouslySetInnerHTML={{ __html: html }} />
-              {/* INGREDIENTS (IF APPLICABLE) */}
-              <p>{/* product.metafield?.key */}</p>
+             
               {/* PRODUCT PRICE */}
-              <h2>
-                £{
-                  selectedVariant && selectedOptions ? 
-                  parseFloat(selectedVariant.priceV2.amount).toFixed(2) : 
-                  parseFloat(product.variants.edges[0].node.priceV2.amount || 0).toFixed(2)
-                }
+              {originalPrice && (
+                <h3 style={{ textDecoration: 'line-through', color: '#ccc' }}>
+                 £{originalPrice}
+                </h3>
+              )}
+
+              <h2 style={originalPrice ? { color: '#00ff99' } : {}}>
+                £{discountedPrice}
+                 {originalPrice && (
+                   <span style={{ marginLeft: '8px', fontSize: '0.9rem', color: '#ff5' }}>
+                     ({discount}% off)
+                   </span>
+                 )}
               </h2>
+
+              {/* STOCK AVAILABILITY */}
               {product.totalInventory === 0 && <h3 style={{ color: 'white', letterSpacing: '1.5px'}}>SOLD OUT</h3>}
+              
               {/* QUANTITY/AMOUNT */}
               <div className={product.totalInventory === 0 ? 'product-quantity disabled' : 'product-quantity'}>
                 <button className='product-quantity-minus' onClick={handleClickMinus}>
@@ -141,6 +186,7 @@ const Product = ({ product, relatedProducts, html }) => {
                   <Plus size={15}/>
                 </button>
               </div>
+
               {/* CHOICE OF TYPE(GRIND) */}
               <div className={`product-coffee-grind ${
                   product.options.length === 1 ? 'single-variant' : ''
@@ -178,6 +224,7 @@ const Product = ({ product, relatedProducts, html }) => {
                   </div>
                 ))}
               </div>
+
               {/* ADD TO CART/CHECKOUT */}
               <button 
                 onClick={handleAddToCart}
@@ -187,6 +234,7 @@ const Product = ({ product, relatedProducts, html }) => {
               >
                 ADD TO CART
               </button>
+
               {/* DELIVERY & SHIPPING INFORMATION */}
               <div className='product-delivery-info'>
                 <h2>DELIVERY & SHIPPING</h2>
@@ -195,6 +243,7 @@ const Product = ({ product, relatedProducts, html }) => {
               </div>
             </div>
           </div>
+
           {/* RELATED PRODUCTS*/}
           <h2 className='related-product-title'>OTHER PRODUCTS</h2>
           <RelatedProducts 
