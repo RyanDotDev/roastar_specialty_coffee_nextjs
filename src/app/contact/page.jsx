@@ -3,13 +3,11 @@ export const dynamic = 'force-dynamic';
 import React from 'react'
 import ContactUsPage from './components/ContactUsPage'
 import ContactUsHeader from './components/ContactUsHeader'
+import { googleMapsData } from '@/pages/api/google-maps/map-key';
 import '@/styles/contact.css'
 
-const baseUrl = 'https://roastarcoffee.co.uk';
-
 const page = async () => {
-  const googleMapsRes = await fetch(`${baseUrl}/api/google-maps/map-key`, { cache: 'no-cache' })
-  const { apiKey } = await googleMapsRes.json();
+  const { apiKey } = await googleMapsData();
 
   return (
     <div className='contact-us-container'>

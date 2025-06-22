@@ -3,24 +3,16 @@ export const dynamic = 'force-dynamic';
 import React from 'react';
 import xss from 'xss';
 import Product from './components/Product';
+import { fetchProduct } from '@/lib/api/shopify/storefront/[handle]';
+import { fetchRelatedProducts } from '@/lib/api/shopify/storefront/related-products';
 import '@/styles/product.css';
 
-const baseUrl = 'https://roastarcoffee.co.uk';
-
 const getProduct = async (handle) => {
-  const res = await fetch(`${baseUrl}/api/new-shopify/storefront/${handle}`, {
-    cache: 'no-store',
-  });
-  if (!res.ok) throw new Error('Failed to fetch product');
-  return res.json();
+  return await fetchProduct(handle);
 };
 
 const getRelatedProducts = async () => {
-  const res = await fetch(`${baseUrl}/api/new-shopify/storefront/related-products`, {
-    cache: 'no-store',
-  });
-  if (!res.ok) throw new Error('Failed to fetch related products');
-  return res.json();
+  return await fetchRelatedProducts();
 };
 
 export default async function Page({ params }) {
@@ -50,7 +42,7 @@ export default async function Page({ params }) {
     <div>
       <Product
         product={product}
-        relatedProducts={relatedProducts.products}
+        relatedProducts={relatedProducts}
         html={sanitisedDescription}
       />
     </div>

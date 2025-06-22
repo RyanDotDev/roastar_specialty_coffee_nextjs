@@ -1,19 +1,39 @@
-import NavbarContainer from "./NavbarContainer";
+export const dynamic = 'force-dynamic';
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-  
-const getProducts = async () => {
+import NavbarContainer from "./NavbarContainer";
+import { fetchCartSliderProducts } from "@/lib/api/shopify/storefront/cart-slider";
+
+const getCartSliderData = async () => {
+  return await fetchCartSliderProducts();
+}
+
+export default async function Navbar() {
+  let sliderProducts = null
+  let error = null
+
+  try {
+    const data = await getCartSliderData();
+    sliderProducts = data || [];
+  } catch (err) {
+    console.error(err);
+    error = err.message || "An error occurred";
+  }
+
+  console.log("Slider products:", sliderProducts);
+  console.log("Error:", error);
+
+  return (
+    <NavbarContainer 
+      sliderProducts={sliderProducts} 
+      error={error}
+    />
+  )
+}
+
+/* const getProducts = async () => {
   const res = await fetch(`http://127.0.0.1:3000/api/new-shopify/storefront/cart-slider`, { 
     cache: 'no-store',
   });
   if (!res.ok) throw new Error('Failed to fetch product data');
   return await res.json();
-}
-
-export default async function Navbar() {
-  const cartSliderData = await getProducts();
-
-  return (
-    <NavbarContainer cartSliderData={cartSliderData} />
-  )
-}
+} */

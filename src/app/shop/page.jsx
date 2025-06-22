@@ -4,16 +4,12 @@ import Header from './components/Header';
 import React from 'react';
 import Products from './components/Products';
 import ShopMaintenance from './components/ShopMaintenance';
+import { fetchProducts } from '@/lib/api/shopify/storefront/products';
 import '@/styles/shop.css';
 
-const baseUrl = 'https://roastarcoffee.co.uk';
-
 const getProducts = async () => {
-  const res = await fetch(`${baseUrl}/api/new-shopify/storefront/products?nocache=`, {
-    cache: 'no-store',
-  });
-  if (!res.ok) throw new Error('Failed to fetch products');
-  return await res.json();
+  const products = await fetchProducts();
+  return { products };
 }; 
 
 const SHOP_READY = process.env.SHOP_READY === 'true';

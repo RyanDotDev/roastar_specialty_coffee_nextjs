@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { showErrorToast } from '@/lib/utils/toasts/toast';
 import { useCartStore } from '@/store/cartStore';
 
-const Cart = ({ handleClose, cartSliderData }) => {
+const Cart = ({ handleClose, sliderProducts }) => {
   const { cart, removeFromCart, clearCart, updateQuantity } = useCartStore();
   const [loading, setLoading] = useState(true);
 
@@ -51,56 +51,6 @@ const Cart = ({ handleClose, cartSliderData }) => {
       setLoading(false)
     }
   };
-
-  /* This code is will be implemented when ready for production.
-  useEffect(() => {
-    const handlePaymentConfirmation = async () => {
-      const orderId = localStorage.getItem('orderId');
-      if (!orderId) {
-        console.error("Order ID is missing, cannot confirm payment.");
-        return;
-      }
-  
-      try {
-        const response = await fetch('/api/shopify/order-paid', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ orderId })
-        });
-  
-        const data = await response.json();
-        console.log("Shopify Webhook Response", data)
-  
-        if (data.success) {
-          console.log('Cart has been cleared.')
-          dispatch(clearCart())
-          localStorage.removeItem('orderId')
-        } else {
-          console.log('There was an issue clearing your cart.', data)
-        }
-      } catch (error) {
-        console.error('Error confirming payment:', error)
-      }
-    }
-
-    handlePaymentConfirmation();
-
-    const storageListener = () => {
-      const orderId = localStorage.getItem('orderId');
-      if (!orderId) {
-        dispatch(clearCart());
-      }
-    }
-
-    window.addEventListener('storage', storageListener);
-
-    return () => {
-      window.removeEventListener('storage', storageListener)
-    }
-  }, [dispatch])
-  */
 
   const handleRemove = (id) => removeFromCart(id)
   const handleClearCart = () => clearCart();
@@ -153,7 +103,7 @@ const Cart = ({ handleClose, cartSliderData }) => {
                 <div className='cart-is-empty'>
                   <p className=''>YOUR CART IS EMPTY</p>
                   <Link href='/shop'><button className='continue'>CONTINUE SHOPPING</button></Link>
-                  <CartSlider data={cartSliderData} />
+                  <CartSlider data={sliderProducts} />
                 </div>
               ) : (
                 <>

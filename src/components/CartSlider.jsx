@@ -18,8 +18,8 @@ const CartSlider = ({ data }) => {
         autoplay={{ delay: 3000 }}
         lazyPreloadPrevNext={false}
       >
-        {Array.isArray(data.products) &&
-          data.products.map(({ node }) => (
+        {Array.isArray(data) &&
+          data.map(({ node }) => (
             <SwiperSlide 
               key={node.id} 
               className='cart-track' 

@@ -18,7 +18,7 @@ const navigation = [
   { _id:105, title: 'CONTACT US', href: '/contact' },
 ];
 
-const NavbarContainer = ({ cartSliderData }) => {
+const NavbarContainer = ({ sliderProducts }) => {
   const cart = useCartStore((state) => state.cart)
   const pathname = usePathname();
   const [colourOnScroll, setColourOnScroll] = React.useState(false); // changes the state of colour upon scrolling
@@ -123,7 +123,6 @@ const NavbarContainer = ({ cartSliderData }) => {
               }}
             >
               <button 
-                disabled
                 className={`cart-btn ${colourOnScroll ? 'cart-white cart-black' : 'cart-white'}` }
                 onClick={() => cartOpen ? close() : open()}
               >
@@ -137,7 +136,7 @@ const NavbarContainer = ({ cartSliderData }) => {
               </button>
             </Badge>
             <AnimatePresence>
-              {cartOpen && <Cart cart={cart} handleClose={close} cartSliderData={cartSliderData} />}
+              {cartOpen && <Cart cart={cart} handleClose={close} sliderProducts={sliderProducts} />}
             </AnimatePresence>
           </div>
         </div>

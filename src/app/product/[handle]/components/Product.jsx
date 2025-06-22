@@ -109,7 +109,7 @@ const Product = ({ product, relatedProducts, html }) => {
             {/* PRODUCT IMAGE */}
             {(selectedVariant?.image?.src || product.images.edges[0]?.node?.src) && (
               <Image
-                src={selectedVariant?.image?.src || product.images.edges[0].node.src} 
+                src={selectedVariant?.image?.src || product.images.edges[0]?.node.src} 
                 alt={product.title} 
                 width={600}
                 height={550}
