@@ -168,9 +168,9 @@ const ProductPreview = ({ handle, handleClose }) => {
         id: selectedVariant.id,
         title: product.title,
         variant: selectedVariant.title,
-        price: parseFloat(selectedVariant.priceV2.amount),
+        price: discountedPrice,
         quantity: counter,
-        image: product.images.edges[0]?.node.src,
+        image: productImage,
         handle: product.handle,
       });
       showSuccessToast('Item Added');
@@ -178,6 +178,38 @@ const ProductPreview = ({ handle, handleClose }) => {
   };
 
   if (!product) return <p></p>;
+
+  /* Variant image change logic (if applicable) */
+  const variantImage = selectedVariant?.image?.src;
+  const originalImage = product.images.edges[0]?.node?.src;
+
+  const productImage = variantImage ?? originalImage;
+
+  /*
+  * Discount Logic */
+  // Product Discount
+  const productDiscount = product?.metafield?.value
+    ? parseFloat(product.metafield.value)
+    : null;
+
+  // Variant Discount
+  const variantDiscount = selectedVariant?.metafield 
+    ? parseFloat(selectedVariant.metafield.value) 
+    : null;
+
+  const price = selectedVariant && selectedVariant.priceV2.amount
+    ? parseFloat(selectedVariant.priceV2.amount) 
+    : product.variants.edges[0]
+      ? parseFloat(product.variants.edges[0].node.priceV2.amount)
+      : 0;
+  
+  const discount = variantDiscount ?? productDiscount;
+
+  const discountedPrice = discount
+    ? (price * (1 - discount / 100)).toFixed(2)
+    : price.toFixed(2);
+
+  const originalPrice = discount ? price.toFixed(2) : null;
 
   return (
     <Backdrop>
@@ -193,35 +225,56 @@ const ProductPreview = ({ handle, handleClose }) => {
           <X size={35} strokeWidth={1.5} />
         </button>
         <div className='product-preview-content'>
+
           {/* PRODUCT TITLE */}
           <h1>{product.title}</h1>
           <div className='product-preview-main'>
+
             {/* PRODUCT IMAGE */}
-            {product.images.edges.length > 0 && (
-              <Image 
-                src={product.images.edges[0].node.src} 
-                alt={product.title} 
-                width={500}
-                height={500}
-                className='product-img'
-                loading='lazy'
-              />
-            )}
+            <Image 
+              src={productImage} 
+              alt={`${product.title} ${selectedVariant?.title || ''}`}
+              width={500}
+              height={500}
+              className='product-img'
+              loading='lazy'
+            />
+           
             <div className='product-preview-details'>
+
               {/* PRODUCT PRICE */}
-              <h2 className='product-preview-price'>
-                £{selectedVariant && selectedOptions ? 
-                  parseFloat(selectedVariant.priceV2.amount).toFixed(2) : 
-                  parseFloat(product.variants.edges[0].node.priceV2.amount || 0).toFixed(2)
-                 }
+               {originalPrice && (
+                <h3 style={{ textDecoration: 'line-through', color: '#ccc' }}>
+                 £{originalPrice}
+                </h3>
+              )}
+
+              <h2 className='product-preview-price' style={originalPrice ? { color: 'black' } : {}}>
+                £{discountedPrice}
+                 {originalPrice && (
+                   <span 
+                     style={{ 
+                       marginLeft: '8px', 
+                       fontSize: '0.9rem', 
+                       fontWeight: '700', 
+                       color: 'var(--main-green)',
+                       letterSpacing: '0.5px' 
+                     }}
+                    >
+                     ({discount}% off)
+                   </span>
+                 )}
               </h2>
+
               {product.totalInventory === 0 && <h3 style={{ color: 'black', letterSpacing: '1.5px' }}>SOLD OUT</h3>}
+
               {/* QUANTITY/AMOUNT */}
               <div className={product.totalInventory === 0 ? 'product-preview-quantity preview-disabled' : 'product-preview-quantity'}>
                 <button className='product-preview-quantity-minus' onClick={handleClickMinus}><Minus size={15}/></button>
                   <p className='product-preview-quantity-amount'>{counter}</p>
                 <button className='product-preview-quantity-plus' onClick={handleClickPlus}><Plus size={15}/></button>
               </div>
+
               {/* CHOICE OF VARIANT/OPTION */}
               <div className={`product-preview-coffee-grind ${
                 product.options.length === 1 ? 'preview-single-variant' : ''
@@ -258,6 +311,7 @@ const ProductPreview = ({ handle, handleClose }) => {
                   </div>
                 ))}
               </div>
+
               {/* ADD TO CART/CHECKOUT */}
               <button 
                 onClick={handleAddToCart}
@@ -287,4 +341,4 @@ const ProductPreview = ({ handle, handleClose }) => {
   )
 }
 
-export default ProductPreview
+export default ProductPreview;

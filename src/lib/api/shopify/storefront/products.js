@@ -18,6 +18,9 @@ export async function fetchProducts() {
                 }
               }
             }
+            metafield(namespace: "custom", key: "discountPercentage") {
+              value
+            }
             variants(first: 1) {
               edges {
                 node {

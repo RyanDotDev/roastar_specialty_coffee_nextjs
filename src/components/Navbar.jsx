@@ -19,9 +19,6 @@ export default async function Navbar() {
     error = err.message || "An error occurred";
   }
 
-  console.log("Slider products:", sliderProducts);
-  console.log("Error:", error);
-
   return (
     <NavbarContainer 
       sliderProducts={sliderProducts} 

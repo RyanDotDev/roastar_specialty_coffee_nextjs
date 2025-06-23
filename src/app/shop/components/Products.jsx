@@ -19,6 +19,7 @@ const Products = ({ products = [], error: serverError, addToCart }) => {
     setProductsList(products);
   }, [products]);
 
+  // Scroll and background color logic
   useEffect(() => {
     handleCloseModal();
     const originalBackgroundColor = document.body.style.backgroundColor;
@@ -52,12 +53,29 @@ const Products = ({ products = [], error: serverError, addToCart }) => {
     <div className="product-container">
       <div className='product-grid'>
       {
-        productsList.map(({ node }) => (
+        productsList.map(({ node }) => {
+          const discount = node?.metafield?.value
+            ? parseFloat(node.metafield.value)
+            : null;
+  
+          const price = node.variants.edges[0].node.priceV2.amount
+            ? parseFloat(node.variants.edges[0].node.priceV2.amount)
+            : node.variants.edges[0]
+              ? parseFloat(node.variants.edges[0].node.priceV2.amount)
+              : 0;
+  
+          const discountedPrice = discount
+            ? (price * (1 - discount / 100)).toFixed(2)
+            : price.toFixed(2);
+
+          const originalPrice = discount ? price.toFixed(2) : null;
+
+          return (
           <div
             className='product-card' 
             key={node.id}
           >
-            {/* Ensure the link is by handle */}
+            {/* Link to product page */}
             <Link href={`/product/${node.handle}`}>
               {node.images.edges.length > 0 && (
                 <Image 
@@ -68,8 +86,11 @@ const Products = ({ products = [], error: serverError, addToCart }) => {
                   priority
                 />
               )}
+
+              {/* PRODUCT TITLE */}
               <h2>{node.title}</h2>
               <div className='view-product'> 
+
                 {/* PREVIEW BUTTON OF PRODUCT DESKTOP/LAPTOP */}
                 <button 
                   onClick={(e) => {
@@ -77,14 +98,28 @@ const Products = ({ products = [], error: serverError, addToCart }) => {
                     handleOpenModal(node.handle)
                   }} 
                   type='button'
-                  className='product-view'
+                  className='product-preview-button'
                 >
                   PRODUCT PREVIEW
                 </button>
               </div>
-              <p>£{`${parseFloat(node.variants.edges[0].node.priceV2.amount).toFixed(2)}`}</p>
+
+              {/* PRODUCT PRICING */}
+              <div className='product-pricing'>
+                {originalPrice && (
+                  <p style={{ textDecoration: 'line-through', color: 'black'}}>
+                   £{originalPrice}
+                  </p>
+                )}
+                {/* SALE PRICE */}
+                <p style={ originalPrice ? { color: 'crimson' }: {}}>
+                  £{discountedPrice}
+                </p>
+              </div>
+
               {/* Renders "SOLD OUT" label if totalInventory is 0 */}
               {node.totalInventory === 0 && <p>SOLD OUT</p>}
+
               {/* PREVIEW BUTTON OF PRODUCT FOR TABLET/MOBILE ONLY */}
               <button 
                 onClick={(e) => {
@@ -92,14 +127,16 @@ const Products = ({ products = [], error: serverError, addToCart }) => {
                   handleOpenModal(node.handle)
                 }} 
                 type='button'
-                className='pro'
+                className='product-preview-mobile-button'
               >
                 PRODUCT PREVIEW
               </button>
             </Link>
           </div>
-        ))
-      }
+        )}
+      )}
+
+      {/* LOGIC FOR PRODUCT MODAL */}
       <AnimatePresence>
         {selectedProduct && (
           <ProductPreview 

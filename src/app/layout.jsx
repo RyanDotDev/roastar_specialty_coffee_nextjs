@@ -5,7 +5,7 @@ import Footer from '@/components/Footer.jsx';
 import './globals.css';
 
 export const metadata = {
-  title: 'Roastar Coffee',
+  title: 'Roastar Coffee | Vietnamese Specialty Coffee Shop',
   description: 'Vietnamese Specialty Coffee',
   icons: {
     icon: '/favicon.ico'

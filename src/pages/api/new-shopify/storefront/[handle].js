@@ -27,17 +27,15 @@ export default async function handler(req, res) {
           totalInventory
           productType
           descriptionHtml
-          metafield(namespace: "custom", key: "ingredients") {
-            namespace
-            key
-            value
-          }
           images(first: 1) {
             edges {
               node {
                 src
               }
            }
+          }
+          metafield(namespace: "custom", key: "discountPercentage") {
+            value
           }
           variants(first: 12) {
             edges {
@@ -52,6 +50,13 @@ export default async function handler(req, res) {
                 priceV2 {
                   amount
                   currencyCode
+                }
+                image {
+                  src
+                  altText
+                }
+                metafield(namespace: "custom", key: "discountPercentage") {
+                  value
                 }
               }
             }

@@ -31,7 +31,7 @@ export default async function Page() {
     products = data.products || [];
   } catch (err) {
     console.error(err);
-    error = err.message || "An error occurred";
+    error = err.message || "Sorry, an error occurred!";
   }
 
   return (

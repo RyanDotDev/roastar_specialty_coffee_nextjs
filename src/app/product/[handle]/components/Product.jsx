@@ -78,58 +78,58 @@ const Product = ({ product, relatedProducts, html }) => {
       return // Stop execution if no valid variant is selected
     }
 
+    /* Max cart item variable and "Add To Cart" cart logic */
     const maxCartItems = 50;
     const totalItemsInCart = cart.reduce((total, item) => total + item.quantity, 0);
     if (totalItemsInCart + counter > maxCartItems) {
       showErrorToast(`You can only add up to ${maxCartItems} items to your cart.`);
       return;
     }
+
     if (selectedVariant && product) {
       addToCart({
         id: selectedVariant.id,
         title: product.title,
         variant: selectedVariant.title,
-        price: parseFloat(selectedVariant.priceV2.amount),
+        price: discountedPrice,
         quantity: counter,
-        image: product.images.edges[0]?.node.src,
+        image: productImage,
         handle: product.handle,
       });
     };
   };
 
-  const discountPercentageField = product.metafields.find(
-    (mf) =>
-      mf.key.toLowerCase() === "discountpercentage" &&
-      (!mf.namespace || mf.namespace.toLowerCase() === "custom")
-  );
+  /* Variant image change logic (if applicable) */
+  const variantImage = selectedVariant?.image?.src;
+  const originalImage = product.images.edges[0]?.node?.src;
 
-  const discountedVariantField = product.metafields.find(
-    (mf) =>
-      mf.key.toLowerCase() === "discountedvariant" &&
-      (!mf.namespace || mf.namespace.toLowerCase() === "custom")
-  );
+  const productImage = variantImage ?? originalImage;
 
-  const discount = discountPercentageField ? parseFloat(discountPercentageField.value) : null;
-  const discountedVariantTitle = discountedVariantField?.value?.trim().toLowerCase();
-  const currentVariantTitle = selectedVariant?.title?.trim().toLowerCase();
-  const isDiscounted = currentVariantTitle === discountedVariantTitle;
+  /*
+  * Discount Logic */
+  // Product Discount
+  const productDiscount = product?.metafield?.value
+    ? parseFloat(product.metafield.value)
+    : null;
 
-  const price = selectedVariant 
+  // Variant Discount
+  const variantDiscount = selectedVariant?.metafield 
+    ? parseFloat(selectedVariant.metafield.value) 
+    : null;
+
+  const price = selectedVariant && selectedVariant.priceV2.amount
     ? parseFloat(selectedVariant.priceV2.amount) 
-    : parseFloat(product.variants.edges[0].node.priceV2.amount);
+    : product.variants.edges[0]
+      ? parseFloat(product.variants.edges[0].node.priceV2.amount)
+      : 0;
+  
+  const discount = variantDiscount ?? productDiscount;
 
-  const discountedPrice = isDiscounted && discount
+  const discountedPrice = discount
     ? (price * (1 - discount / 100)).toFixed(2)
     : price.toFixed(2);
 
-  const originalPrice = isDiscounted && discount
-    ? price.toFixed(2)
-    : null;
-
-  console.log("Selected variant title:", selectedVariant?.title);
-  console.log("Discounted variant title from metafield:", discountedVariantField?.value);
-  console.log("Discount % from metafield:", discount);
-  console.log("isDiscounted:", isDiscounted);
+  const originalPrice = discount ? price.toFixed(2) : null;
 
   return (
     <div className='product-page-background'>
@@ -142,16 +142,14 @@ const Product = ({ product, relatedProducts, html }) => {
           <div className='product-main'>
 
             {/* PRODUCT IMAGE */}
-            {(selectedVariant?.image?.src || product.images.edges[0]?.node?.src) && (
-              <Image
-                src={selectedVariant?.image?.src || product.images.edges[0]?.node.src} 
-                alt={product.title} 
-                width={600}
-                height={550}
-                className='product-img'
-                priority
-              />
-            )}
+            <Image
+              src={productImage} 
+              alt={`${product.title} ${selectedVariant?.title || ''}`} 
+              width={600}
+              height={550}
+              className='product-img'
+              priority
+            />
 
             <div className='product-details'>
               {/* PRODUCT DETAILS */}
@@ -159,15 +157,15 @@ const Product = ({ product, relatedProducts, html }) => {
              
               {/* PRODUCT PRICE */}
               {originalPrice && (
-                <h3 style={{ textDecoration: 'line-through', color: '#ccc' }}>
+                <h3 style={{ textDecoration: 'line-through', color: 'rgb(255, 255, 255, 0.5)' }}>
                  £{originalPrice}
                 </h3>
               )}
 
-              <h2 style={originalPrice ? { color: '#00ff99' } : {}}>
+              <h2 style={originalPrice ? { color: 'white' } : {}}>
                 £{discountedPrice}
                  {originalPrice && (
-                   <span style={{ marginLeft: '8px', fontSize: '0.9rem', color: '#ff5' }}>
+                   <span style={{ marginLeft: '8px', fontSize: '0.9rem', color: 'var(--main-beige)' }}>
                      ({discount}% off)
                    </span>
                  )}

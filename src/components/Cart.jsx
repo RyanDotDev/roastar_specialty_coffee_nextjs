@@ -86,6 +86,7 @@ const Cart = ({ handleClose, sliderProducts }) => {
           animate='visible'
           exit='exit'
         >
+
           {/* CART CONTAINER */}
           <div className='cart-background'>
             <div className='cart-head'>
@@ -97,7 +98,8 @@ const Cart = ({ handleClose, sliderProducts }) => {
               </button>
               <h3 className='cart-header'>SHOPPING CART {`(${cart.length})`}</h3>
             </div>
-            {/* CART CONTENT (EMPTY) */}
+
+            {/* IF CART IS EMPTY */}
             <div className='cart-content'>
               {cart.length === 0 ? (
                 <div className='cart-is-empty'>
@@ -107,6 +109,8 @@ const Cart = ({ handleClose, sliderProducts }) => {
                 </div>
               ) : (
                 <>
+
+                {/* IF CART HAS ITEM(S) */}
                   <div className='cart-container'>
                     {cart.map((item) => (
                       <div className='cart-item-container' key={item.id}>
@@ -136,12 +140,14 @@ const Cart = ({ handleClose, sliderProducts }) => {
                         <button className='cart-delete' onClick={() => handleRemove(item.id)}><DeleteIcon /></button>
                       </div>
                     ))}
+
                     {/* BOTTOM SECTION OF CART */}
                     <button className='clear' onClick={handleClearCart}>CLEAR CART</button>
                   </div>
                   <div className='cart-bottom-section'>
                     <p className='tax-and-shipping'>Tax and shipping is calculated at checkout</p>
                     <p className='cart-subtotal'>SUBTOTAL<span>£{subtotal.toFixed(2)} GBP</span></p>
+
                     {/* CHECKOUT BUTTON */}
                     <button 
                       onClick={handleCheckout}
@@ -149,6 +155,7 @@ const Cart = ({ handleClose, sliderProducts }) => {
                     >
                       {loading ? 'CHECKOUT' : 'Processing...'}
                     </button>
+
                     {/* CONTINUE SHOPPING BUTTON */}
                     <Link href='/shop'>
                       <button className='continue'>
@@ -166,4 +173,4 @@ const Cart = ({ handleClose, sliderProducts }) => {
   )
 }
 
-export default Cart
+export default Cart;

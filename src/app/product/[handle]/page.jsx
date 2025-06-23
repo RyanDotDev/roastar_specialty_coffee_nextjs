@@ -27,7 +27,7 @@ export default async function Page({ params }) {
     relatedProducts = await getRelatedProducts();
   } catch (err) {
     console.error(err);
-    error = err.message || 'An error occurred';
+    error = err.message || 'Sorry, an error occurred!';
   }
 
   if (error) return <div className='product-page-background pnf-container'><p>{error}</p></div>; 

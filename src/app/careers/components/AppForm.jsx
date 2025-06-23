@@ -77,7 +77,6 @@ const AppForm = ({ handleClose }) => {
 
       const result = await response.json();
       if (response.ok) {
-        console.log('Application submitted successfully');
         router.push('/submit');
       } else {
         const errorMessage = result?.message || 'Submission failed';

@@ -14,20 +14,15 @@ export async function fetchProduct(handle) {
         totalInventory
         productType
         descriptionHtml
-        metafields(identifiers: [
-          { namespace: "custom", key: "discountPercentage" },
-          { namespace: "custom", key: "discountedVariant" }
-        ]) {
-          namespace
-          key
-          value
-        }
         images(first: 1) {
           edges {
             node {
               src
             }
           }
+        }
+        metafield(namespace: "custom", key: "discountPercentage") {
+          value
         }
         variants(first: 12) {
           edges {
@@ -42,6 +37,13 @@ export async function fetchProduct(handle) {
               priceV2 {
                 amount
                 currencyCode
+              }
+              image {
+                src
+                altText
+              }
+              metafield(namespace: "custom", key: "discountPercentage") {
+                value
               }
             }
           }
