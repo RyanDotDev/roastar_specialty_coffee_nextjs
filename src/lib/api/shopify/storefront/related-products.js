@@ -12,14 +12,14 @@ export async function fetchRelatedProducts() {
             images(first: 1) {
               edges {
                 node {
-                  src
+                  url
                 }
               }
             }
             variants(first: 1) {
               edges {
                 node {
-                  priceV2 {
+                  price {
                     amount
                   }
                 }

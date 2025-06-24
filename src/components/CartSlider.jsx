@@ -29,12 +29,12 @@ const CartSlider = ({ data }) => {
                 <div className='cart-slide-card'>
                   {node.images.edges.length > 0 && (
                     <Image 
-                      src={node.images.edges[0].node.src}
+                      src={node.images.edges[0].node.url}
                       alt={node.title}
                       width={130}
                       height={130}
                       className='cart-slide swiper-lazy'
-                      data-src={node.images.edges[0].node.src}
+                      data-src={node.images.edges[0].node.url}
                     />
                   )}
                   <p>{node.title}</p>

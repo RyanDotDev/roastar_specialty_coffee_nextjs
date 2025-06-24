@@ -58,10 +58,10 @@ const Products = ({ products = [], error: serverError, addToCart }) => {
             ? parseFloat(node.metafield.value)
             : null;
   
-          const price = node.variants.edges[0].node.priceV2.amount
-            ? parseFloat(node.variants.edges[0].node.priceV2.amount)
+          const price = node.variants.edges[0].node.price.amount
+            ? parseFloat(node.variants.edges[0].node.price.amount)
             : node.variants.edges[0]
-              ? parseFloat(node.variants.edges[0].node.priceV2.amount)
+              ? parseFloat(node.variants.edges[0].node.price.amount)
               : 0;
   
           const discountedPrice = discount
@@ -79,7 +79,7 @@ const Products = ({ products = [], error: serverError, addToCart }) => {
             <Link href={`/product/${node.handle}`}>
               {node.images.edges.length > 0 && (
                 <Image 
-                  src={node.images.edges[0].node.src} 
+                  src={node.images.edges[0].node.url} 
                   alt={node.title} 
                   width={250}
                   height={250}

@@ -14,7 +14,7 @@ export async function fetchProducts() {
             images(first: 1) {
               edges {
                 node {
-                  src
+                  url
                 }
               }
             }
@@ -24,7 +24,7 @@ export async function fetchProducts() {
             variants(first: 1) {
               edges {
                 node {
-                  priceV2 {
+                  price {
                     amount
                     currencyCode
                   }

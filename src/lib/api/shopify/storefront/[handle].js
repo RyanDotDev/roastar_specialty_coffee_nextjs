@@ -8,7 +8,9 @@ export async function fetchProduct(handle) {
         title
         options {
           name
-          values
+          optionValues {
+            name
+          }
         }
         handle
         totalInventory
@@ -17,7 +19,7 @@ export async function fetchProduct(handle) {
         images(first: 1) {
           edges {
             node {
-              src
+              url
             }
           }
         }
@@ -34,12 +36,12 @@ export async function fetchProduct(handle) {
                 value
               }
               availableForSale
-              priceV2 {
+              price {
                 amount
                 currencyCode
               }
               image {
-                src
+                url
                 altText
               }
               metafield(namespace: "custom", key: "discountPercentage") {

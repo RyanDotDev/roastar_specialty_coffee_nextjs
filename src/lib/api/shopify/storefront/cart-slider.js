@@ -12,7 +12,7 @@ export async function fetchCartSliderProducts() {
             images(first: 1) {
               edges {
                 node {
-                  src
+                  url
                 }
               }
             }

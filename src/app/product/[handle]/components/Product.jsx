@@ -100,8 +100,8 @@ const Product = ({ product, relatedProducts, html }) => {
   };
 
   /* Variant image change logic (if applicable) */
-  const variantImage = selectedVariant?.image?.src;
-  const originalImage = product.images.edges[0]?.node?.src;
+  const variantImage = selectedVariant?.image?.url;
+  const originalImage = product.images.edges[0]?.node?.url;
 
   const productImage = variantImage ?? originalImage;
 
@@ -117,10 +117,10 @@ const Product = ({ product, relatedProducts, html }) => {
     ? parseFloat(selectedVariant.metafield.value) 
     : null;
 
-  const price = selectedVariant && selectedVariant.priceV2.amount
-    ? parseFloat(selectedVariant.priceV2.amount) 
+  const price = selectedVariant && selectedVariant.price.amount
+    ? parseFloat(selectedVariant.price.amount) 
     : product.variants.edges[0]
-      ? parseFloat(product.variants.edges[0].node.priceV2.amount)
+      ? parseFloat(product.variants.edges[0].node.price.amount)
       : 0;
   
   const discount = variantDiscount ?? productDiscount;
@@ -209,8 +209,8 @@ const Product = ({ product, relatedProducts, html }) => {
                       <option value='' disabled>
                         SELECT {option.name.toUpperCase()}
                       </option>
-                      {Array.from(new Set(option.values)).map((value, index) => {
-                        // Check if this value is available
+                      {Array.from(new Set(option.optionValues)).map((v, index) => {
+                        const value = v.name;
                         const isAvailable = getAvailableOptions(option.name).includes(value);
                         return (
                           <option key={`${option.name}-${value}-${index}`} value={value} disabled={!isAvailable}>

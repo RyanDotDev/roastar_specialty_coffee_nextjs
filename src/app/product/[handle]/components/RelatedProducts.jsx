@@ -14,7 +14,7 @@ const RelatedProducts = ({ product, relatedProducts }) => {
             <Link href={`/product/${node.handle}`}>
               {node.images.edges.length > 0 && (
                 <Image 
-                  src={node.images.edges[0].node.src} 
+                  src={node.images.edges[0].node.url} 
                   alt={node.title} 
                   width={200}
                   height={200}

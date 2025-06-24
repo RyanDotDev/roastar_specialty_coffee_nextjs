@@ -21,7 +21,9 @@ export default async function handler(req, res) {
           title
           options {
             name
-            values
+            optionValues {
+              name
+            }
           }
           handle
           totalInventory
@@ -30,7 +32,7 @@ export default async function handler(req, res) {
           images(first: 1) {
             edges {
               node {
-                src
+                url
               }
            }
           }
@@ -41,18 +43,18 @@ export default async function handler(req, res) {
             edges {
               node {
                 id
-               title
+                title
                 selectedOptions {
                   name
                   value
                 }
                 availableForSale
-                priceV2 {
+                price {
                   amount
                   currencyCode
                 }
                 image {
-                  src
+                  url
                   altText
                 }
                 metafield(namespace: "custom", key: "discountPercentage") {
