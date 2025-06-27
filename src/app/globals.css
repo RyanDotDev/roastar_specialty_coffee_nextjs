@@ -760,7 +760,7 @@ body {
 /* For Footer.jsx */
 .footer-container {
   color: white;
-  width: 100vw;
+  width: 100%;
   height: auto;
   position: relative; 
   top: 0rem;
