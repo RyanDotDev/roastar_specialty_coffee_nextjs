@@ -1,5 +1,3 @@
-import crypto from 'crypto';
-
 // Shopify Storefront API
 export async function fetchShopifyData(query, variables = {}) {
   const controller = new AbortController();
