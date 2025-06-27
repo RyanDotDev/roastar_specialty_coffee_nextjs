@@ -357,7 +357,7 @@
 .desc-container {
   background-image: linear-gradient(white, var(--main-beige));
   height: auto;
-  padding-bottom: 1rem
+  padding-bottom: rem
 }
 
 .desc-content {
