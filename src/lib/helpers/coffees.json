@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "image": "/products/iced_coconut_coffee.webp",
+    "title": "Iced Coconut Coffee"
+  },
+  {
+    "id": 2,
+    "image": "/products/vietnamese_iced_coffee.webp",
+    "title": "Vietnamese Iced Coffee"
+  },
+  {
+    "id": 3,
+    "image": "/products/vietnamese_iced_salted_coffee.webp",
+    "title": "Vietnamese Iced Salted Coffee"
+  },
+  {
+    "id": 4,
+    "image": "/products/creamy_matcha_latte.webp",
+    "title": "Creamy Matcha Latte"
+  }
+]

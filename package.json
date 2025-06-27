@@ -24,6 +24,8 @@
     "@vercel/speed-insights": "^1.2.0",
     "@vis.gl/react-google-maps": "^1.4.3",
     "ajv": "^8.17.1",
+    "contentful": "^11.7.3",
+    "cookie": "^1.0.2",
     "dotenv": "^16.4.7",
     "esbuild": "^0.25.5",
     "firebase": "^11.4.0",
@@ -57,6 +59,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@rushstack/eslint-patch": "^1.10.5",
+    "@types/cookie": "^0.6.0",
     "@types/node": "^22.10.7",
     "eslint": "^8.57.1",
     "eslint-config-next": "^15.1.5"

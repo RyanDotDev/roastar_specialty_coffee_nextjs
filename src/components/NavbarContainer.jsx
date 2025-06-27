@@ -34,7 +34,7 @@ const NavbarContainer = ({ sliderProducts }) => {
         '/': 650,
         '/about': 1,
         '/shop': 1,
-        '/menu': 1,
+        '/menu': 0,
         '/contact': 1,
         '/careers': 1,
         '/privacy': 1,

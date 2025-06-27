@@ -10,9 +10,9 @@ const HomeContainer = () => {
     <div className='home-container'>
       <Links />
       <Desc />
-      <Specialty />
       <MenuAd />
       <FeaturedShop />
+      <Specialty />
     </div>
   )
 }

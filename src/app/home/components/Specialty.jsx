@@ -5,6 +5,9 @@ const Specialty = () => {
   return (
     <div className='specialty-container'>
       <div className='specialty-content'>
+        <div className='points-title'>
+          <h2>THE TASTE OF VIETNAM AT YOUR DOORSTEP!</h2>
+        </div>
         <Image 
           src='/images/roastar_outside_image.webp'
           alt='Roastar Outside Image'
@@ -12,9 +15,6 @@ const Specialty = () => {
           width={900}
           loading='lazy'
         />
-      </div>
-      <div className='points-title'>
-        <h2>THE TASTE OF VIETNAM AT YOUR DOORSTEP!</h2>
       </div>
     </div>
   )

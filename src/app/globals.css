@@ -760,8 +760,8 @@ body {
   width: 100vw;
   height: auto;
   position: relative; 
-  top: 0.1rem;
-  margin-bottom: -6.5rem;
+  top: 0rem;
+  margin-bottom: -6.6rem;
   padding: 2rem;
   background-color: hsl(96, 24%, 44%);
   display: flex;
