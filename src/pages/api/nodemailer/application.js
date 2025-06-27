@@ -34,15 +34,15 @@ export default async function handler(req, res) {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.GMAIL_TEST_USER,
-        pass: process.env.GMAIL_TEST_APP_PASSWORD,
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD,
       },
     });
 
     // Sends notification email TO the client
     const clientMailOptions = {
-      from: process.env.GMAIL_TEST_USER,
-      to: process.env.GMAIL_TEST_USER, 
+      from: process.env.GMAIL_USER,
+      to: process.env.GMAIL_USER, 
       replyTo: email,
       subject: `New Application from ${`${firstName} ${lastName}` || 'Applicant'}`,
       html: `
@@ -68,7 +68,7 @@ export default async function handler(req, res) {
 
     // Sends confirmation email TO the applicant
     const applicantMailOptions = {
-      from: `Roastar Coffee Careers <${process.env.GMAIL_TEST_USER}>`,
+      from: `Roastar Coffee Careers <${process.env.GMAIL_USER}>`,
       to: email,
       subject: 'Thank you for your application!',
       html: `

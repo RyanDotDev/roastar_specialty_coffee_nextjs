@@ -13,14 +13,14 @@ export default async function handler(req, res) {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.GMAIL_TEST_USER,
-        pass: process.env.GMAIL_TEST_APP_PASSWORD,
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD,
       },
     });
 
     const clientMailOptions = {
-      from: `New Message <${process.env.GMAIL_TEST_USER}>`,
-      to: process.env.GMAIL_TEST_USER,
+      from: `New Message <${process.env.GMAIL_USER}>`,
+      to: process.env.GMAIL_USER,
       subject: `${subject}`,
       html: `
         <p>You have a new contact form submission:</p>
@@ -37,7 +37,7 @@ export default async function handler(req, res) {
 
     // Sends confirmation email TO the sender
     const senderMailOptions = {
-      from: `Roastar Coffee <${process.env.GMAIL_TEST_USER}>`,
+      from: `Roastar Coffee <${process.env.GMAIL_USER}>`,
       to: email,
       subject: `Your subject: ${subject}`,
       html: `
