@@ -7,13 +7,12 @@
   padding: 0;
 }
 
-html {
+html,
+body {
   position: relative;
   min-height: 100%;
-}
-
-body {
   margin-bottom: 100px;
+  max-width: 100%;
 }
 
 :root {
