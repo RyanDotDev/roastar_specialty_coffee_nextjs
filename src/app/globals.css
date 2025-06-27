@@ -17,10 +17,6 @@ body {
   margin-bottom: 100px;
 }
 
-.html, body {
-  touch-action: manipulation;
-}
-
 :root {
   --main-green: hsl(96, 24%, 44%);
   --main-beige: hsl(48, 54%, 89%);
@@ -764,7 +760,7 @@ body {
 /* For Footer.jsx */
 .footer-container {
   color: white;
-  width: 100%;
+  width: 100vw;
   height: auto;
   position: relative; 
   top: 0rem;

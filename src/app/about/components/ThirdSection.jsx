@@ -27,11 +27,11 @@ const ThirdSection = () => {
       <div className='third-section-images'>
         <div className='about-image-one'>
           <Image
-            src='/images/roastar_latte_photo.webp'
+            src='/images/roastar_matcha_latte.webp'
             alt='Image Two'
             width={350}
             height={350}
-            style={{ objectFit: 'cover', transform: 'rotate(270deg)' }}
+            style={{ objectFit: 'cover' }}
             className='latte-img'
             loading='lazy'
           />

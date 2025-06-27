@@ -357,7 +357,7 @@
 
 @media all and (max-width: 1000px) {
   .app-container {
-    width: 100vw;
+    width: 100%;
   }
 
   .app-text {

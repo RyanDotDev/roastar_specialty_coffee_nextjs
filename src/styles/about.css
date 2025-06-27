@@ -166,8 +166,7 @@
   }
 
   .first-section-images img {
-    width: 45vw;
-    height: 45vw;
+    width: 100%;
   }
 
   .text-container-one {
@@ -177,11 +176,6 @@
 
   .text-container-one h3 {
     text-align: center;
-  }
-
-  .text-container-one img {
-    right: 2em;
-    width: 90%;
   }
 
   /* For the 'bottom-section' */
@@ -198,7 +192,6 @@
 
   .second-section-img img {
     width: 100%;
-    height: 100%;
   }
 
   /* For ThirdSection.jsx */
@@ -235,8 +228,8 @@
 
   .third-section-images img {
     text-align: center;
-    width: 45vw;
-    height: 45vw;
+    width: 100%;
+    height: 100%;
   }
 }
 
