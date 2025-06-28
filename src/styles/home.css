@@ -199,7 +199,6 @@
   cursor: pointer;
   height: 300px;
   width: 300px;
-  filter: brightness(0.8);
   border-radius: 5px;
   transform: scale(1);
   transition: 
@@ -207,6 +206,13 @@
     filter 500ms,
     box-shadow 500ms;
   box-shadow: none;
+  position: relative;
+}
+
+.image-wrapper {
+  filter: brightness(0.8);
+  transition: filter 500ms;
+  border-radius: 5px;
 }
 
 .image-one img, .image-two img, .image-three img {
@@ -224,21 +230,21 @@
   text-decoration: none;
 }
 
+.image-one:hover .image-wrapper, 
+.image-two:hover .image-wrapper, 
+.image-three:hover .image-wrapper {
+  filter: brightness(1);
+}
+
 .image-one:hover, .image-two:hover, .image-three:hover {
   transform: scale(1.05);
-  filter: brightness(1);
-  border-radius: 5px;
-  transition:
-    transform 500ms, 
-    filter 500ms,
-    box-shadow 500ms;
   box-shadow: 2px 2px 10px 2px rgb(118, 118, 118);
 }
 
 .image-one p {
   position: relative;
   font-size: 1.875rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 1.5px;
   top: -5.3em;
   color: white;
@@ -248,7 +254,7 @@
 .image-two p {
   position: relative;
   font-size: 1.875rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 1.5px;
   top: -5.3em;
   color: white;
@@ -258,7 +264,7 @@
 .image-three p {
   position: relative;
   font-size: 1.875rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 1.5px;
   top: -5.3em;
   color: white;
@@ -970,7 +976,7 @@
   }
 
   .deliveroo img, .uber-eats img {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
   }
 }

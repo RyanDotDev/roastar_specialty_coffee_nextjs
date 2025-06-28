@@ -297,7 +297,7 @@ const AppForm = ({ handleClose }) => {
               disabled={!watch("resume") }
               className='submit-btn'
             >
-              {loading ? 'SUBMIT APPLICATION': 'Processing...' }
+              {loading ? 'SUBMIT APPLICATION' : 'Processing...' }
             </button>
           </div>
         </form>

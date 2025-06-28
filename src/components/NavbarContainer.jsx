@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Badge } from '@mui/material';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -21,8 +21,8 @@ const navigation = [
 const NavbarContainer = ({ sliderProducts }) => {
   const cart = useCartStore((state) => state.cart)
   const pathname = usePathname();
-  const [colourOnScroll, setColourOnScroll] = React.useState(false); // changes the state of colour upon scrolling
-  const [cartOpen, setCartOpen] = React.useState(false) // Opens and closes cart
+  const [colourOnScroll, setColourOnScroll] = useState(false); // changes the state of colour upon scrolling
+  const [cartOpen, setCartOpen] = useState(false) // Opens and closes cart
 
   const close = () => setCartOpen(false);
   const open = () => setCartOpen(true)

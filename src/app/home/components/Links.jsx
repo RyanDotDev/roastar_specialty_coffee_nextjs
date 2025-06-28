@@ -38,13 +38,15 @@ const Links = () => {
               pathname: '/contact',
               hash: '#location'
             }}>
-            <Image
-              src='/images/location_link_image.webp'
-              alt='Roastar Location'
-              width={300}
-              height={300}
-              loading='lazy'
-            />
+            <div className='image-wrapper'>
+              <Image
+                src='/images/location_link_image.webp'
+                alt='Roastar Location'
+                width={300}
+                height={300}
+                loading='lazy'
+              />
+            </div>
             <p>LOCATION</p>
           </Link>
         </div>
@@ -54,14 +56,16 @@ const Links = () => {
           className='image-two'
           onClick={() => modalOpen ? close() : open()}
         >
-          <Image
-            src='/images/delivery_link_image.webp'
-            alt='Roastar Delivery'
-            width={300}
-            height={300}
-            loading='lazy'
-          />
-          <p>DELIVERY</p>
+          <div className='image-wrapper'>
+            <Image
+              src='/images/delivery_link_image.webp'
+              alt='Roastar Delivery'
+              width={300}
+              height={300}
+              loading='lazy'
+            />
+          </div>
+          <p>DELIVERY</p> 
         </div>
         
         {/* content of popup from backdrop components*/}
@@ -72,13 +76,15 @@ const Links = () => {
         {/* LINK TO '/Shop' */}
         <div className='image-three'>
           <Link href='/shop'>
-            <Image
-              src='/images/roastar_products.webp'
-              alt='Roastar Shop'
-              width={300}
-              height={300}
-              loading='lazy'
-            />
+            <div className='image-wrapper'>
+              <Image
+                src='/images/roastar_products.webp'
+                alt='Roastar Shop'
+                width={300}
+                height={300}
+                loading='lazy'
+              />
+            </div>
             <p>SHOP</p>
           </Link>
         </div>

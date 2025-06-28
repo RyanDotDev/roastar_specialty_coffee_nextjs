@@ -10,7 +10,7 @@ const CareersPage = () => {
           <Image 
             src='/images/imageThree.webp'
             alt='Roastar Careers Image'
-            width={1000}
+            width={320}
             height={320}
             priority
           />

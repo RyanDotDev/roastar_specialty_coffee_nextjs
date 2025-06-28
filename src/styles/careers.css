@@ -48,13 +48,15 @@
 
 .careers-image {
   text-align: center;
-  filter: brightness(1)
+  filter: brightness(1);
+  padding-right: 4.5vw;
+  padding-left: 4.5vw;
 }
 
 .careers-image img {
   background: var(--main-beige);
   margin-top: 3rem;
-  width: 90%;
+  width: 100%;
   object-fit: cover;
   object-position: 80% 50%;
 }

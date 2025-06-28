@@ -77,7 +77,7 @@ export default async function handler(req, res) {
           Thank you for applying for the ${job} role. We have received your application and we will 
           get back to you as soon as possible.
         </p>
-        <br>/<br>
+        <br><br>
         If you have not heard from us within 10 - 14 days, then please assume that your application was unsuccessful.
         <p>Best regards,<br/>Roastar Coffee</p>
         <br></br>
