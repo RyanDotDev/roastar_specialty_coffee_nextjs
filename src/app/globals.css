@@ -461,7 +461,7 @@ body {
 
 .cart-slider {
   position: absolute;
-  bottom: 5rem;
+  bottom: 3rem;
   overflow: hidden;
   margin: auto;
   width: 95%;
@@ -665,7 +665,7 @@ body {
   margin-right: 1em;
   margin-left: 1em;
   padding-bottom: 1rem;
-  bottom: 1rem;
+  bottom: 0rem;
 }
 
 .cart-bottom-section .tax-and-shipping {
@@ -1063,7 +1063,7 @@ body {
   .cart-bottom-section {
     position: relative;
     margin-top: 15rem;
-    margin-bottom: -2rem;
+    margin-bottom: -3rem;
   }
   
   .footer-container {
@@ -1097,7 +1097,7 @@ body {
 @media all and (max-width: 1000px) and (min-height: 700px) {
   .cart-slider {
     position: absolute;
-    bottom: 5rem;
+    bottom: 3rem;
     overflow: hidden;
     width: 90%;
     margin-bottom: 0rem;

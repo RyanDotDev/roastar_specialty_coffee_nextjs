@@ -20,26 +20,22 @@ const Cart = ({ handleClose, sliderProducts }) => {
     setLoading(true)
     
     try {
-      const lineItems = cart.map((item) => ({
-        merchandiseId: item.id,
-        quantity: item.quantity,
-      }));
-      console.log("Line items sent to Shopify:", lineItems);
-      const response = await fetch('/api/new-shopify/storefront/checkout', {
+      const cancelUrl = window.location.href;
+
+      const response = await fetch('/api/new-shopify/checkout/stripe', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ lineItems }), // Send lineItems in the request body
+        body: JSON.stringify({ cart, cancelUrl }), // Send cart in the request body
       })
 
       if (!response) {
         throw new Error("Failed to create checkout");
       }
 
-      const { checkoutUrl, orderId } = await response.json();
-      if (checkoutUrl && orderId) {
-        localStorage.setItem('orderId', orderId)
+      const { checkoutUrl } = await response.json();
+      if (checkoutUrl) {
         window.location.href = checkoutUrl;
       } else {
         showErrorToast("Failed to create checkout. Please try again.")

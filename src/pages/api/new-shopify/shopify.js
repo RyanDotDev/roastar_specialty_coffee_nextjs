@@ -4,7 +4,7 @@ export async function fetchShopifyData(query, variables = {}) {
   const timeout = setTimeout(() => controller.abort(), 5000)
 
   try {
-    const response = await fetch(process.env.SHOPIFY_URL, {
+    const response = await fetch(`${process.env.SHOPIFY_URL}/api/2025-04/graphql.json`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export async function fetchShopifyAdminData(query, variables) {
   const timeout = setTimeout(() => controller.abort(), 5000)
 
   try {
-    const response = await fetch(process.env.SHOPIFY_URL, {
+    const response = await fetch(`${process.env.SHOPIFY_URL}/admin/api/2025-04/products.json`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -27,7 +27,9 @@ const ProductPreview = ({ handle, handleClose }) => {
         return;
       }
       try {
-        const res = await fetch(`/api/new-shopify/storefront/${handle}`, { cache: 'no-store'});
+        const res = await fetch(`/api/new-shopify/storefront/${handle}`, { 
+          cache: 'no-store'
+        });
         if (!res.ok) throw new Error ("Product not found or server error")
         const data = await res.json()
         productCache.set(handle, data);
@@ -62,17 +64,23 @@ const ProductPreview = ({ handle, handleClose }) => {
     }
 
     try {
-      const lineItems = [{ 
-        merchandiseId: selectedVariant.id, 
-        quantity: counter,
-      }]
+      const cancelUrl = window.location.href;
 
-      const response = await fetch('/api/new-shopify/storefront/checkout', {
+      const lineItems = { 
+        id: product.id,
+        title: product.title,
+        variant: selectedVariant?.title,
+        price: parseFloat(discountedPrice),
+        quantity: counter,
+        image: productImage,
+      }
+      
+      const response = await fetch('/api/new-shopify/checkout/stripe', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ lineItems })
+        body: JSON.stringify({ product: lineItems, cancelUrl }),
       })
 
       if (!response) {

@@ -51,6 +51,7 @@
     "react-hot-toast": "^2.5.1",
     "react-redux": "^9.2.0",
     "resend": "^4.5.2",
+    "stripe": "^18.2.1",
     "swiper": "^11.2.0",
     "uuid": "^11.0.5",
     "xss": "^1.0.15",
