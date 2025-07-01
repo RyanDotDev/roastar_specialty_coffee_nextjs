@@ -36,7 +36,13 @@ export default async function handler(req, res) {
               }
            }
           }
-          metafield(namespace: "custom", key: "discountPercentage") {
+          discount: metafield(namespace: "custom", key: "discountPercentage") {
+            value
+          }
+          stripe: metafield(namespace: "custom", key: "stripe_price_id") {
+            value
+          }
+          stripeDiscount: metafield(namespace: "custom", key: "stripe_discounted_price_id") {
             value
           }
           variants(first: 12) {
@@ -49,6 +55,9 @@ export default async function handler(req, res) {
                   value
                 }
                 availableForSale
+                compareAtPrice {
+                  amount
+                }
                 price {
                   amount
                   currencyCode
@@ -57,7 +66,13 @@ export default async function handler(req, res) {
                   url
                   altText
                 }
-                metafield(namespace: "custom", key: "discountPercentage") {
+                discount: metafield(namespace: "custom", key: "discountPercentage") {
+                  value
+                }
+                stripe: metafield(namespace: "custom", key: "stripe_price_id") {
+                  value
+                }
+                stripeDiscount: metafield(namespace: "custom", key: "stripe_discounted_price_id") {
                   value
                 }
               }

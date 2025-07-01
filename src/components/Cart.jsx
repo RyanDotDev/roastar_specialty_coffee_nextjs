@@ -22,14 +22,20 @@ const Cart = ({ handleClose, sliderProducts }) => {
     try {
       const cancelUrl = window.location.href;
 
-      const response = await fetch('/api/new-shopify/checkout/stripe', {
+      const cartPayload = cart.map(item => ({
+        stripe_price_id: item.stripe_price_id,
+        quantity: item.quantity,
+      }));
+
+      const response = await fetch('/api/new-shopify/checkout/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ cart, cancelUrl }), // Send cart in the request body
+        body: JSON.stringify({ cart: cartPayload, cancelUrl }), // Send cart in the request body
       })
 
+      console.log("Cart being sent to checkout:", cart);
       if (!response) {
         throw new Error("Failed to create checkout");
       }

@@ -13,20 +13,11 @@ export async function createCheckoutSession(req, res) {
 
   try {
     const line_items = items.map((item) => ({
-      price_data: {
-        currency: 'gbp',
-        product_data: {
-          name: item.title,
-          images: [item.image],
-          metadata: {
-            variant: item.variant,
-            shopify_product_id: item.id,
-          },
-        },
-        unit_amount: Math.round(item.price * 100)
-      },
+      price: item.stripe_discounted_price_id || item.stripe_price_id,
       quantity: item.quantity,
     }));
+    console.log('Line items going to Stripe:', line_items);
+    
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -53,6 +44,9 @@ export async function createCheckoutSession(req, res) {
       ],
       success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/thank-you?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: cancelUrl || `${process.env.NEXT_PUBLIC_SITE_URL}/cart`,
+      metadata: {
+        cart: JSON.stringify(cart)
+      }
     });
 
     return res.status(200).json({ checkoutUrl: session.url });

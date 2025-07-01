@@ -73,9 +73,10 @@ const ProductPreview = ({ handle, handleClose }) => {
         price: parseFloat(discountedPrice),
         quantity: counter,
         image: productImage,
+        stripe_price_id: selectedVariant.stripe_price_id,
       }
       
-      const response = await fetch('/api/new-shopify/checkout/stripe', {
+      const response = await fetch('/api/new-shopify/checkout/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -180,6 +181,7 @@ const ProductPreview = ({ handle, handleClose }) => {
         quantity: counter,
         image: productImage,
         handle: product.handle,
+        stripe_price_id: selectedVariant.stripe_price_id,
       });
       showSuccessToast('Item Added');
     }
@@ -195,29 +197,61 @@ const ProductPreview = ({ handle, handleClose }) => {
 
   /*
   * Discount Logic */
-  // Product Discount
-  const productDiscount = product?.metafield?.value
-    ? parseFloat(product.metafield.value)
+  // Filters out the available variants
+  const availableVariants = product.variants.edges
+    .map(edge => edge.node)
+    .filter(variant => variant.availableForSale); // or your stock check
+
+  // Finds the discounted variants
+  const discountedVariants = availableVariants.filter(variant => {
+    const price = parseFloat(variant.price.amount);
+    const comparedAtPrice = variant.compareAtPrice?.amount
+      ? parseFloat(variant.compareAtPrice.amount)
+      : null;
+    return comparedAtPrice && comparedAtPrice > price;
+  })
+
+  const nonDiscountedVariants = availableVariants.filter(variant => {
+    const price = parseFloat(variant.price.amount);
+    const comparedAtPrice = variant.compareAtPrice?.amount
+      ? parseFloat(variant.compareAtPrice.amount)
+      : null;
+    return !(comparedAtPrice && comparedAtPrice > price);
+  })
+
+  // Chooses fallback variant:
+  // If discountedVariant exists, use it
+  // Else fallback to first available variant (non-discounted)
+  const fallbackVariant = nonDiscountedVariants[0] || discountedVariants[0] || null;
+
+  // Uses selectedVariant if fully chosen, other reverts back to fallbackVariant
+  const chosenVariant = selectedVariant || fallbackVariant;
+
+  // Parses price string to number, or defaults to 0 to avoid errors if missing
+  const price = chosenVariant?.price?.amount
+    ? parseFloat(chosenVariant.price.amount)
+    : 0;
+  // Parses comparedToPrice string to number, or defaults to 0 to avoid errors if missing
+  const comparedAtPrice = chosenVariant?.compareAtPrice?.amount
+    ? parseFloat(chosenVariant.compareAtPrice.amount)
     : null;
 
-  // Variant Discount
-  const variantDiscount = selectedVariant?.metafield 
-    ? parseFloat(selectedVariant.metafield.value) 
+  // Calculates discount percentage if comparedAtPrice > price to ensure it is a real discount, not price increase.
+  const isDiscounted = comparedAtPrice && comparedAtPrice > price;
+  const discountPercentage =
+    comparedAtPrice && comparedAtPrice > price
+    ? Math.round(((comparedAtPrice - price) / comparedAtPrice) * 100)
     : null;
 
-  const price = selectedVariant && selectedVariant.price.amount
-    ? parseFloat(selectedVariant.price.amount) 
-    : product.variants.edges[0]
-      ? parseFloat(product.variants.edges[0].node.price.amount)
-      : 0;
-  
-  const discount = variantDiscount ?? productDiscount;
+  // Uses discount only if selectedVariant is fully chosen which helps prevent early price changes and confusing UI
+  const discount = 
+    selectedVariant 
+      ? (isDiscounted ? discountPercentage : null)
+      : (fallbackVariant === chosenVariant && isDiscounted ? discountPercentage : null)
 
-  const discountedPrice = discount
-    ? (price * (1 - discount / 100)).toFixed(2)
-    : price.toFixed(2);
-
-  const originalPrice = discount ? price.toFixed(2) : null;
+  // Formats the prices for display
+  const discountedPrice = price.toFixed(2);
+  const originalPrice = discount ? comparedAtPrice.toFixed(2) : null;
 
   return (
     <Backdrop>
