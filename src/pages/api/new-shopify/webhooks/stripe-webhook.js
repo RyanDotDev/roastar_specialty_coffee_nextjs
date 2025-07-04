@@ -1,6 +1,6 @@
 import Stripe from 'stripe'
 import { buffer } from 'micro';
-import { createShopfifyOrder } from './admin/createShopifyOrder';
+import { createShopfifyOrder } from '../admin/createShopifyOrder';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -27,19 +27,28 @@ export default async function handler(req, res) {
       process.env.STRIPE_WEBHOOK_KEY
     );
   } catch (err) {
-    console.error('Webhook signature verification failed:', err.message);
+    console.error('❌ Stripe webhook signature failed', err);
     return res.status(400).send(`Webhook Error: ${err.message}`)
   }
 
   if (event.type === 'checkout.session.completed') {
-    const sessionId = event.data.object.id;
+    const session = event.data.object;
+    const sessionId = session.id;
 
+      
     try {
       await createShopfifyOrder(sessionId);
-      console.log('✅ Shopify order created');
+      console.log('✅ Shopify order created for session', sessionId);
+      return res.status(200).json({ received: true })
     } catch (err) {
-      console.error('❌ Failed to sync order to Shopify', err.message)
+      console.error('Error creating Shopify order:', err);
+      return res.status(500).send('Shopify order creation failed');
     }
+  } 
+
+  if (event.type === 'charge.succeeded') {
+    const charge = event.data.object;
+    console.log('Charge succeeded for customers', charge.customer)
   }
 
   res.status(200).json({ received: true });

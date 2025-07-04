@@ -101,11 +101,6 @@ const Product = ({ product, relatedProducts, html }) => {
     };
   };
 
-  console.log('selectedVariant:', selectedVariant);
-console.log('stripeDiscount:', selectedVariant?.stripeDiscount);
-console.log('stripe:', selectedVariant?.stripe);
-console.log('stripePriceId:', stripePriceId);
-
   /* Variant image change logic (if applicable) */
   const variantImage = selectedVariant?.image?.url;
   const originalImage = product.images.edges[0]?.node?.url;

@@ -25,29 +25,47 @@ export async function createShopfifyOrder(sessionId) {
     throw new Error('Missing customer shipping details');
   }
 
-  
   const orderData = {
     order: {
       line_items: lineItems.map(item => {
+        const metadata = item.price?.metadata || {};
+        const productMetadata = item.price?.product?.metadata || {};
+
         const shopifyVariantId =
-          item.price?.metadata?.shopify_variant_id ||
-          item.price?.product?.metadata?.shopify_variant_id;
+          metadata.shopify_variant_id ||
+          productMetadata.shopify_variant_id;
 
-        const parsedVariantId = Number(shopifyVariantId);
-          if (isNaN(parsedVariantId)) {
-            throw new Error(`❌ Invalid or missing Shopify variant ID for item: ${item.description}`);
-          }
+        const parsedVariantId = Number(
+          shopifyVariantId?.match(/\d+$/)?.[0] ?? NaN
+        );
+        console.log(`📦 Extracted Shopify Variant ID raw:`, shopifyVariantId);
 
-        if (!shopifyVariantId && item.price?.metadata.shopify_product_id) {
-          throw new Error(`Missing shopify_variant_id in Stripe product metadata`);
+        const isFallback = metadata.fallback === 'true' && isNaN(parsedVariantId);
+
+        if (!isFallback && isNaN(parsedVariantId)) {
+          throw new Error(`❌ Invalid or missing Shopify variant ID for item: ${item.description}`);
         }
 
-       console.log('[Metadata]', item?.price?.metadata);
-       return {
-         variant_id: parsedVariantId,
-         quantity: item.quantity,
-       };
+        if (isFallback) {
+          console.warn(`⚠️ Fallback item detected: ${item.description}`);
+          return {
+            title: item.description || metadata.title || "Custom Product",
+            price: (item.amount_total ?? item.price?.unit_amount ?? 100) / 100,
+            quantity: item.quantity,
+            custom: true,
+          };
+        }
+
+        if (!isNaN(parsedVariantId)) {
+          console.log('✅ Using variant_id', parsedVariantId, 'for', item.description)
+          return {
+            variant_id: parsedVariantId,
+            quantity: item.quantity,
+          };
+        }
+        throw new Error(`❌ Invalid or missing Shopify variant ID for item: ${item.description}`);
      }),
+
       email: customer.email,
       shipping_address: {
         first_name: customer.name?.split(' ')[0],
@@ -60,6 +78,8 @@ export async function createShopfifyOrder(sessionId) {
         zip: customer.address.postal_code,
       },
       financial_status: 'paid',
+      inventory_management: 'shopify',
+      inventory_policy: 'deny',
       transactions: [
         {
           kind: 'sale',
@@ -99,5 +119,6 @@ export async function createShopfifyOrder(sessionId) {
     throw new Error(`Shopify order creation failed: ${err}`)
   }
 
-  return response.json();
+  const responseData = await response.json();
+  console.log('[Shopify Order Response]', JSON.stringify(responseData, null, 2));
 };

@@ -23,8 +23,16 @@ const Cart = ({ handleClose, sliderProducts }) => {
       const cancelUrl = window.location.href;
 
       const cartPayload = cart.map(item => ({
-        stripe_price_id: item.stripe_price_id,
+        id: item.id,
         quantity: item.quantity,
+        price: item.price,
+        title: item.title,
+        productTitle: item.productTitle || item.title,
+        variantName: item.variant || 'Default variant',
+        image: item.image,
+        productId: item.productId,
+        stripe_price_id: item.stripe_price_id,
+        stripe_discounted_price_id: item.stripe_discounted_price_id,
       }));
 
       const response = await fetch('/api/new-shopify/checkout/checkout', {

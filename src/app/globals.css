@@ -1051,14 +1051,6 @@ body {
     display: block;
   }
 
-  /* Cart.jsx (if cart is empty) */
-  .cart-slider {
-    display: flex;
-    position: relative;
-    margin-left: 0.5rem;
-    width: 100%;
-  }
-
   /* Cart.jsx (if cart has item(s)) */
   .cart-bottom-section {
     position: relative;

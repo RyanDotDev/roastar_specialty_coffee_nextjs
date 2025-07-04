@@ -173,6 +173,7 @@ const ProductPreview = ({ handle, handleClose }) => {
     }
 
     if (selectedVariant && product) {
+      const stripePriceId = selectedVariant?.stripeDiscount?.value || selectedVariant?.stripe?.value;
       addToCart({
         id: selectedVariant.id,
         title: product.title,
@@ -181,7 +182,7 @@ const ProductPreview = ({ handle, handleClose }) => {
         quantity: counter,
         image: productImage,
         handle: product.handle,
-        stripe_price_id: selectedVariant.stripe_price_id,
+        stripe_price_id: stripePriceId,
       });
       showSuccessToast('Item Added');
     }
