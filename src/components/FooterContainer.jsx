@@ -11,7 +11,7 @@ import Image from 'next/image';
 const FooterContainer = () => {
   const pathname = usePathname();
 
-  // if (pathname === '/shop') return null; 
+  if (pathname === '/shop') return null; 
 
   if (pathname.startsWith('/thank-you/')) return null; 
 

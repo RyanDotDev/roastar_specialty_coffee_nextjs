@@ -6,6 +6,7 @@ import Stripe from 'stripe';
 import '@/styles/thank-you.css';
 import { CircleCheck } from 'lucide-react';
 import Link from 'next/link';
+import { sessionToShopifyOrderMap } from '@/pages/api/shopify/webhooks/shopify/webhook';
 import ConfirmationDetails from './components/ConfirmationDetails';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -31,7 +32,8 @@ export default async function ThankYouPage({ params }) {
   const lineItems = session.line_items?.data || [];
   const shippingCost = session.total_details?.amount_shipping || 0;
   const totalCost = session.amount_total || 0;
-  const confirmationNumber = `${session.id.slice(-12).toUpperCase()}`;
+  const confirmationNumber = `${session.id.slice(-8).toUpperCase()}`;
+  const shopifyOrderNumber = session.metadata?.shopifyOrderNumber || 'N/A';
 
   return (
     <div className='confirmation-container'>
