@@ -14,13 +14,13 @@ export default async function ThankYouPage({ params }) {
   const { sessionId } = await params;
 
   const session = await stripe.checkout.sessions.retrieve(sessionId, {
-    expand: ['shipping', 'line_items.data.price.product', 'customer'],
+    expand: ['line_items.data.price.product', 'customer'],
   });
 
   // Customer Order Personal details
   const customerName = session.customer_details?.name || 'Valued Customer';
   const email = session.customer_details?.email || 'N/A';
-  const shipping = session.shipping.address;
+  const shipping = session.shipping?.address;
   const billing = session.customer_details?.address;
   const fulfillmentMethod = session.metadata?.fulfillment_method || 'delivery';
   const shippingMethod = session.shipping_options?.[0]?.shipping_rate || 'Standard';
