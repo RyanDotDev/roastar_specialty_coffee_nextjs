@@ -7,6 +7,7 @@ const getCartSliderData = async () => {
   return await fetchCartSliderProducts();
 }
 
+
 export default async function Navbar() {
   let sliderProducts = null
   let error = null
@@ -26,11 +27,3 @@ export default async function Navbar() {
     />
   )
 }
-
-/* const getProducts = async () => {
-  const res = await fetch(`http://127.0.0.1:3000/api/new-shopify/storefront/cart-slider`, { 
-    cache: 'no-store',
-  });
-  if (!res.ok) throw new Error('Failed to fetch product data');
-  return await res.json();
-} */

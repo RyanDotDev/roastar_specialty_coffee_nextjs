@@ -1,6 +1,25 @@
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+async function fetchVariantWeight(variantId) {
+  const res = await fetch(`${process.env.SHOPIFY_URL}/admin/api/2025-04/variants/${variantId}.json`, {
+    headers: {
+      'X-Shopify-Access-Token': process.env.SHOPIFY_ADMIN_API_TOKEN,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch variant ${variantId}: ${await res.text()}`);
+  }
+
+  const data = await res.json();
+  return {
+    weight: data.variant.grams,
+    weight_unit: data.variant.weight_unit
+  };
+}
 
 export async function createShopfifyOrder(sessionId) {
   const session = await stripe.checkout.sessions.retrieve(sessionId, {
@@ -25,47 +44,46 @@ export async function createShopfifyOrder(sessionId) {
     throw new Error('Missing customer shipping details');
   }
 
+  let totalWeight = 0;
+  const processedLineItems = [];
+
+  for (const item of lineItems) {
+    const metadata = item.price?.product?.metadata || {};
+    const shopifyVariantId = metadata.shopify_variant_id || null;
+
+    const parsedVariantId = Number(shopifyVariantId?.match(/\d+$/)?.[0] ?? NaN);
+    const isCustom = !shopifyVariantId || isNaN(parsedVariantId);
+
+    if (isCustom) {
+      processedLineItems.push({
+        title: item.description || 'Custom Product',
+        price: (item.amount_total ?? item.price?.unit_amount ?? 100) / 100,
+        quantity: item.quantity,
+        custom: true,
+      })
+      continue;
+    }
+
+    const { weight: grams } = await fetchVariantWeight(parsedVariantId);
+    totalWeight += grams * item.quantity;
+
+    processedLineItems.push({
+      variant_id: parsedVariantId,
+      quantity: item.quantity,
+      grams,
+    })
+  }
+
+  const shippingLine = {
+    title: 'Standard',
+    price: 599 / 100, // This was showing as £599 because you need to divide it by 100
+    code: 'Standard',
+    source: 'Custom'
+  }
+
   const orderData = {
     order: {
-      line_items: lineItems.map(item => {
-        const metadata = item.price?.metadata || {};
-        const productMetadata = item.price?.product?.metadata || {};
-
-        const shopifyVariantId =
-          metadata.shopify_variant_id ||
-          productMetadata.shopify_variant_id;
-
-        const parsedVariantId = Number(
-          shopifyVariantId?.match(/\d+$/)?.[0] ?? NaN
-        );
-        console.log(`📦 Extracted Shopify Variant ID raw:`, shopifyVariantId);
-
-        const isFallback = metadata.fallback === 'true' && isNaN(parsedVariantId);
-
-        if (!isFallback && isNaN(parsedVariantId)) {
-          throw new Error(`❌ Invalid or missing Shopify variant ID for item: ${item.description}`);
-        }
-
-        if (isFallback) {
-          console.warn(`⚠️ Fallback item detected: ${item.description}`);
-          return {
-            title: item.description || metadata.title || "Custom Product",
-            price: (item.amount_total ?? item.price?.unit_amount ?? 100) / 100,
-            quantity: item.quantity,
-            custom: true,
-          };
-        }
-
-        if (!isNaN(parsedVariantId)) {
-          console.log('✅ Using variant_id', parsedVariantId, 'for', item.description)
-          return {
-            variant_id: parsedVariantId,
-            quantity: item.quantity,
-          };
-        }
-        throw new Error(`❌ Invalid or missing Shopify variant ID for item: ${item.description}`);
-     }),
-
+      line_items: processedLineItems,
       email: customer.email,
       shipping_address: {
         first_name: customer.name?.split(' ')[0],
@@ -80,6 +98,7 @@ export async function createShopfifyOrder(sessionId) {
       financial_status: 'paid',
       inventory_management: 'shopify',
       inventory_policy: 'deny',
+      shipping_lines: [shippingLine],
       transactions: [
         {
           kind: 'sale',
@@ -87,7 +106,7 @@ export async function createShopfifyOrder(sessionId) {
           amount: session.amount_total / 100,
         },
       ],
-      note_attributes: lineItems.map((item, i) => ({
+      /* note_attributes: lineItems.map((item, i) => ({
         name: `item-${i + 1}`,
         value: JSON.stringify({
           metadata: {
@@ -99,7 +118,7 @@ export async function createShopfifyOrder(sessionId) {
           },
           image: item.price?.product?.images?.[0] || 'No Image'
         })
-      }))
+      })) */
     },
   };
 

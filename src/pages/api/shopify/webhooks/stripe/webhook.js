@@ -1,6 +1,6 @@
 import Stripe from 'stripe'
 import { buffer } from 'micro';
-import { createShopfifyOrder } from '../admin/createShopifyOrder';
+import { createShopfifyOrder } from '../../admin/createShopifyOrder';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 

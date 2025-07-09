@@ -1,4 +1,4 @@
-import { fetchShopifyData } from "@/pages/api/new-shopify/shopify";
+import { fetchShopifyData } from "@/pages/api/shopify/shopify";
 
 export async function fetchRelatedProducts() {
   const query = `

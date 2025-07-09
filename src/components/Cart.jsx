@@ -17,8 +17,6 @@ const Cart = ({ handleClose, sliderProducts }) => {
   console.log("Cart state after adding:", JSON.stringify(cart, null, 2));
 
   const handleCheckout = async () => {
-    setLoading(true)
-    
     try {
       const cancelUrl = window.location.href;
 
@@ -35,7 +33,8 @@ const Cart = ({ handleClose, sliderProducts }) => {
         stripe_discounted_price_id: item.stripe_discounted_price_id,
       }));
 
-      const response = await fetch('/api/new-shopify/checkout/checkout', {
+      setLoading(true)
+      const response = await fetch('/api/shopify/checkout/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

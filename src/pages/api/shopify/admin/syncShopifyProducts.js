@@ -20,7 +20,7 @@ export async function syncShopifyProductsToStripe() {
   const shopifyUrl = process.env.SHOPIFY_URL;
   const adminToken = process.env.SHOPIFY_ADMIN_API_TOKEN;
 
-  // Get all Shopify products (with needed fields)
+  // Gets all Shopify products (with needed fields)
   const { products } = await fetchJson(
     `${shopifyUrl}/admin/api/2025-04/products.json?fields=id,title,variants,image`,
     {
@@ -32,7 +32,7 @@ export async function syncShopifyProductsToStripe() {
   );
 
   for (const product of products) {
-    // 2. Fetch metafields for the product (returns array of metafields)
+    // Fetches metafields for the product (returns array of metafields)
     const { metafields: productMetafields } = await fetchJson(
       `${shopifyUrl}/admin/api/2025-04/products/${product.id}/metafields.json`,
       {
@@ -44,19 +44,19 @@ export async function syncShopifyProductsToStripe() {
     );
     await delay(500);
 
-    // 3 Find stripe_product_id metafield if it exists
+    // Find stripe_product_id metafield if it exists
     let stripeProductId = productMetafields.find(
       (mf) => mf.namespace === "custom" && mf.key === "stripe_product_id"
     )?.value;
 
-    // 4) If no stripe product ID metafield, create Stripe Product & save metafield
+    // If no stripe product ID metafield, create Stripe Product & save metafield
     if (!stripeProductId) {
       const stripeProduct = await stripe.products.create({
         name: product.title,
         images: product.image ? [product.image.src] : [],
         metadata: {
           shopify_product_id: product.id.toString(),
-          variant_name: product.variants.title, 
+          variant_name: product.variants.map(v => v.title).join(", "), 
         },
       });
       stripeProductId = stripeProduct.id;
@@ -81,7 +81,7 @@ export async function syncShopifyProductsToStripe() {
 
       console.log(`Created Stripe Product for Shopify product: ${product.title}`);
     } else {
-      // Optional: update Stripe product metadata if needed
+      // Update Stripe product metadata if needed
       await stripe.products.update(stripeProductId, {
         metadata: {
           shopify_product_id: product.id.toString(),
@@ -94,7 +94,7 @@ export async function syncShopifyProductsToStripe() {
 
     const stripePriceIds = [];
 
-    // 5) Now sync variants to Stripe Prices
+    // Now sync variants to Stripe Prices
     for (const variant of product.variants) {
       // Fetch variant metafields
       const { metafields: variantMetafields } = await fetchJson(
@@ -175,15 +175,6 @@ export async function syncShopifyProductsToStripe() {
             shopify_variant_id: variant.id.toString(),
             variant_name: variant.title,
             is_discounted: "true",
-            price_id: ""
-          },
-        });
-
-        await stripe.prices.update(discountedPrice.id, {
-          metadata: {
-            ...discountedPrice.metadata,
-            price_id: discountedPrice.id,
-            stripe_discounted_price_id: discountedPrice.id,
           },
         });
 

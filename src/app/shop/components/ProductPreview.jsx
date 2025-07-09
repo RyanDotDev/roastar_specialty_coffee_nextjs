@@ -27,7 +27,7 @@ const ProductPreview = ({ handle, handleClose }) => {
         return;
       }
       try {
-        const res = await fetch(`/api/new-shopify/storefront/${handle}`, { 
+        const res = await fetch(`/api/shopify/storefront/${handle}`, { 
           cache: 'no-store'
         });
         if (!res.ok) throw new Error ("Product not found or server error")
@@ -48,7 +48,6 @@ const ProductPreview = ({ handle, handleClose }) => {
   }, [handle]);
 
   const handleCheckout = async () => {
-    setLoading(true);
     const unselectedOption = product.options.find(
       (option) => !selectedOptions[option.name]
     );
@@ -63,6 +62,8 @@ const ProductPreview = ({ handle, handleClose }) => {
       return // Stop execution if no valid variant is selected
     }
 
+    setLoading(true);
+
     try {
       const cancelUrl = window.location.href;
 
@@ -70,18 +71,20 @@ const ProductPreview = ({ handle, handleClose }) => {
         id: product.id,
         title: product.title,
         variant: selectedVariant?.title,
+        variantId: selectedVariant?.id,
         price: parseFloat(discountedPrice),
         quantity: counter,
         image: productImage,
-        stripe_price_id: selectedVariant.stripe_price_id,
+        stripe_price_id: selectedVariant?.stripeDiscount?.value|| selectedVariant?.stripe?.value,
       }
       
-      const response = await fetch('/api/new-shopify/checkout/checkout', {
+      const response = await fetch('/api/shopify/checkout/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ product: lineItems, cancelUrl }),
+        body: JSON.stringify({ 
+          product: lineItems, cancelUrl }),
       })
 
       if (!response) {
@@ -178,6 +181,7 @@ const ProductPreview = ({ handle, handleClose }) => {
         id: selectedVariant.id,
         title: product.title,
         variant: selectedVariant.title,
+        variant_id: selectedVariant.id,
         price: discountedPrice,
         quantity: counter,
         image: productImage,
@@ -369,7 +373,7 @@ const ProductPreview = ({ handle, handleClose }) => {
                 className='product-purchase'
                 disabled={product.totalInventory === 0}
               >
-                {loading ? 'CHECKOUT' : '...Processing'}
+                {loading ? 'CHECKOUT' : 'Processing...'}
               </button>
               <Link 
                 className='view-details' 

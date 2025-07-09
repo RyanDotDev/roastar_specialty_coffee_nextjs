@@ -54,21 +54,27 @@ const Products = ({ products = [], error: serverError, addToCart }) => {
       <div className='product-grid'>
       {
         productsList.map(({ node }) => {
-          const discount = node?.metafield?.value
-            ? parseFloat(node.metafield.value)
-            : null;
-  
-          const price = node.variants.edges[0].node.price.amount
-            ? parseFloat(node.variants.edges[0].node.price.amount)
-            : node.variants.edges[0]
-              ? parseFloat(node.variants.edges[0].node.price.amount)
-              : 0;
-  
-          const discountedPrice = discount
-            ? (price * (1 - discount / 100)).toFixed(2)
-            : price.toFixed(2);
+          const availableVariants = node.variants.edges
+            .map(edge => edge.node)
+            .filter(variant => variant.availableForSale)
+          
+          const variant = availableVariants[0] || node.variants.edges[0]?.node;
 
-          const originalPrice = discount ? price.toFixed(2) : null;
+          const price = variant?.price?.amount
+            ? parseFloat(variant.price.amount)
+            : 0;
+
+          const compareAtPrice = variant?.compareAtPrice?.amount
+            ? parseFloat(variant.compareAtPrice.amount)
+            : null;
+
+          const isDiscounted = compareAtPrice && compareAtPrice > price;
+          const discountPercentage = isDiscounted
+            ? Math.round(((compareAtPrice - price) / compareAtPrice) * 100)
+            : null;
+          
+          const discountedPrice = price.toFixed(2);
+          const originalPrice = isDiscounted ? compareAtPrice.toFixed(2) : null;
 
           return (
           <div
@@ -114,6 +120,11 @@ const Products = ({ products = [], error: serverError, addToCart }) => {
                 {/* SALE PRICE */}
                 <p style={ originalPrice ? { color: 'crimson' }: {}}>
                   £{discountedPrice}
+                  {originalPrice && (
+                    <span style={{ marginLeft: '8px', fontSize: '0.8rem', color: 'var(--main-green)'}}>
+                      ({discountPercentage}% off)
+                    </span>
+                  )}
                 </p>
               </div>
 

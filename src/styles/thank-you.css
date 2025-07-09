@@ -1,0 +1,229 @@
+.confirmation-container {
+  background: white;
+  height: 100vh;
+  margin-bottom: -6.5rem;
+  box-shadow: 2px 2px 30px 2px rgb(232, 232, 232) inset;
+  max-height: 100vh;
+  overflow-y: scroll;
+}
+
+.confirmation-navbar {
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+  text-align: center;
+  width: 100%;
+  height: auto;
+}
+
+.confirmation-content {
+  text-align: center;
+  color: black;
+  margin-top: 1vh;
+}
+
+.confirmation-content h1 {
+  font-weight: 500;
+}
+
+.confirmation-content span {
+  color: var(--btn-green);
+}
+
+/* confirmation of successful order */
+.confirmation-success {
+  margin-top: 1rem;
+}
+
+.confirmation-details-container {
+  border-radius: 10px;
+  margin-top: 2rem;
+}
+
+.confirmation-details {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+}
+
+.confirmation-product-container {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+.confirmation-product-details {
+  text-align: left;
+  width: 400px;
+  margin-bottom: 0.8rem;
+}
+
+.confirmation-product-details img {
+  border: 1px solid var(--main-green);
+  border-radius: 10px;
+}
+
+.confirmation-image {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.confirmation-text {
+  flex: 1; /* This keeps the variant next to the product image */
+}
+
+.confirmation-product-price {
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
+/* Confirmation summary (left-hand-side) */
+.confirmation-summary {
+  margin-top: 1rem;
+  letter-spacing: 0.5px;
+}
+
+.confirmation-subtotal, .confirmation-shipping, .confirmation-total {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.confirmation-subtotal, .confirmation-shipping {
+  font-size: 0.9rem;
+}
+
+.confirmation-links {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.continue-shopping {
+  font-size: 0.8rem;
+  cursor: pointer;
+  height: auto;
+  padding: 1rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: white;
+  border: 1px solid var(--btn-green);
+  border-radius: 3px;
+  background: var(--btn-green);
+  transition: 
+    color 300ms,
+    border 300ms,
+    background 300ms;
+  &:hover {
+    border: 1px solid rgb(238, 238, 238);
+    background: rgb(238, 238, 238);
+    color: black;
+  }
+}
+
+.contact-us {
+  margin-top: 0.9rem;
+  font-size: 0.9rem;
+}
+
+.contact-us a, .contact-us span {
+  color: rgb(0, 162, 255);
+  transition: color 300ms;
+  border-bottom: none;
+  text-decoration: none;
+  &:hover {
+    color: rgb(0, 123, 194);
+    border-bottom: 1px solid rgb(0, 123, 194);
+    padding-bottom: 0.1px;
+  }
+}
+
+/* Confirmation details (right-hand-side) */
+/* Confirmation Card */
+.confirmation-card {
+  position: relative;
+  left: 5rem;
+  display: flex;
+}
+
+/* Confirmation Card Details */
+.confirmation-card-details {
+  text-align: left;
+  max-width: 400px;
+  margin-left: auto;
+}
+
+.confirmation-card-details h2, .confirmation-card-details h3 {
+  color: var(--btn-green);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.confirmation-card-details p {
+  color: rgb(128, 128, 128);
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+@media all and (max-width: 1000px) {
+  /* Confirmation Container */
+  .confirmation-container {
+    background: white;
+    height: auto;
+    padding-bottom: 3rem;
+    margin-bottom: -6.5rem;
+    box-shadow: 2px 2px 30px 2px rgb(232, 232, 232) inset;
+  }
+
+  .confirmation-content {
+    padding: 0.4rem;
+    margin-top: 0.46rem;
+  }
+
+  /* Confirmation Details */
+  .confirmation-details {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-inline: auto;
+    gap: 60px;
+  }
+
+  .confirmation-product-details {
+    text-align: center;
+  }
+
+  .confirmation-text {
+    flex: 1;
+  }
+
+  .confirmation-summary {
+    text-align: center;
+    width: auto;
+    margin-inline: auto;
+  }
+
+  .confirmation-summary p {
+    text-align: center;
+  }
+
+  .confirmation-summary span {
+    float: none;
+  }
+
+  /* Confirmation Right Section */
+  .confirmation-card-details {
+    text-align: left;
+    max-width: 400px;
+    margin-right: auto;
+    margin-left: none;
+  }
+
+  .confirmation-card {
+    position: relative;
+    left: 0rem;
+    display: flex;
+  }
+}

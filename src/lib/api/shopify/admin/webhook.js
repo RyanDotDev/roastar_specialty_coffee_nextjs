@@ -1,4 +1,4 @@
-import { fetchShopifyAdminData } from "@/pages/api/new-shopify/shopify";
+import { fetchShopifyAdminData } from "@/pages/api/shopify/shopify";
 
 export async function registerOrderWebhook(callbackUrl) {
   const query = `

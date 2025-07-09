@@ -1,4 +1,4 @@
-import { fetchShopifyData } from "@/pages/api/new-shopify/shopify";
+import { fetchShopifyData } from "@/pages/api/shopify/shopify";
 
 export async function fetchProducts() {
   const query = `
@@ -21,9 +21,13 @@ export async function fetchProducts() {
             metafield(namespace: "custom", key: "discountPercentage") {
               value
             }
-            variants(first: 1) {
+            variants(first: 12) {
               edges {
                 node {
+                  availableForSale
+                  compareAtPrice {
+                    amount
+                  }
                   price {
                     amount
                     currencyCode

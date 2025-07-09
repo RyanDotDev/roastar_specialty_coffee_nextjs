@@ -44,6 +44,8 @@ const NavbarContainer = ({ sliderProducts }) => {
       let threshold;
       if (pathname.startsWith('/product/')) {
         threshold = 1;
+      } else if (pathname.startsWith('/thank-you/')) {
+        threshold = 180;
       } else {
         threshold = scrollThresholds[pathname] || 0;
       }
@@ -57,7 +59,7 @@ const NavbarContainer = ({ sliderProducts }) => {
       window.removeEventListener('scroll', changeColourOnScroll);
     }
   }, [pathname])
-  
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const htmlElement = document.documentElement;
@@ -72,6 +74,8 @@ const NavbarContainer = ({ sliderProducts }) => {
       }
     };
   }, [cartOpen]);
+
+  if (pathname.startsWith('/thank-you/')) return null; 
 
   return (
     <div className={`${colourOnScroll ? 'navbar navbarbg' : 'navbar'}`}>
@@ -123,7 +127,6 @@ const NavbarContainer = ({ sliderProducts }) => {
               }}
             >
               <button 
-                disabled
                 className={`cart-btn ${colourOnScroll ? 'cart-white cart-black' : 'cart-white'}` }
                 onClick={() => cartOpen ? close() : open()}
               >
