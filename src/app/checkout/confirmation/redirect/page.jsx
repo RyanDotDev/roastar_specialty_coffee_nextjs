@@ -1,22 +1,12 @@
-'use client'
+import dynamic from 'next/dynamic'
+import { Suspense } from 'react'
 
-import { useEffect } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
+const Redirect = dynamic(() => import('./Redirect'), { ssr: false })
 
-export default function CheckoutReturnRedirect() {
-  const searchParams = useSearchParams()
-  const router = useRouter()
-
-  useEffect(() => {
-    const intentId = searchParams.get('payment_intent')
-    const status = searchParams.get('redirect_status')
-
-    if (intentId && status === 'succeeded') {
-      router.replace(`/confirmation/${intentId}`)
-    } else {
-      router.replace('/checkout?error=payment_failed')
-    }
-  }, [searchParams, router])
-
-  return <p>Redirecting to confirmation…</p>
+export default function RedirectPage() {
+  return (
+    <Suspense fallback={<p>Redirecting...</p>}>
+      <Redirect />
+    </Suspense>
+  )
 }
