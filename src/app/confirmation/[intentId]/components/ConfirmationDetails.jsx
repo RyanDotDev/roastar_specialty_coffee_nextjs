@@ -116,19 +116,31 @@ const ConfirmationDetails = ({
             ) : (
               <>
                 <h3>Shipping Address:</h3>
-                <p>{shipping?.name}</p>
-                <p>{shipping?.line1}</p>
-                {shipping?.line2 && <p>{shipping?.line2}</p>}
-                <p>{shipping?.city} {shipping?.postal_code}</p>
-                <p><strong>Shipping Method:</strong> {shippingMethod}</p>
+                {!shipping ? (
+                  <p>Shipping details unavailable</p>
+                ) : (
+                  <>
+                    <p>{shipping?.name}</p>
+                    <p>{shipping?.line1}</p>
+                    {shipping?.line2 && <p>{shipping?.line2}</p>}
+                    <p>{shipping?.city} {shipping?.postal_code}</p>
+                    <p><strong>Shipping Method:</strong> {shippingMethod}</p>
+                  </>
+                )}
               </>
             )}
             <br />
             <h3>Billing Address:</h3>
-            <p>{billing?.line1}</p>
-            {billing?.line2 && <p>{billing?.line2}</p>}
-            <p>{billing?.city}, {billing?.postal_code}</p>
-            <p>{billing?.country}</p>
+            {!billing ? (
+              <p>Billing details unavailable</p>
+            ) : (
+              <>
+                <p>{billing?.line1}</p>
+                {billing?.line2 && <p>{billing?.line2}</p>}
+                <p>{billing?.city}, {billing?.postal_code}</p>
+                <p>{billing?.country}</p>
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -21,50 +21,61 @@ async function fetchVariantWeight(variantId) {
   };
 }
 
-export async function createShopfifyOrder(sessionId) {
-  const session = await stripe.checkout.sessions.retrieve(sessionId, {
-    expand: ['line_items.data.price', 'line_items.data.price.product', 'customer_details'],
-  });
+export async function createShopifyOrder(paymentIntentId) {
+  const intent = await stripe.paymentIntents.retrieve(paymentIntentId);
+  const metadata = intent.metadata || {};
 
-  const lineItems = session.line_items?.data;
-  const customer = session.customer_details;
-  const shipping = customer?.address;
-
-  console.log('[Stripe Session]', JSON.stringify(session, null, 2));
-
-  if (!lineItems || !lineItems.length) {
-    throw new Error('No line items found in session');
+  if (!metadata.cart || !metadata.shipping || !metadata.customer_email) {
+    throw new Error('Missing metadata from Payment Intent')
   }
 
-  if (!customer || !customer.address) {
-    throw new Error('No line items found in session');
+  const cartToken = metadata.cart_token;
+  if (cartToken) {
+    const existingOrderRes = await fetch(`${process.env.SHOPIFY_URL}/admin/api/2025-04/orders.json?financial_status=paid&fields=id,note`, {
+      headers: {
+        'X-Shopify-Access-Token': process.env.SHOPIFY_ADMIN_API_TOKEN,
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const existingOrders = (await existingOrderRes.json())?.orders || [];
+    const orderExists = existingOrders.some(order => order.note?.includes(cartToken));
+
+    if (orderExists) {
+      console.log(`⚠️ Shopify order already exists for cart_token: ${cartToken}`)
+      return
+    }
   }
 
-   if (!shipping) {
-    throw new Error('Missing customer shipping details');
+  let cartItems, shipping;
+  try {
+    cartItems = JSON.parse(metadata.cart);
+    shipping = JSON.parse(metadata.shipping);
+  } catch (err) {
+    throw new Error('Invalid JSON in PaymentIntent metadata: ' + err.message);
   }
+
+  const email = metadata.customer_email;
 
   let totalWeight = 0;
   const processedLineItems = [];
 
-  for (const item of lineItems) {
-    const metadata = item.price?.product?.metadata || {};
-    const shopifyVariantId = metadata.shopify_variant_id || null;
-
-    const parsedVariantId = Number(shopifyVariantId?.match(/\d+$/)?.[0] ?? NaN);
-    const isCustom = !shopifyVariantId || isNaN(parsedVariantId);
+  for (const item of cartItems) {
+    const isCustom = !item.variant_id;
 
     if (isCustom) {
       processedLineItems.push({
-        title: item.description || 'Custom Product',
-        price: (item.amount_total ?? item.price?.unit_amount ?? 100) / 100,
+        title: item.title || 'Custom Product',
+        price: parseFloat(item.price?.toFixed?.(2)) || item.price || 0,
         quantity: item.quantity,
         custom: true,
-      })
+      });
       continue;
     }
 
+    const parsedVariantId = item.variant_id.replace('gid://shopify/ProductVariant/', '');
     const { weight: grams } = await fetchVariantWeight(parsedVariantId);
+
     totalWeight += grams * item.quantity;
 
     processedLineItems.push({
@@ -81,48 +92,46 @@ export async function createShopfifyOrder(sessionId) {
     source: 'Custom'
   }
 
+  const authorisedAmount = parseFloat(((intent.amount_received || intent.amount || 0) / 100).toFixed(2)) + parseFloat((shippingLine.price || 0).toFixed(2));
+
+  const [first, ...rest] = (shipping.name || '').split(' ');
   const orderData = {
     order: {
       line_items: processedLineItems,
-      email: customer.email,
+      email,
       shipping_address: {
-        first_name: customer.name?.split(' ')[0],
-        last_name: customer.name?.split(' ').slice(1).join(' ') || '',
-        address1: customer.address.line1,
-        address2: customer.address.line2,
-        city: customer.address.city,
-        province: customer.address.state,
-        country: customer.address.country,
-        zip: customer.address.postal_code,
+        first_name: first || '',
+        last_name: rest.join(' ') || '',
+        address1: shipping.line1,
+        address2: shipping.line2,
+        city: shipping.city,
+        province: shipping.state,
+        country: shipping.country,
+        zip: shipping.postal_code,
       },
       financial_status: 'paid',
+      payment_gateway_names: ["stripe"],
+      transactions: [
+        {
+          kind: "authorization", // or "sale" depending on status
+          status: "success",
+          amount: authorisedAmount,
+          gateway: "manual",
+          currency: intent.currency,
+          processed_at: new Date(intent.created * 1000).toISOString()
+         }
+      ],
+      processing_method: 'offsite',
       inventory_management: 'shopify',
       inventory_policy: 'deny',
       shipping_lines: [shippingLine],
-      transactions: [
-        {
-          kind: 'sale',
-          status: 'success',
-          amount: session.amount_total / 100,
-        },
-      ],
-      /* note_attributes: lineItems.map((item, i) => ({
-        name: `item-${i + 1}`,
-        value: JSON.stringify({
-          metadata: {
-            shopify_variant_id: item.price?.metadata?.shopify_variant_id || null,
-            shopify_variant_title: item.price?.metadata?.variant_title || null,
-            shopify_option1: item.price?.metadata?.option1 || null,
-            shopify_option2: item.price?.metadata?.option2 || null,
-            shopify_option3: item.price?.metadata?.option3 || null,
-          },
-          image: item.price?.product?.images?.[0] || 'No Image'
-        })
-      })) */
+      note: cartToken ? `cart_token: ${cartToken}` : undefined,
     },
   };
 
-  console.log('[Order Payload]', JSON.stringify(lineItems, null, 2));
+  console.log('[Order Payload]', JSON.stringify(processedLineItems, null, 2));
+  console.log('→ Creating Shopify order with shipping:', shipping);
+  console.log('→ Order payload shipping_address object:', JSON.stringify(orderData.order.shipping_address, null, 2));
 
   const response = await fetch(`${process.env.SHOPIFY_URL}/admin/api/2025-04/orders.json`, {
     method: 'POST',
@@ -139,5 +148,22 @@ export async function createShopfifyOrder(sessionId) {
   }
 
   const responseData = await response.json();
+  const order = responseData.order;
+
   console.log('[Shopify Order Response]', JSON.stringify(responseData, null, 2));
+  console.log('--- Shopify Order Debug Info ---');
+  console.log('financial_status:', order.financial_status);
+  console.log('payment_gateway_names:', order.payment_gateway_names);
+  console.log('transactions:', JSON.stringify(order.transactions, null, 2));
+  console.log('confirmed:', order.confirmed);
+  console.log('processed_at:', order.processed_at);
+  console.log('fulfillment_status:', order.fulfillment_status);
+  console.log('cancelled_at:', order.cancelled_at);
+  console.log('created_at:', order.created_at);
+  console.log('updated_at:', order.updated_at);
+  console.log('tags:', order.tags);
+  console.log('note:', order.note);
+  console.log('--------------------------------');
+
+  return order.name;
 };

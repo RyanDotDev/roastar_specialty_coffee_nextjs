@@ -1,6 +1,6 @@
 import Stripe from 'stripe'
 import { buffer } from 'micro';
-import { createShopfifyOrder } from '../../admin/createShopifyOrder';
+import { createShopifyOrder } from '../../admin/createShopifyOrder';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -31,18 +31,27 @@ export default async function handler(req, res) {
     return res.status(400).send(`Webhook Error: ${err.message}`)
   }
 
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-    const sessionId = session.id;
+  if (event.type === 'payment_intent.succeeded') {
+    const intent = event.data.object;
+    const intentId = intent.id;
 
+    console.log('✅ PaymentIntent received:', {
+      id: intentId,
+      amount: intent.amount,
+      amount_received: intent.amount_received,
+      status: intent.status,
+    });
+
+    if (intent.status === 'succeeded' && intent.amount_received > 0) {  
+      try {
+        await createShopifyOrder(intentId);
       
-    try {
-      await createShopfifyOrder(sessionId);
-      console.log('✅ Shopify order created for session', sessionId);
-      return res.status(200).json({ received: true })
-    } catch (err) {
-      console.error('Error creating Shopify order:', err);
-      return res.status(500).send('Shopify order creation failed');
+        console.log('✅ Shopify order created for session', intentId);
+        return res.status(200).json({ received: true })
+      } catch (err) {
+        console.error('Error creating Shopify order:', err);
+        return res.status(500).send('Shopify order creation failed');
+      }
     }
   } 
 

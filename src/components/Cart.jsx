@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Backdrop from '@/utils/popups/cart/Backdrop';
 import { Minus, Plus, X } from 'lucide-react';
@@ -15,6 +16,8 @@ const Cart = ({ handleClose, sliderProducts }) => {
   const [loading, setLoading] = useState(true);
 
   console.log("Cart state after adding:", JSON.stringify(cart, null, 2));
+
+  const router = useRouter();
 
   const handleCheckout = async () => {
     try {
@@ -33,26 +36,11 @@ const Cart = ({ handleClose, sliderProducts }) => {
         stripe_discounted_price_id: item.stripe_discounted_price_id,
       }));
 
-      setLoading(true)
-      const response = await fetch('/api/shopify/checkout/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ cart: cartPayload, cancelUrl }), // Send cart in the request body
-      })
+      setLoading(true);
 
-      console.log("Cart being sent to checkout:", cart);
-      if (!response) {
-        throw new Error("Failed to create checkout");
-      }
+      localStorage.setItem('checkout_cart', JSON.stringify(cartPayload));
 
-      const { checkoutUrl } = await response.json();
-      if (checkoutUrl) {
-        window.location.href = checkoutUrl;
-      } else {
-        showErrorToast("Failed to create checkout. Please try again.")
-      }
+      router.push('/checkout');
     } catch(error) {
       console.error("Checkout error:", error);
       showErrorToast("Error creating checkout. Please try again later")

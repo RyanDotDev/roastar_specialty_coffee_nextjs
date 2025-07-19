@@ -8,21 +8,13 @@ const createLineItem = async (item) => {
   const image = item.image?.src ?? item.image; // [item.image?.src ?? item.image]?.filter((img) => typeof img === 'string')
   
   return {
-    price_data: {
-      currency: 'gbp',
-      unit_amount: price,
-      product_data: {
-        name: item.productTitle || item.title || 'Unknown Product',
-        description: `${`${item.variantName} x ${item.quantity}` || 'Default'}`,
-        images: item ? [image] : [],
-        metadata: {
-          shopify_product_id: item.productId || item.id || 'unknown',
-          shopify_variant_id: item.id || 'unknown',
-          fallback: 'true'
-        },
-      },
-    },
-    quantity
+    price,
+    quantity,
+    name: item.productTitle || item.title || 'Unknown Product',
+    description: `${item.variantName ?? ''} x ${quantity}`,
+    image,
+    productId: item.productId || item.id,
+    variantId: item.id,
   };
 };
 
@@ -55,109 +47,99 @@ async function checkShopifyVariantInventory(variantId, requiredQuantity) {
   return true;
 }
 
-export async function createCheckoutSession(req, res) {
-  const { cart, product, cancelUrl } = req.body;
+export async function createPaymentIntentSession(req, res) {
+  const { cart, cartToken, product, fulfillmentMethod, pickupLocation } = req.body;
 
   const items = cart || (product ? [product] : [])
-
-  if (!items.length) {
-    return res.status(400).json({ error: 'No items to checkout' });
-  }
+  if (!items.length) return res.status(400).json({ error: 'No items to checkout' });
 
   try {
+    // Inventory check
     await Promise.all(items.map(async (item) => {
       const variantId = item.id;
       const quantity = item.quantity || 1;
 
-      if (!variantId) {
-        console.warn('⚠️ Skipping inventory check: missing variant ID');
-      } else {
+      if (variantId) {
         await checkShopifyVariantInventory(variantId, quantity);
       }
-
-      return createLineItem(item);
     }))
-    
+
+    // Build line items and calculates total
+    const lineItems = await Promise.all(items.map(createLineItem));
+    const totalAmount = lineItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    // Shipping fee (if any)
+    let shippingAmount = 0;
+    if (fulfillmentMethod === 'shipping') {
+      const FREE_SHIPPING_THRESHOLD = 2500;
+      const SHIPPING_FEE = 599;
+
+      if (totalAmount < FREE_SHIPPING_THRESHOLD) {
+        shippingAmount = SHIPPING_FEE;
+      }
+    }
+
+    const amount = totalAmount + shippingAmount;
+
+    const metadata = {
+      ...(cartToken && { cart_token: cartToken }),
+      ...(cart && { cart: JSON.stringify(cart) }),
+      ...(req.body.shipping && { shipping: JSON.stringify(req.body.shipping) }), 
+      ...(req.body.email && { customer_email: req.body.email }),
+      fulfillment_method: fulfillmentMethod || 'shipping',
+      ...(pickupLocation && fulfillmentMethod === 'pickup' && {
+      pickup_location: pickupLocation
+      }),
+    };
+
+    if (pickupLocation && fulfillmentMethod === 'pickup') {
+      metadata.pickup_location = pickupLocation;
+    }
+
+    if (shippingAmount > 0) {
+      metadata.shipping_fee = shippingAmount.toString(); // Add shipping fee to metadata
+    }
+
+    lineItems.forEach((item, index) => {
+      const shortId = item.variantId?.replace("gid://shopify/ProductVariant/", "") || `unknown_${index}`;
+      metadata[`item_${index}`] = `${shortId}|${item.quantity}`;
+    });
+
+    const customer = await stripe.customers.create({
+      email: req.body.email,
+      name: req.body.shipping?.name,
+      shipping: req.body.shipping,
+    })
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency: 'gbp',
+      payment_method_types: ['card'],
+      receipt_email: req.body.email,
+      shipping: req.body.shipping || undefined,
+      metadata,
+      customer: customer.id, 
+      automatic_payment_methods: {
+        enabled: false,
+      },
+    });
+
+    return res.status(200).json({
+      clientSecret: paymentIntent.client_secret,
+      amount,
+      currency: 'gbp',
+      shippingAmount
+    });
   } catch (err) {
     console.error('❌ Inventory check failed', err.message);
     return res.status(400).json({ error: err.message });
   }
-
-  try {
-    const line_items = await Promise.all(items.map(createLineItem))
-    console.log('Line items going to Stripe:', JSON.stringify(line_items, null, 2));
-    
-    const metadata = {};
-
-    if (cart && Array.isArray(cart)) {
-      cart.forEach((variant, index) => {
-        const shortId = variant.id.replace("gid://shopify/ProductVariant/", "") || `unknown_${index}`;
-        metadata[`variant_${index}_id`] = shortId,
-        metadata[`variant_${index}_quantity`] = String(variant.quantity || 1);
-        metadata[`variant+${index}_stripe_price_id`] = variant.stripe_price_id || 'unknown';
-        metadata[`variant_${index}`] = `${shortId}|${variant.quantity || 1}|${variant.stripe_price_id || 'none'}`;
-      });
-    } else if (product) {
-      const shortId = product.id.replace("gid://shopify/ProductVariant/", "") || 'unknown_product';
-      metadata[`variant_0_id`] = shortId;
-      metadata[`variant_0_quantity`] = String(product.quantity || 1);
-      metadata[`variant_0_stripe_price_id`] = product.stripe_price_id || 'unknown';
-      metadata[`variant_0`] = `${shortId}|${product.quantity || 1}|${product.stripe_price_id || 'none'}`
-    }
-    // For extra saftey avoid stripe character limitations
-    
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'payment',
-      line_items,
-      billing_address_collection: 'required',
-      shipping_address_collection: {
-        allowed_countries: ['GB'],
-      },
-      payment_intent_data: {
-
-      },
-      shipping_options: [
-        {
-          shipping_rate_data: {
-            display_name: 'Standard Shipping',
-            type: 'fixed_amount',
-            fixed_amount: {
-              amount: 599,
-              currency: 'gbp',
-            },
-            delivery_estimate: {
-              minimum: { unit: 'business_day', value: 2 },
-              maximum: { unit: 'business_day', value: 5 }
-            },
-            metadata: {
-              pickup: 'true'
-            }
-          },
-        },
-      ],
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/thank-you/{CHECKOUT_SESSION_ID}`,
-      cancel_url: cancelUrl || `${process.env.NEXT_PUBLIC_SITE_URL}/cart`,
-      metadata,
-    });
-
-    await stripe.checkout.sessions.update(session.id, {
-      metadata: {
-        session_id: session.id,
-      }
-    })
-
-    return res.status(200).json({ checkoutUrl: session.url });
-  } catch (err) {
-    console.error('Stripe checkout creation failed:', err);
-    return res.status(500).json({ error: 'Unable to create checkout session' });
-  };
 };
 
 export default async function handler(req, res) {
   if(req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   };
-  return createCheckoutSession(req, res)
+  return createPaymentIntentSession(req, res)
 };
 
