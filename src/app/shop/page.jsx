@@ -15,7 +15,7 @@ const getProducts = async () => {
 const SHOP_READY = process.env.SHOP_READY === 'true';
 
 export default async function Page() {
-  if (SHOP_READY) {
+  if (!SHOP_READY) {
     return (
       <div className='shop-container'>
         <ShopMaintenance />
