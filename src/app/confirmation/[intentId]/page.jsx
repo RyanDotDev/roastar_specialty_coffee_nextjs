@@ -15,7 +15,7 @@ export default async function ThankYouPage({ params }) {
   const { intentId } = await params;
 
   const intent = await stripe.paymentIntents.retrieve(intentId, {
-    expand: ['latest_charge', 'charges.data.balance_transaction'],
+    expand: ['charges'],
   });
 
   const charge = intent.latest_charge;

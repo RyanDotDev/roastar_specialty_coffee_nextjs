@@ -2,14 +2,26 @@ import React, { useState } from 'react'
 import { PaymentElement } from '@stripe/react-stripe-js';
 import BillingAddressField from './BillingAddressField';
 
-export const PaymentField = ({ fulfillment }) => {
-  const [name, setName] = useState(''); // Name on card state
+export const PaymentField = ({ 
+  fulfillment, 
+  sameAsBilling, 
+  setSameAsBilling,
+  sameAsShipping,
+  setSameAsShipping,
+  nameOnCard,
+  setNameOnCard
+}) => {
   const [selectedMethod, setSelectedMethod] = useState(null); // Defining payment method
-  const [sameAsShipping, setSameAsShipping] = useState(true);
-  const [billingAddress, setBillingAddress] = useState(null);
 
   const handleBillingChange = (updateAddress) => {
-    setBillingAddress(updateAddress);
+    setSameAsBilling(prev => ({
+      ...prev,
+      ...updateAddress
+    }))
+  };
+
+  const toggleSameAsShipping = () => {
+    setSameAsShipping(prev => !prev); // This will reflect upstream in metadata
   };
 
   return (
@@ -26,8 +38,8 @@ export const PaymentField = ({ fulfillment }) => {
           <label>
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={nameOnCard}
+              onChange={(e) => setNameOnCard(e.target.value)}
               placeholder='Name on card'
               className='name-on-card-field'
               required
@@ -42,14 +54,17 @@ export const PaymentField = ({ fulfillment }) => {
               <input 
                 type="checkbox"
                 checked={sameAsShipping}
-                onChange={() => setSameAsShipping(!sameAsShipping)}
+                onChange={toggleSameAsShipping}
               />
               <p style={{ fontSize: '0.8rem' }}>Shipping address is the same as billing address</p> 
             </div>
 
             {/* RENDERS BILLING ADDRESS IF ABOVE INPUT IS UNTICKED */}
             {!sameAsShipping && (
-              <BillingAddressField onChange={handleBillingChange} />
+              <BillingAddressField 
+                onChange={handleBillingChange} 
+                billingData={sameAsBilling}
+              />
             )}
           </>
         )}

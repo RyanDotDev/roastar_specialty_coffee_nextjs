@@ -2,6 +2,7 @@ import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+// Create line items to initiate checkout process
 const createLineItem = async (item) => {
   const price = Math.max(1, Math.round(item.price * 100)); // price in pennies
   const quantity = Math.max(1, item.quantity);
@@ -48,7 +49,17 @@ async function checkShopifyVariantInventory(variantId, requiredQuantity) {
 }
 
 export async function createPaymentIntentSession(req, res) {
-  const { cart, cartToken, product, fulfillmentMethod, pickupLocation } = req.body;
+  const { 
+    cart, 
+    cartToken, 
+    product, 
+    fulfillmentMethod, 
+    shipping, 
+    billing, 
+    nameOnCard,
+    pickupLocation, 
+    isSameAsShipping 
+  } = req.body;
 
   const items = cart || (product ? [product] : [])
   if (!items.length) return res.status(400).json({ error: 'No items to checkout' });
@@ -67,7 +78,6 @@ export async function createPaymentIntentSession(req, res) {
     // Build line items and calculates total
     const lineItems = await Promise.all(items.map(createLineItem));
     const totalAmount = lineItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
     // Shipping fee (if any)
     let shippingAmount = 0;
     if (fulfillmentMethod === 'shipping') {
@@ -78,17 +88,22 @@ export async function createPaymentIntentSession(req, res) {
         shippingAmount = SHIPPING_FEE;
       }
     }
-
+    // Final amount
     const amount = totalAmount + shippingAmount;
 
     const metadata = {
       ...(cartToken && { cart_token: cartToken }),
       ...(cart && { cart: JSON.stringify(cart) }),
-      ...(req.body.shipping && { shipping: JSON.stringify(req.body.shipping) }), 
+      ...(shipping && { shipping: JSON.stringify(req.body.shipping) }), 
+      ...(billing && { billing: JSON.stringify(req.body.billing) }), 
       ...(req.body.email && { customer_email: req.body.email }),
+      ...(nameOnCard && { name_on_card: JSON.stringify(req.body.nameOnCard) }),
+      ...(typeof isSameAsShipping !== 'boolean' && { 
+        is_same_as_shipping: JSON.stringify(req.body.isSameAsShipping)
+      }),
       fulfillment_method: fulfillmentMethod || 'shipping',
       ...(pickupLocation && fulfillmentMethod === 'pickup' && {
-      pickup_location: pickupLocation
+        pickup_location: pickupLocation
       }),
     };
 
@@ -116,7 +131,6 @@ export async function createPaymentIntentSession(req, res) {
       currency: 'gbp',
       payment_method_types: ['card'],
       receipt_email: req.body.email,
-      shipping: req.body.shipping || undefined,
       metadata,
       customer: customer.id, 
       automatic_payment_methods: {

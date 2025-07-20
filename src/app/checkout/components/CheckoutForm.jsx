@@ -15,6 +15,8 @@ const CheckoutForm = ({ cart, cartToken, fulfillment, setFulfillment, subtotal }
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [email, setEmail] = useState('');
+  const [nameOnCard, setNameOnCard] = useState('');
+  // Shipping Address Field
   const [shippingAddress, setShippingAddress] = useState({
     first_name: '',
     last_name: '',
@@ -24,7 +26,8 @@ const CheckoutForm = ({ cart, cartToken, fulfillment, setFulfillment, subtotal }
     postal_code: '',
     country: 'United Kingdom'
   });
-  const [billingAddress, setBillingAddress] = useState({
+  
+  const [billingAddressForPickup, setBillingAddressForPickup] = useState({
     first_name: '',
     last_name: '',
     line1: '',
@@ -33,6 +36,18 @@ const CheckoutForm = ({ cart, cartToken, fulfillment, setFulfillment, subtotal }
     postal_code: '',
     country: ''
   })
+
+  const [billingAddressForDelivery, setBillingAddressForDelivery] = useState({
+    first_name: '',
+    last_name: '',
+    line1: '',
+    line2: '',
+    city: '',
+    postal_code: '',
+    country: ''
+  })
+  
+  const [sameAsShipping, setSameAsShipping] = useState(true);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,19 +73,22 @@ const CheckoutForm = ({ cart, cartToken, fulfillment, setFulfillment, subtotal }
       }
     }
 
-    const billing = {
-      name: `${billingAddress.first_name} ${billingAddress.last_name}`,
+     const billingData = fulfillment.type === 'pickup'
+       ? billingAddressForPickup
+       : (sameAsShipping ? shippingAddress : billingAddressForDelivery);
+
+     const billing = {
+      name: `${billingData.first_name} ${billingData.last_name}`,
       address: {
-        line1: billingAddress.line1,
-        line2: billingAddress.line2,
-        city: billingAddress.city,
-        postal_code: billingAddress.postal_code,
-        country: billingAddress.country,
+        line1: billingData.line1,
+        line2: billingData.line2,
+        city: billingData.city,
+        postal_code: billingData.postal_code,
+        country: billingData.country,
       }
     }
 
     try {
-      console.log('shipping', shipping)
       const response = await fetch('/api/shopify/checkout/checkout', {
         method: 'POST',
         headers: {
@@ -79,10 +97,11 @@ const CheckoutForm = ({ cart, cartToken, fulfillment, setFulfillment, subtotal }
         body: JSON.stringify({
           cart,
           cartToken,
-          FulfillmentMethod: fulfillment.type,
+          fulfillmentMethod: fulfillment.type,
           shippingMethod: fulfillment.method?.id,
           shipping,
           billing,
+          nameOnCard,
           email,
         }),
       });
@@ -94,7 +113,7 @@ const CheckoutForm = ({ cart, cartToken, fulfillment, setFulfillment, subtotal }
         elements,
         clientSecret,
         confirmParams: {
-          return_url: `${window.location.origin}/checkout/confirmation`,
+          return_url: `${window.location.origin}/checkout/confirmation/redirect/`,
           payment_method_data: {
             billing_details: {
               name: billing.name,
@@ -152,14 +171,23 @@ const CheckoutForm = ({ cart, cartToken, fulfillment, setFulfillment, subtotal }
             <PickupAddressField
               selection={fulfillment}
               setSelection={setFulfillment}
-              onBillingChange={setBillingAddress}
+              onBillingChange={setBillingAddressForPickup}
+              pickupBilling={billingAddressForPickup}
             />
           </label>
         </div>
       )}
 
       {/* PAYMENT FIELD */}
-      <PaymentField fulfillment={fulfillment} />
+      <PaymentField 
+        fulfillment={fulfillment}
+        sameAsBilling={billingAddressForDelivery}
+        setSameAsBilling={setBillingAddressForDelivery}
+        sameAsShipping={sameAsShipping}
+        setSameAsShipping={setSameAsShipping}
+        nameOnCard={nameOnCard}
+        setNameOnCard={setNameOnCard}
+      />
       
       <button className='checkout-button' type="submit" disabled={!stripe || loading}>
         {loading ? 'Processing…' : 'Pay'}

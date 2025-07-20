@@ -1,20 +1,10 @@
 import React, { useState } from 'react'
 
-const BillingAddressField = ({ onChange }) => {
-  const [address, setAddress] = useState({
-    first_name: '',
-    last_name: '',
-    line1: '',
-    line2: '',
-    city: '',
-    postal_code: '',
-    country: ''
-  });
+const BillingAddressField = ({ onChange, billingData }) => {
   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    const updated = { ...address, [name]: value }
-    setAddress(updated);
+    const updated = { ...billingData, [name]: value }
     onChange?.(updated)
   }
 
@@ -27,7 +17,7 @@ const BillingAddressField = ({ onChange }) => {
           type='text'
           name='first_name'
           placeholder='First name'
-          value={address.first_name}
+          value={billingData?.first_name ?? ''}
           onChange={handleInputChange}
           className='field'
           required
@@ -40,7 +30,7 @@ const BillingAddressField = ({ onChange }) => {
           type='text'
           name='last_name'
           placeholder='Last name'
-          value={address.last_name}
+          value={billingData?.last_name ?? ''}
           onChange={handleInputChange}
           className='field'
           required
@@ -53,7 +43,7 @@ const BillingAddressField = ({ onChange }) => {
           type='text'
           name='line1'
           placeholder='Address Line 1'
-          value={address.line1}
+          value={billingData?.line1 ?? ''}
           onChange={handleInputChange}
           className='field'
           required
@@ -66,7 +56,7 @@ const BillingAddressField = ({ onChange }) => {
           type='text'
           name='line2'
           placeholder='Address Line 2 (optional)'
-          value={address.line2}
+          value={billingData?.line2 ?? ''}
           onChange={handleInputChange}
           className='field'
         />
@@ -78,7 +68,7 @@ const BillingAddressField = ({ onChange }) => {
           type='text'
           name='city'
           placeholder='City'
-          value={address.city}
+          value={billingData?.city ?? ''}
           onChange={handleInputChange}
           className='field'
           required
@@ -91,7 +81,7 @@ const BillingAddressField = ({ onChange }) => {
           type='text'
           name='postal_code'
           placeholder='Post code'
-          value={address.postal_code}
+          value={billingData?.postal_code ?? ''}
           onChange={handleInputChange}
           className='field'
           required
@@ -102,12 +92,13 @@ const BillingAddressField = ({ onChange }) => {
       <label className='country'>
         <select
           name="country"
-          value={address.country}
+          value={billingData?.country ?? ''}
           onChange={handleInputChange}
           className='select-field'
           required
         >
-          <option>United Kingdom</option>
+          <option value='' disabled hidden>Select a country</option>
+          <option value='United Kingdom'>United Kingdom</option>
         </select>
       </label>
 

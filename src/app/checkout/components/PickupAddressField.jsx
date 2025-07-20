@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import BillingAddressField from './BillingAddressField';
 
-const PickupAddressField = ({ selection, onBillingChange }) => {
+const PickupAddressField = ({ selection, onBillingChange, pickupBilling }) => {
   const [locations, setLocations] = useState([]);
   const [error, setError] = useState('');
   
@@ -42,7 +42,10 @@ const PickupAddressField = ({ selection, onBillingChange }) => {
 
       {/* BILLING ADDRESS */}
       <h3 style={{ marginTop: '1rem', fontSize: '0.9rem' }}>Billing Address</h3>
-      <BillingAddressField onChange={onBillingChange} />
+      <BillingAddressField 
+        onChange={onBillingChange} 
+        billingData={pickupBilling}
+      />
     </div>
   )
 }
