@@ -51,13 +51,17 @@ async function checkShopifyVariantInventory(variantId, requiredQuantity) {
 export async function createPaymentIntentSession(req, res) {
   const { 
     cart, 
-    cartToken, 
+    cartToken,
+    email, 
     product, 
     fulfillmentMethod, 
     shipping, 
+    shippingMethod,
     billing, 
+    subtotal,
     nameOnCard,
-    pickupLocation, 
+    pickupLocationId, 
+    pickupLocation,
     isSameAsShipping 
   } = req.body;
 
@@ -93,27 +97,49 @@ export async function createPaymentIntentSession(req, res) {
 
     const metadata = {
       ...(cartToken && { cart_token: cartToken }),
-      ...(cart && { cart: JSON.stringify(cart) }),
+
+      ...(cart && 
+        { cart: JSON.stringify(
+            cart.map(item => ({
+              title: item.title,
+              variant: item.variant,
+              variant_id: item.id,
+              image: item.image,
+              price: item.price,
+              quantity: item.quantity,
+              handle: item.handle,
+          }))) 
+        }),
+
       ...(shipping && { shipping: JSON.stringify(req.body.shipping) }), 
       ...(billing && { billing: JSON.stringify(req.body.billing) }), 
-      ...(req.body.email && { customer_email: req.body.email }),
+
+      ...(email && { customer_email: req.body.email }),
       ...(nameOnCard && { name_on_card: JSON.stringify(req.body.nameOnCard) }),
+      ...(shippingMethod && { shipping_method: JSON.stringify(req.body.shippingMethod) }),
+      ...(subtotal && { subtotal: req.body.subtotal.toFixed(2) }),
+
       ...(typeof isSameAsShipping !== 'boolean' && { 
         is_same_as_shipping: JSON.stringify(req.body.isSameAsShipping)
       }),
+
       fulfillment_method: fulfillmentMethod || 'shipping',
-      ...(pickupLocation && fulfillmentMethod === 'pickup' && {
-        pickup_location: pickupLocation
+
+      ...(fulfillmentMethod === 'pickup' && pickupLocationId && {
+        pickup_location_id: pickupLocationId
       }),
+
+      ...(pickupLocation && fulfillmentMethod === 'pickup' && {
+        pickup_location: JSON.stringify(pickupLocation)
+      }),
+
+      ...(shippingAmount > 0 && { 
+        shipping_fee: shippingAmount.toString(),
+      }),
+
+        cart_total: (amount / 100).toFixed(2),
+        timestamp: new Date().toISOString(),
     };
-
-    if (pickupLocation && fulfillmentMethod === 'pickup') {
-      metadata.pickup_location = pickupLocation;
-    }
-
-    if (shippingAmount > 0) {
-      metadata.shipping_fee = shippingAmount.toString(); // Add shipping fee to metadata
-    }
 
     lineItems.forEach((item, index) => {
       const shortId = item.variantId?.replace("gid://shopify/ProductVariant/", "") || `unknown_${index}`;

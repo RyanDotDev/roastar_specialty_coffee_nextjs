@@ -20,11 +20,18 @@ const page = () => {
   const [clientSecret, setClientSecret] = useState(null);
   const [returnUrl, setReturnUrl] = useState('/');
 
-  const [subtotal, setSubtotal] = useState(0);
-  const [shipping, setShipping] = useState(0);
-  const [total, setTotal] = useState(0);
+  // price/cost states
+  const [subtotal, setSubtotal] = useState(0); // total of products ONLY
+  const [shipping, setShipping] = useState(0); // Shipping cost/fee
+  const [total, setTotal] = useState(0); // total price
   const [fulfillment, setFulfillment] = useState({ type: 'delivery' }); // State for selecting delivery or pickup
 
+  // States for shipping methods
+  const [shippingMethod, setShippingMethod] = useState([]);
+  const [shippingThreshold, setShippingThreshold] = useState(0); // threshold for free shipping
+  const [selectedShippingMethod, setSelectedShippingMethod] = useState(null);
+
+  // Main cart logic useEffect
   useEffect(() => {
     const stored = localStorage.getItem('cart-storage');
     // Returns to original url
@@ -94,10 +101,61 @@ const page = () => {
   }, [])
 
   useEffect(() => {
-    if (subtotal >= 0 && shipping >= 0) {
-      setTotal(Math.round(subtotal * 100) + shipping)
-    }
-  }, [subtotal, shipping])
+    const fetchMethods = async () => {
+      try {
+        const response = await fetch('/api/shopify/admin/deliveryMethods');
+        const data = await response.json();
+        setShippingMethod(data.shippingMethods || []);
+        setShippingThreshold(data.shippingThreshold);
+
+        if (data.shippingMethods?.length > 0) {
+          setSelectedShippingMethod(data.shippingMethods[0])
+        }
+      } catch (error) {
+        console.error('Error fetching delivery methods:', error)
+      }
+    };
+
+    fetchMethods();
+  }, []);
+
+  const calculateTotals = (method, fulfillmentType, subtotal, shippingThreshold) => {
+    if (!method) return { shippingCost: 0, totalPrice: subtotal };
+
+    const isPickup = fulfillmentType === 'pickup';
+    const isStandard = method.id === 'standard';
+    const isFree = isPickup || (isStandard && subtotal >= shippingThreshold);
+
+    const shippingCost = isFree ? 0 : method.price || 0;
+    const totalPrice = Math.round(subtotal * 100) + shippingCost;
+
+    return { shippingCost, totalPrice }
+  }
+
+  useEffect(() => {
+    if (!selectedShippingMethod) return;
+
+    const { shippingCost, totalPrice } = calculateTotals(
+      selectedShippingMethod,
+      fulfillment?.type,
+      subtotal,
+      shippingThreshold
+    );
+
+    setShipping(shippingCost);
+    setTotal(totalPrice);
+  }, [selectedShippingMethod, fulfillment?.type, subtotal, shippingThreshold])
+
+  const shippingLabel = 
+    fulfillment?.type === 'pickup'
+      ? 'FREE'
+      : shipping > 0
+      ? `£${(shipping / 100).toFixed(2)}`
+      : 'FREE'
+
+  const handleShippingMethodChange = (method) => {
+    setSelectedShippingMethod(method)
+  }
 
   // Displays if user tries to access page without any items in the cart
   if (isCartEmpty) {
@@ -105,7 +163,7 @@ const page = () => {
       <div className='empty-cart-message'>
         <h2>Your cart is empty</h2>
         <p>
-          Please add items to your cart before checkoing out, or return to the {" "}
+          Please add items to your cart before checkout, or return to the {" "}
           <Link href='/shop' className='checkout-cart-empty-link'>
             Shop
           </Link>
@@ -143,10 +201,13 @@ const page = () => {
           <CheckoutSummary 
             cart={cart}
             subtotal={subtotal}
-            shipping={shipping}
             total={total}
+            shippingMethod={shippingMethod}
+            shippingThreshold={shippingThreshold}
+            selectedShippingMethod={selectedShippingMethod}
+            onShippingMethodChange={handleShippingMethodChange}
+            shippingLabel={shippingLabel}
             fulfillment={fulfillment}
-            setFulfillment={setFulfillment}
           />
         </div>
 
@@ -159,8 +220,13 @@ const page = () => {
                 fulfillment={fulfillment}
                 setFulfillment={setFulfillment}
                 subtotal={subtotal}
+                shippingCost={shipping}
                 cart={cart}
                 cartToken={cartToken}
+                shippingMethod={shippingMethod}
+                shippingThreshold={shippingThreshold}
+                selectedShippingMethod={selectedShippingMethod}
+                onShippingMethodChange={handleShippingMethodChange}
               />
             </Elements>
           )}

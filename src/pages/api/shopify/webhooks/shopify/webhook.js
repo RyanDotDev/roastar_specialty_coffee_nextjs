@@ -103,6 +103,8 @@ export default async function handler(req, res) {
       const variantId = item.variant_id; // numeric ID (e.g. 123456789)
       const quantityPurchased = item.quantity;
 
+      console.log('🧾 Line item variant ID received:', item.variant_id)
+
       if (!variantId) {
         console.log('No variant ID for this item, skipping inventory adjustment');
         continue

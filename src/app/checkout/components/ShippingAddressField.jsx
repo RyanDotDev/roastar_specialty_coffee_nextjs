@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from 'react'
 
-const ShippingAddressField = ({ onChange, shipping, selection, setSelection, subtotal }) => {
-  const [methods, setMethods] = useState([]);
-  const [selectedMethod, setSelectedMethod] = useState(null);
+const ShippingAddressField = ({ 
+  onChange, 
+  shipping, 
+  selection, 
+  setSelection, 
+  subtotal,
+  shippingCost,
+  shippingMethod,
+  shippingThreshold,
+  selectedShippingMethod,
+  onShippingMethodChange
+}) => {
+  const [selectedMethod, setSelectedMethod] = useState(selectedShippingMethod || null);
 
   useEffect(() => {
-    const fetchMethods = async () => {
-      try {
-        const res = await fetch('/api/shopify/admin/deliveryMethods');
-        const data = await res.json();
-        setMethods(data.deliveryMethods || []);
-      } catch (error) {
-        console.error('Error fetching delivery methods:', error);
-      }
-    };
-
-    fetchMethods();
-  }, []);
+  if (selectedShippingMethod) {
+    setSelectedMethod(selectedShippingMethod);
+  }
+}, [selectedShippingMethod]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -24,11 +26,13 @@ const ShippingAddressField = ({ onChange, shipping, selection, setSelection, sub
     onChange?.(updated)
   };
 
-
   const handleMethodChange = (e) => {
-    const selected = methods.find(m => m.id === e.target.value);
+    const selected = shippingMethod.find(m => m.id === e.target.value);
+    if (!selected) return;
     setSelectedMethod(selected);
     setSelection?.({ type: 'delivery', method: selected });
+
+    onShippingMethodChange?.(selected)
   }
 
   // Hides everything if not selected for delivery
@@ -128,17 +132,19 @@ const ShippingAddressField = ({ onChange, shipping, selection, setSelection, sub
             <option value="GB">United Kingdom</option>
           </select>
         </label>
+
+        <p style={{ fontSize: '0.9rem', gridColumn: '1 / -1' }}>
+          Free standard delivery for UK orders over <strong>£{shippingThreshold}</strong>
+        </p>
  
         {/* SHIPPING METHOD */}
         <div className='checkout-shipping-method'>
           <h3 style={{ marginBottom: '1rem', fontSize: '0.9rem' }}>Shipping Method</h3>
-          {methods.map((method, i) => {
-            const isFree = Number(subtotal) >= 25 && method.price > 0;
-            const shippingPrice = isFree 
-              ? 'FREE' 
-              : method.price > 0 
-                ? `£${(method.price / 100).toFixed(2)}` 
-                : 'FREE';
+          {shippingMethod.map((method, i) => {
+            const isStandard = method.id === 'standard';
+            const isFree = isStandard && Number(subtotal) >= shippingThreshold;
+            const priceLabel = isFree ? 'FREE' : `£${(method.price / 100).toFixed(2)}`;
+              
             return (
               <label 
                 className={`shipping-method ${selectedMethod?.id === method.id ? 'selected' : ''}`}
@@ -166,7 +172,7 @@ const ShippingAddressField = ({ onChange, shipping, selection, setSelection, sub
                     {method.estimated_days}
                   </p>
                 </div>
-                <span style={{ fontWeight: '600', fontSize: '0.8rem' }}>{shippingPrice}</span>
+                <span style={{ fontWeight: '600', fontSize: '0.8rem' }}>{priceLabel}</span>
               </label>
             )
           })}

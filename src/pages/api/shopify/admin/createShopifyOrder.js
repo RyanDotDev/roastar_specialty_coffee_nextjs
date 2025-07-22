@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { fetchDeliveryMethods } from "./deliveryMethods";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -25,6 +26,8 @@ export async function createShopifyOrder(paymentIntentId) {
   const intent = await stripe.paymentIntents.retrieve(paymentIntentId, {
     expand: ['charges']
   });
+  const deliveryMethods = await fetchDeliveryMethods();
+  console.log('[deliveryMethods]', deliveryMethods);
   const metadata = intent.metadata || {};
 
   // For fetching card details
@@ -70,6 +73,7 @@ export async function createShopifyOrder(paymentIntentId) {
     throw new Error('Invalid JSON in PaymentIntent metadata: ' + err.message);
   }
 
+  // Extract email from checkout form
   const email = metadata.customer_email;
 
   let totalWeight = 0;
@@ -94,20 +98,60 @@ export async function createShopifyOrder(paymentIntentId) {
     totalWeight += grams * item.quantity;
 
     processedLineItems.push({
-      variant_id: parsedVariantId,
+      variant_id: Number(parsedVariantId),
       quantity: item.quantity,
       grams,
     })
   }
 
-  const shippingLine = {
+  // Extract from metadata
+  let shippingMethod = metadata.shipping_method;
+
+  try {
+    shippingMethod = JSON.parse(metadata.shipping_method);
+  } catch (error) {
+    shippingMethod = deliveryMethods.find(m => m.id === metadata.shipping_method)
+  }
+
+  console.log('[shippingMethod]', shippingMethod);
+  const subtotal = parseFloat(metadata.subtotal || '0');
+
+  let shippingLine = {
     title: 'Standard',
-    price: 599 / 100, // This was showing as £599 because you need to divide it by 100
+    price: 0,
     code: 'Standard',
     source: 'Custom'
   }
 
-  const authorisedAmount = parseFloat(((intent.amount_received || intent.amount || 0) / 100).toFixed(2)) + parseFloat((shippingLine.price || 0).toFixed(2));
+  if (shippingMethod && deliveryMethods?.length) {
+    const selected = deliveryMethods.find(method => method.id === shippingMethod.id);
+    if (selected) {
+      const isFree = subtotal >= 25 && selected.price > 0;
+
+      shippingLine = {
+        title: selected.label,
+        price: isFree ? 0 : selected.price / 100,
+        code: selected.id,
+        source: 'Shopify Metafield'
+      }
+    }
+  }
+
+  // For pickup location
+  const pickupLocation = metadata.pickup_location;
+
+  let parsedPickupLocation = null;
+  if (pickupLocation) {
+    try {
+      parsedPickupLocation = JSON.parse(pickupLocation);
+    } catch (error) {
+      console.warn('Failed to parse pickupLoaction from metadata', error.message)
+    }
+  }
+
+  const authorisedAmount = 
+    parseFloat(((intent.amount_received || intent.amount || 0) / 100).toFixed(2)) 
+    + parseFloat((shippingLine.price || 0).toFixed(2));
 
   // First and Last Name for billing address
   const [first, ...rest] = (shipping.name || '').split(' ');
@@ -127,7 +171,6 @@ export async function createShopifyOrder(paymentIntentId) {
     zip: billing.address.postal_code || '',
   }
   
-
   const orderData = {
     order: {
       line_items: processedLineItems,

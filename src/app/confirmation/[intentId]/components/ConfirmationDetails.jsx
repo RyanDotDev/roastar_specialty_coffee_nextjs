@@ -8,10 +8,10 @@ const ConfirmationDetails = ({
   shipping,
   billing,
   fulfillmentMethod,
-  shippingMethod,
+  // shippingMethod,
   paymentMethod,
   pickupAddress,
-  lineItems,
+  cartItems,
   shippingCost,
   totalCost,
 }) => {
@@ -21,11 +21,10 @@ const ConfirmationDetails = ({
         {/* PRODUCT LIST */}
         <div>
           <div className='confirmation-product-container'>
-            {lineItems.map(item => {
-              const product = item.price.product;
-              const imageUrl = product.images?.[0];
+            {cartItems.map((item, index) => {
+              const imageUrl = item.image
               return (
-                <div className='confirmation-product-details' key={item.id}>
+                <div className='confirmation-product-details' key={index}>
                   {/* CONFIRMED PRODUCT IMAGE */}
                   <div className='confirmation-image'>
                     <Badge
@@ -46,27 +45,27 @@ const ConfirmationDetails = ({
                         }
                       }}
                     >
-                      {imageUrl && 
+                      {imageUrl && (
                         <Image 
                           src={imageUrl} 
-                          alt={item.description} 
+                          alt={item.title} 
                           width={80} 
                           height={80} 
                         />
-                      }
+                      )}
                     </Badge>
                     {/* PRODUCT DETAILS */}
                     <div className='confirmation-text'>
                       {/* PRODUCT NAME */}
                       <p style={{ color: 'black', fontWeight: 'bold', fontSize: '0.8rem' }}>
-                        {item.description}
+                        {item.title}
                       </p>
                       {/* PRODUCT VARIANT */}
                       <p style={{ color: '#808080', fontSize: '0.7rem' }}>
-                        {item.price.product.description.slice(0, -4).toUpperCase()}
+                        {item.variant}
                       </p>
                     </div>
-                    <p className='confirmation-product-price'>{`£${(item.price.unit_amount / 100).toFixed(2)}`}</p>
+                    <p className='confirmation-product-price'>{`£${item.price}`}</p>
                   </div>
                 </div>
               )
@@ -79,16 +78,16 @@ const ConfirmationDetails = ({
               <p>Subtotal</p>
               <p>
                 £{(
-                  lineItems.reduce(
-                    (sum, item) => sum + item.price.unit_amount * item.quantity,
+                  cartItems.reduce(
+                    (sum, item) => sum + item.price * item.quantity,
                     0
-                  ) / 100
+                  )
                 ).toFixed(2)}
               </p>
             </div>
             <div className='confirmation-shipping'>
               <p>Shipping</p>
-              <p>{`£${(shippingCost / 100).toFixed(2)}`}</p>
+              <p>{`£${(shippingCost).toFixed(2)}`}</p>
             </div>
             <div className='confirmation-total'>
               <p><strong>TOTAL</strong> </p>
@@ -105,7 +104,7 @@ const ConfirmationDetails = ({
 
         {/* CONFIRMATION ORDER DETAILS */}
         <div className='confirmation-card'>
-          <div className='confirmation-card-details'>
+          {/*<div className='confirmation-card-details'>
             <h2>Order Details</h2>
             <p><strong>Email:</strong> {email}</p>
             <p><strong>Payment Method:</strong> {paymentMethod.toUpperCase()}</p>
@@ -141,7 +140,7 @@ const ConfirmationDetails = ({
                 <p>{billing?.country}</p>
               </>
             )}
-          </div>
+          </div>*/}
         </div>
       </div>
     </div>     

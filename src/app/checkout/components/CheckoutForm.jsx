@@ -7,7 +7,19 @@ import PickupAddressField from './PickupAddressField';
 import ContactField from './ContactField';
 import PaymentField from './PaymentField';
 
-const CheckoutForm = ({ cart, cartToken, fulfillment, setFulfillment, subtotal }) => {
+const CheckoutForm = ({ 
+  cart, 
+  cartToken, 
+  fulfillment, 
+  setFulfillment, 
+  subtotal, 
+  shippingCost,
+  shippingMethod,
+  shippingThreshold,
+  selectedShippingMethod,
+  onShippingMethodChange,
+}) => {
+
   const router = useRouter();
   const stripe = useStripe();
   const elements = useElements();
@@ -48,6 +60,14 @@ const CheckoutForm = ({ cart, cartToken, fulfillment, setFulfillment, subtotal }
   })
   
   const [sameAsShipping, setSameAsShipping] = useState(true);
+
+  // For pickup method
+  const [pickupLocationId, setPickupLocationId] = useState(''); // Pickup locaction
+  const [pickupLocation, setPickupLocation] = useState();
+
+  const handlePickupLocationChange = (location) => {
+    setPickupLocation(location);
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -98,10 +118,14 @@ const CheckoutForm = ({ cart, cartToken, fulfillment, setFulfillment, subtotal }
           cart,
           cartToken,
           fulfillmentMethod: fulfillment.type,
-          shippingMethod: fulfillment.method?.id,
+          shippingMethod: selectedShippingMethod,
+          shippingCost,
           shipping,
+          pickupLocationId,
+          pickupLocation,
           billing,
           nameOnCard,
+          subtotal,
           email,
         }),
       });
@@ -160,6 +184,11 @@ const CheckoutForm = ({ cart, cartToken, fulfillment, setFulfillment, subtotal }
               selection={fulfillment}
               setSelection={setFulfillment}
               subtotal={subtotal}
+              shippingCost={shippingCost}
+              shippingMethod={shippingMethod}
+              shippingThreshold={shippingThreshold}
+              selectedShippingMethod={selectedShippingMethod}
+              onShippingMethodChange={onShippingMethodChange}
             />
           </label>
         </div>
@@ -170,9 +199,11 @@ const CheckoutForm = ({ cart, cartToken, fulfillment, setFulfillment, subtotal }
           <label>
             <PickupAddressField
               selection={fulfillment}
-              setSelection={setFulfillment}
               onBillingChange={setBillingAddressForPickup}
               pickupBilling={billingAddressForPickup}
+              pickupLocationId={pickupLocationId}
+              onPickupLocationChange={handlePickupLocationChange}
+              setPickupLocationId={setPickupLocationId}
             />
           </label>
         </div>
