@@ -26,8 +26,10 @@ export async function createShopifyOrder(paymentIntentId) {
   const intent = await stripe.paymentIntents.retrieve(paymentIntentId, {
     expand: ['charges']
   });
+
   const deliveryMethods = await fetchDeliveryMethods();
   console.log('[deliveryMethods]', deliveryMethods);
+
   const metadata = intent.metadata || {};
 
   // For fetching card details
@@ -104,43 +106,72 @@ export async function createShopifyOrder(paymentIntentId) {
     })
   }
 
-  // Extract from metadata
-  let shippingMethod = metadata.shipping_method;
+  // Extract shipping_method from metadata
+  let shippingMethod // shippingMethod is an array, use '[shippingMethod]' for debugging
 
   try {
     shippingMethod = JSON.parse(metadata.shipping_method);
-  } catch (error) {
+  } catch {
+    // fallback: treat as string id and find matching delivery method
     shippingMethod = deliveryMethods.find(m => m.id === metadata.shipping_method)
   }
 
+  console.log('Raw shipping_method metadata:', metadata.shipping_method);
+  console.log('Parsed shippingMethod:', shippingMethod);
+  console.log('Delivery methods:', deliveryMethods);
+
   console.log('[shippingMethod]', shippingMethod);
   const subtotal = parseFloat(metadata.subtotal || '0');
+  const shippingThreshold = metadata.shipping_threshold; // Threshold for free delivery eligibility
+  
+  let shippingLine
 
-  let shippingLine = {
-    title: 'Standard',
-    price: 0,
-    code: 'Standard',
-    source: 'Custom'
+  if (!shippingLine) {
+    shippingLine = {
+      title: 'Pickup',
+      price: 0,
+      code: 'pickup',
+      source: 'manual',
+    };
   }
 
-  if (shippingMethod && deliveryMethods?.length) {
-    const selected = deliveryMethods.find(method => method.id === shippingMethod.id);
-    if (selected) {
-      const isFree = subtotal >= 25 && selected.price > 0;
+  if (!shippingMethod) {
+    console.warn('Shipping method not found in deliveryMethods:', metadata.shipping_method);
+  }
 
+  const fulfillmentMethod = metadata.fulfillment_method;
+
+  if (fulfillmentMethod === 'pickup') {
+    shippingLine = {
+      title: 'Pickup in store',
+      price: 0,
+      code: 'pickup',
+      source: 'manual'
+    }
+  } else {
+    if (shippingMethod) {
+      const isFree = subtotal >= shippingThreshold && shippingMethod.price > 0;
       shippingLine = {
-        title: selected.label,
-        price: isFree ? 0 : selected.price / 100,
-        code: selected.id,
-        source: 'Shopify Metafield'
-      }
+        title: shippingMethod.label,
+        price: isFree ? 0 : shippingMethod.price / 100,
+        code: shippingMethod.id,
+        source: 'Shopify Metafield',
+      };
+    } else {
+      shippingLine = {
+        title: 'Standard',
+        price: 0,
+        code: 'standard',
+        source: 'custom'
+      };
     }
   }
 
   // For pickup location
+  
   const pickupLocation = metadata.pickup_location;
 
-  let parsedPickupLocation = null;
+  let parsedPickupLocation;
   if (pickupLocation) {
     try {
       parsedPickupLocation = JSON.parse(pickupLocation);
@@ -148,10 +179,12 @@ export async function createShopifyOrder(paymentIntentId) {
       console.warn('Failed to parse pickupLoaction from metadata', error.message)
     }
   }
+  
+  console.log('Parsed pickup location', pickupLocation)
 
   const authorisedAmount = 
     parseFloat(((intent.amount_received || intent.amount || 0) / 100).toFixed(2)) 
-    + parseFloat((shippingLine.price || 0).toFixed(2));
+    + parseFloat((shippingLine?.price || 0).toFixed(2));
 
   // First and Last Name for billing address
   const [first, ...rest] = (shipping.name || '').split(' ');
@@ -169,6 +202,29 @@ export async function createShopifyOrder(paymentIntentId) {
     province: billing.address.state || '',
     country: billing.address.country || '',
     zip: billing.address.postal_code || '',
+  }
+
+  // Note for Shopify Order
+  let note = cartToken
+    ? `cart-token: ${cartToken} |
+
+      Card: ${card?.brand?.toUpperCase() || 'Unknown'} | •••• ${card?.last4 || 'XXXX'} |
+
+      Name on card: ${nameOnCard}
+      `
+    : '';
+
+  let tags = [];
+
+  if (fulfillmentMethod === 'pickup') {
+    tags.push('Pickup');
+
+    if (parsedPickupLocation) {
+      note += ` 
+      | Pickup from: ${parsedPickupLocation.name} (${parsedPickupLocation.address})`;
+    }
+  } else {
+    tags.push('Delivery');
   }
   
   const orderData = {
@@ -207,12 +263,9 @@ export async function createShopifyOrder(paymentIntentId) {
       processing_method: 'offsite',
       inventory_management: 'shopify',
       inventory_policy: 'deny',
-      shipping_lines: [shippingLine],
-      note: cartToken ? 
-        `cart_token: ${cartToken} | 
-         Card: ${card?.brand?.toUpperCase() || 'Unknown'} •••• ${card?.last4 || 'XXXX'} | 
-         Name on card: ${nameOnCard}`
-        : undefined
+      shipping_lines: shippingLine ? [shippingLine] : [],
+      note: note || undefined,
+      tags: tags.join(', ')
     },
   };
 

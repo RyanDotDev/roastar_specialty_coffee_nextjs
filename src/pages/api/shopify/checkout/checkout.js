@@ -57,6 +57,7 @@ export async function createPaymentIntentSession(req, res) {
     fulfillmentMethod, 
     shipping, 
     shippingMethod,
+    shippingThreshold,
     billing, 
     subtotal,
     nameOnCard,
@@ -117,6 +118,7 @@ export async function createPaymentIntentSession(req, res) {
       ...(email && { customer_email: req.body.email }),
       ...(nameOnCard && { name_on_card: JSON.stringify(req.body.nameOnCard) }),
       ...(shippingMethod && { shipping_method: JSON.stringify(req.body.shippingMethod) }),
+      ...(shippingThreshold && { shipping_threshold: req.body.shippingThreshold }),
       ...(subtotal && { subtotal: req.body.subtotal.toFixed(2) }),
 
       ...(typeof isSameAsShipping !== 'boolean' && { 
@@ -130,15 +132,15 @@ export async function createPaymentIntentSession(req, res) {
       }),
 
       ...(pickupLocation && fulfillmentMethod === 'pickup' && {
-        pickup_location: JSON.stringify(pickupLocation)
+        pickup_location: JSON.stringify({
+          id: pickupLocation.id,
+          name: pickupLocation.name,
+          address: `${pickupLocation.address1} ${pickupLocation.city} ${pickupLocation.zip}`
+        })
       }),
 
-      ...(shippingAmount > 0 && { 
-        shipping_fee: shippingAmount.toString(),
-      }),
-
-        cart_total: (amount / 100).toFixed(2),
-        timestamp: new Date().toISOString(),
+      cart_total: (amount / 100).toFixed(2),
+      timestamp: new Date().toISOString(),
     };
 
     lineItems.forEach((item, index) => {

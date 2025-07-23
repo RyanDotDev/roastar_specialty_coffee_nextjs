@@ -31,6 +31,31 @@ const page = () => {
   const [shippingThreshold, setShippingThreshold] = useState(0); // threshold for free shipping
   const [selectedShippingMethod, setSelectedShippingMethod] = useState(null);
 
+  // States for pickup
+  const [locations, setLocations] = useState([]);
+  const [pickupLocationId, setPickupLocationId] = useState(null);
+  const [pickupLocation, setPickupLocation] = useState(null);
+
+  // To fetch locations as an array
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const res = await fetch('/api/shopify/admin/locations');
+        const data = await res.json();
+        setLocations(data);
+      } catch (err) {
+        console.error('Failed to fetch locations:', err.message);
+      }
+    };
+
+    fetchLocations();
+  }, []);
+
+  useEffect(() => {
+    const selected = locations.find(loc => String(loc.id) === String(pickupLocationId));
+    setPickupLocation(selected || null);
+  }, [pickupLocationId, locations]);
+
   // Main cart logic useEffect
   useEffect(() => {
     const stored = localStorage.getItem('cart-storage');
@@ -227,6 +252,11 @@ const page = () => {
                 shippingThreshold={shippingThreshold}
                 selectedShippingMethod={selectedShippingMethod}
                 onShippingMethodChange={handleShippingMethodChange}
+                locations={locations}
+                pickupLocationId={pickupLocationId}
+                setPickupLocationId={setPickupLocationId}
+                pickupLocation={pickupLocation}
+                setPickupLocation={setPickupLocation}
               />
             </Elements>
           )}

@@ -18,6 +18,11 @@ const CheckoutForm = ({
   shippingThreshold,
   selectedShippingMethod,
   onShippingMethodChange,
+  locations,
+  pickupLocation,
+  setPickupLocation,
+  pickupLocationId,
+  setPickupLocationId
 }) => {
 
   const router = useRouter();
@@ -60,14 +65,6 @@ const CheckoutForm = ({
   })
   
   const [sameAsShipping, setSameAsShipping] = useState(true);
-
-  // For pickup method
-  const [pickupLocationId, setPickupLocationId] = useState(''); // Pickup locaction
-  const [pickupLocation, setPickupLocation] = useState();
-
-  const handlePickupLocationChange = (location) => {
-    setPickupLocation(location);
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -119,6 +116,7 @@ const CheckoutForm = ({
           cartToken,
           fulfillmentMethod: fulfillment.type,
           shippingMethod: selectedShippingMethod,
+          shippingThreshold,
           shippingCost,
           shipping,
           pickupLocationId,
@@ -201,8 +199,10 @@ const CheckoutForm = ({
               selection={fulfillment}
               onBillingChange={setBillingAddressForPickup}
               pickupBilling={billingAddressForPickup}
+              locations={locations}
+              pickupLocation={pickupLocation}
+              setPickupLocatio={setPickupLocation}
               pickupLocationId={pickupLocationId}
-              onPickupLocationChange={handlePickupLocationChange}
               setPickupLocationId={setPickupLocationId}
             />
           </label>

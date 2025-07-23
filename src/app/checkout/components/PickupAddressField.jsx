@@ -5,50 +5,35 @@ const PickupAddressField = ({
   selection, 
   onBillingChange, 
   pickupBilling,
+  locations,
+  pickupLocation,
+  setPickupLocation,
   pickupLocationId,
   setPickupLocationId,
-  onPickupLocationChange,
 }) => {
-  const [locations, setLocations] = useState([]);
-  const [error, setError] = useState('');
-  
   useEffect(() => {
-    const fetchLocations = async () => {
-      try {
-        const res = await fetch('/api/shopify/admin/locations');
-        if (!res.ok) throw new Error('Failed to fetch locations');
-        const data = await res.json();
-        setLocations(data);
-      } catch (err) {
-        console.error('Failed to fetch Shopify store locations:', err.message)
-        setError('Could not load store pickup locations', err.message);
+    if (!locations || !pickupLocationId) return;
+    const selected = locations.find(
+      loc => String(loc.id) === String(pickupLocationId)
+    );
+    if (selected) {
+      if (!pickupLocation || selected.id !== pickupLocation.id) {
+        setPickupLocation?.(selected);
       }
     }
-
-    fetchLocations();
-  }, [])
-
-  useEffect(() => {
-    const selectedPickupLocation = locations.find(loc => loc.id === pickupLocationId);
-    if (selectedPickupLocation && onPickupLocationChange) {
-      onPickupLocationChange(selectedPickupLocation);
-    }
-  }, [pickupLocationId, locations])
+  }, [pickupLocationId, locations]);
   
   if (selection?.type !== 'pickup') return null;
 
   return (
     <div className='checkout-pickup-container'>
-      {error 
-        ? <p>{error}</p> 
-        : <h3 style={{ marginTop: '1rem', marginBottom: '1rem', fontSize: '0.9rem' }}>Pick a shop location</h3>
-      }
+      <h3 style={{ marginTop: '1rem', marginBottom: '1rem', fontSize: '0.9rem' }}>Pick a shop location</h3>
       <label className='checkout-pickup' htmlFor='pickup_location_id' >
         <select 
           className='select-field' 
           name='pickup_location_id' 
           id='pickup_locations_id' 
-          value={pickupLocationId}
+          value={pickupLocationId || ''}
           onChange={e => setPickupLocationId(e.target.value)}
           required
         >
