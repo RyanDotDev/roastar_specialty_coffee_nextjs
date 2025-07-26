@@ -22,7 +22,7 @@ const CheckoutForm = ({
   pickupLocation,
   setPickupLocation,
   pickupLocationId,
-  setPickupLocationId
+  setPickupLocationId,
 }) => {
 
   const router = useRouter();
@@ -228,5 +228,4 @@ const CheckoutForm = ({
     </form>
   );
 };
-
 export default CheckoutForm;

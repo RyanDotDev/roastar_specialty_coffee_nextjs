@@ -174,7 +174,7 @@ export async function createPaymentIntentSession(req, res) {
     });
   } catch (err) {
     console.error('❌ Inventory check failed', err.message);
-    return res.status(400).json({ error: err.message });
+    return res.status(400).json({ error: true, message: err.message });
   }
 };
 

@@ -1,15 +1,17 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { nanoid } from 'nanoid';
 import { appearance } from '@/lib/utils/themes/stripe/appearance';
-import Link from 'next/link';
-import CheckoutForm from './components/CheckoutForm';
 import { ShoppingBag } from 'lucide-react';
-import '@/styles/checkout.css'
 import CheckoutSummary from './components/CheckoutSummary';
+import CheckoutForm from './components/CheckoutForm';
+import ZeroStockModal from '@/lib/utils/popups/checkout/zero-stock/ZeroStockModal';
+import CheckoutFormSkeleton from './components/CheckoutFormSkeleton';
+import '@/styles/checkout.css'
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
@@ -19,6 +21,9 @@ const page = () => {
   const [isCartEmpty, setIsCartEmpty] = useState(false);
   const [clientSecret, setClientSecret] = useState(null);
   const [returnUrl, setReturnUrl] = useState('/');
+
+  // Loading skeleton before checkout form
+  const [isMounted, setIsMounted] = useState(false);
 
   // price/cost states
   const [subtotal, setSubtotal] = useState(0); // total of products ONLY
@@ -35,6 +40,10 @@ const page = () => {
   const [locations, setLocations] = useState([]);
   const [pickupLocationId, setPickupLocationId] = useState(null);
   const [pickupLocation, setPickupLocation] = useState(null);
+  // Error modal when product is out of stock
+  const [zeroStockError, setZeroStockError] = useState(false);
+  const modalRef = useRef();
+  const scrollContainerRef = useRef();
 
   // To fetch locations as an array
   useEffect(() => {
@@ -51,6 +60,7 @@ const page = () => {
     fetchLocations();
   }, []);
 
+  // State for selected locations
   useEffect(() => {
     const selected = locations.find(loc => String(loc.id) === String(pickupLocationId));
     setPickupLocation(selected || null);
@@ -108,14 +118,22 @@ const page = () => {
             fulfillmentMethod: 'shipping',
           }),
         })
-          .then(res => res.json())
-          .then(data => {
-            setClientSecret(data.clientSecret);
-            setShipping(data.shippingAmount || 0);
-          })
-          .catch(err => {
-            console.error('Failed to catch clientSecret:', err)
-          })
+        .then(async (res) => {
+          const data = await res.json();
+
+          if (!res.ok && data.message?.includes('Only 0 left in stock')) {
+            console.log('🧨 Zero stock detected on page load.');
+            setZeroStockError(true);
+            modalRef.current?.playEnter?.();
+            return;
+          }
+
+          setClientSecret(data.clientSecret);
+          setShipping(data.shippingAmount || 0);
+        })
+        .catch(err => {
+          console.error('Failed to catch clientSecret:', err)
+        });
       } catch (err) {
         console.error('Failed to parse cart from localStorage', err);
         setIsCartEmpty(true);
@@ -125,6 +143,7 @@ const page = () => {
     }
   }, [])
 
+  // Fetch methods
   useEffect(() => {
     const fetchMethods = async () => {
       try {
@@ -144,6 +163,7 @@ const page = () => {
     fetchMethods();
   }, []);
 
+  // Calculate totals of shipping method, fulfillmentType (e.g. pickup or delivery), subtotal of products only and shipping threshold for free delivery
   const calculateTotals = (method, fulfillmentType, subtotal, shippingThreshold) => {
     if (!method) return { shippingCost: 0, totalPrice: subtotal };
 
@@ -182,6 +202,16 @@ const page = () => {
     setSelectedShippingMethod(method)
   }
 
+  // Loading useEffect for skeleton
+  useEffect(() => {
+    // Avoid hydration mismatch + wait for Stripe & elements to be available
+    const timeout = setTimeout(() => {
+      setIsMounted(true);
+    }, 200); // Adjustable
+
+    return () => clearTimeout(timeout);
+  }, []);
+
   // Displays if user tries to access page without any items in the cart
   if (isCartEmpty) {
     return (
@@ -199,7 +229,7 @@ const page = () => {
   }
 
   return (
-    <div className='checkout-container'>
+    <div ref={scrollContainerRef} className='checkout-container'>
 
       {/* CHECKOUT NAVBAR */}
       <div className='checkout-navbar'>
@@ -217,6 +247,7 @@ const page = () => {
           <ShoppingBag style={{ marginTop: '0.5rem' }} color={'black'}/>
         </Link>
       </div>
+      {/* IF THERE IS NOT STOCK AVAILABLE OF ITEM */}
 
       {/* CHECKOUT CONTENT */}
       <div className='checkout-content'>
@@ -225,7 +256,9 @@ const page = () => {
         <div className='checkout-summary-container'>
           <CheckoutSummary 
             cart={cart}
+            setCart={setCart}
             subtotal={subtotal}
+            setSubtotal={setSubtotal}
             total={total}
             shippingMethod={shippingMethod}
             shippingThreshold={shippingThreshold}
@@ -233,12 +266,16 @@ const page = () => {
             onShippingMethodChange={handleShippingMethodChange}
             shippingLabel={shippingLabel}
             fulfillment={fulfillment}
+            scrollContainerRef={scrollContainerRef}
           />
         </div>
 
         {/* CHECKOUT FORM/PAYMENT (left side) */}
         <div className='checkout-form-container'>
-          {clientSecret && (
+
+          {zeroStockError ? (
+             <ZeroStockModal ref={modalRef} handleClose={() => setZeroStockError(false)} />
+            ) : clientSecret ? (
             <Elements stripe={stripePromise} options={{ clientSecret, appearance }}>
               <CheckoutForm 
                 clientSecret={clientSecret}
@@ -259,6 +296,8 @@ const page = () => {
                 setPickupLocation={setPickupLocation}
               />
             </Elements>
+          ) : (
+            <CheckoutFormSkeleton />
           )}
         </div>
       </div>
