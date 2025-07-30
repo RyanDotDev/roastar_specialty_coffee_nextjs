@@ -78,7 +78,7 @@ const ConfirmationDetails = ({
               <p>Subtotal</p>
               <p>
                 £{(
-                  cartItems || [].reduce(
+                  (cartItems || []).reduce(
                     (sum, item) => sum + item.price * item.quantity,
                     0
                   )

@@ -99,16 +99,20 @@ export async function createPaymentIntentSession(req, res) {
 
     const cartMetadata = {}
 
-    cart.forEach((item, index) => {
-      cartMetadata[`cart_item_${index}`] = JSON.stringify({
-        title: item.title,
-        variant: item.variant,
-        variant_id: item.id, // assuming item.id is your variant ID
-        price: item.price,
-        quantity: item.quantity,
-        // omit image and handle to save space if needed
+    if (Array.isArray(cart)) {
+      cart.forEach((item, index) => {
+        cartMetadata[`cart_item_${index}`] = JSON.stringify({
+          title: item.title,
+          variant: item.variant,
+          image: item.image,
+          variant_id: item.id, // assuming item.id is your variant ID
+          price: item.price,
+          quantity: item.quantity,
+          handle: item.handle,
+          // omit image and handle to save space if needed
+        });
       });
-    });
+    };
 
     const metadata = {
       ...(cartToken && { cart_token: cartToken }),

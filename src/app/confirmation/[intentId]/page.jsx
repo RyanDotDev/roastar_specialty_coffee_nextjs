@@ -11,6 +11,17 @@ import ResetCartToken from './components/ResetCartToken';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+const safeParseJSON = (json) => {
+  try {
+    if (typeof json === 'string' && json !== 'undefined') {
+      return JSON.parse(json);
+    }
+      return null;
+  } catch {
+    return null;
+  }
+}
+
 export default async function ThankYouPage({ params }) {
   const { intentId } = await params;
 
@@ -24,19 +35,20 @@ export default async function ThankYouPage({ params }) {
   // Extract metadata for each order details
   const metadata = intent.metadata || {};
 
-  let cartItems, shipping, billing;
-
-  /* useEffect(() => {
-  localStorage.removeItem('product-checkout');
-}, []); */
-
-  try {
-    cartItems = JSON.parse(metadata.cart);
-    shipping = JSON.parse(metadata.shipping);
-    billing = JSON.parse(metadata.billing);
-  } catch (error) {
-    console.error('Invalid JSON in paymentIntent metadata', error.message)
+  // Reconstruct cart items from split keys if present, else fallback to metadata.cart
+  let cartItems = [];
+  const cartKeys = Object.keys(metadata).filter(k => k.startsWith('cart_item_'));
+  if (cartKeys.length) {
+    cartKeys.forEach(key => {
+      const item = safeParseJSON(metadata[key]);
+      if (item) cartItems.push(item);
+    });
+  } else {
+    cartItems = safeParseJSON(metadata.cart) || [];
   }
+
+  const shipping = safeParseJSON(metadata.shipping);
+  const billing = safeParseJSON(metadata.billing);
 
   const fullName = (billing?.name || shipping?.name || '').trim();
   const [firstName = '', ...rest] = fullName.split(/\s+/);

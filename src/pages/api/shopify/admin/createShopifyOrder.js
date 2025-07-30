@@ -42,7 +42,9 @@ export async function createShopifyOrder(paymentIntentId) {
   const cardholderName = charge?.billing_details?.name;
   const nameOnCard = metadata.name_on_card;
 
-  if ((!metadata.cart && !metadata.product) || !metadata.shipping || !metadata.customer_email) {
+  const hasCartItems = Object.keys(metadata).some((key) => key.startsWith('cart_item_'));
+
+  if ((!hasCartItems && !metadata.product) || !metadata.shipping || !metadata.customer_email) {
     throw new Error('Missing metadata from Payment Intent')
   }
 
@@ -74,10 +76,21 @@ try {
   shipping = JSON.parse(metadata.shipping);
   billing = JSON.parse(metadata.billing);
 
-  if (metadata.cart) {
-    cartItems = JSON.parse(metadata.cart);
+  const cartEntries = Object.entries(metadata).filter(([key]) => key.startsWith('cart_item_'));
+
+  // Cart checkout flow
+  if (cartEntries.length > 0) {
+    cartItems = cartEntries.map(([_, value]) => {
+      try {
+        return JSON.parse(value);
+      } catch (err) {
+        console.warn('❌ Failed to parse cart item:', value);
+        return null;
+      }
+    }).filter(Boolean);
   }
 
+  // Single product checkout flow
   if (metadata.product) {
     product = JSON.parse(metadata.product);
     console.log('✅ Parsed single product:', product);
