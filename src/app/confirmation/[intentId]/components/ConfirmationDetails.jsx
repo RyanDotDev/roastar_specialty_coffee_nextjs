@@ -21,7 +21,7 @@ const ConfirmationDetails = ({
         {/* PRODUCT LIST */}
         <div>
           <div className='confirmation-product-container'>
-            {cartItems.map((item, index) => {
+            {(cartItems || []).map((item, index) => {
               const imageUrl = item.image
               return (
                 <div className='confirmation-product-details' key={index}>
@@ -65,7 +65,7 @@ const ConfirmationDetails = ({
                         {item.variant}
                       </p>
                     </div>
-                    <p className='confirmation-product-price'>{`£${item.price}`}</p>
+                    <p className='confirmation-product-price'>{`£${Number(item.price).toFixed(2)}`}</p>
                   </div>
                 </div>
               )
@@ -78,7 +78,7 @@ const ConfirmationDetails = ({
               <p>Subtotal</p>
               <p>
                 £{(
-                  cartItems.reduce(
+                  cartItems || [].reduce(
                     (sum, item) => sum + item.price * item.quantity,
                     0
                   )

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image';
-import Link from 'next/link'
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { nanoid } from 'nanoid';
 import { motion } from 'framer-motion'
 import { previewAnimate } from '@/utils/popups/product_preview/animation'
 import Backdrop from '@/utils/popups/product_preview/Backdrop'
@@ -11,6 +13,7 @@ import { useCartStore } from '@/store/cartStore';
 const ProductPreview = ({ handle, handleClose }) => {
   const cart = useCartStore((state) => state.cart);
   const addToCart = useCartStore((state) => state.addToCart);
+  const router = useRouter();
 
   const [product, setProduct] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState(null);
@@ -65,41 +68,27 @@ const ProductPreview = ({ handle, handleClose }) => {
     setLoading(true);
 
     try {
-      const cancelUrl = window.location.href;
-
       const lineItems = { 
-        id: product.id,
         title: product.title,
         variant: selectedVariant?.title,
         variantId: selectedVariant?.id,
         price: parseFloat(discountedPrice),
         quantity: counter,
         image: productImage,
-        stripe_price_id: selectedVariant?.stripeDiscount?.value|| selectedVariant?.stripe?.value,
-      }
-      
-      const response = await fetch('/api/shopify/checkout/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          product: lineItems, cancelUrl }),
-      })
-
-      if (!response) {
-        throw new Error("Checkout URL is missing or invalid.")
-      } 
-
-      const { checkoutUrl } = await response.json();
-
-      if (checkoutUrl) {
-        console.log("Redirecting to checkout URL:", checkoutUrl);
-        window.location.href = checkoutUrl;
-      } else {
-        showErrorToast("Failed to create checkout. Please try again")
       }
 
+      const token = nanoid(40);
+
+      const dataToStore = {
+        token,
+        product: lineItems,
+      };
+
+      localStorage.setItem('single-product-checkout', JSON.stringify(dataToStore));
+
+      localStorage.setItem('previous-url', window.location.pathname);
+
+      router.push(`/checkout?product-token=${token}`)
     } catch(error) {
       console.error("Checkout Error:", error.message || error);
       showErrorToast("Error creating checkout. Please try again later")

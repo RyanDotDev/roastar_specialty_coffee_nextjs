@@ -9,7 +9,10 @@ import PaymentField from './PaymentField';
 
 const CheckoutForm = ({ 
   cart, 
-  cartToken, 
+  product,
+  checkoutToken, 
+  cartToken,
+  productToken,
   fulfillment, 
   setFulfillment, 
   subtotal, 
@@ -113,7 +116,10 @@ const CheckoutForm = ({
         },
         body: JSON.stringify({
           cart,
+          product,
+          checkoutToken,
           cartToken,
+          productToken,
           fulfillmentMethod: fulfillment.type,
           shippingMethod: selectedShippingMethod,
           shippingThreshold,

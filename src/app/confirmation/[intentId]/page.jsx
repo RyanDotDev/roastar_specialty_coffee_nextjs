@@ -26,6 +26,10 @@ export default async function ThankYouPage({ params }) {
 
   let cartItems, shipping, billing;
 
+  /* useEffect(() => {
+  localStorage.removeItem('product-checkout');
+}, []); */
+
   try {
     cartItems = JSON.parse(metadata.cart);
     shipping = JSON.parse(metadata.shipping);

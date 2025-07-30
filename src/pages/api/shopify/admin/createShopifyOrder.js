@@ -31,7 +31,6 @@ export async function createShopifyOrder(paymentIntentId) {
   console.log('[deliveryMethods]', deliveryMethods);
 
   const metadata = intent.metadata || {};
-
   // For fetching card details
   const charges = await stripe.charges.list({
     payment_intent: paymentIntentId,
@@ -43,12 +42,14 @@ export async function createShopifyOrder(paymentIntentId) {
   const cardholderName = charge?.billing_details?.name;
   const nameOnCard = metadata.name_on_card;
 
-  if (!metadata.cart || !metadata.shipping || !metadata.customer_email) {
+  if ((!metadata.cart && !metadata.product) || !metadata.shipping || !metadata.customer_email) {
     throw new Error('Missing metadata from Payment Intent')
   }
 
   const cartToken = metadata.cart_token;
-  if (cartToken) {
+  const productToken = metadata.product_token;
+
+  if (cartToken && productToken) {
     const existingOrderRes = await fetch(`${process.env.SHOPIFY_URL}/admin/api/2025-04/orders.json?financial_status=paid&fields=id,note`, {
       headers: {
         'X-Shopify-Access-Token': process.env.SHOPIFY_ADMIN_API_TOKEN,
@@ -65,46 +66,80 @@ export async function createShopifyOrder(paymentIntentId) {
     }
   }
 
-  let cartItems, shipping, billing;
+  let cartItems = [];
+let product = null;
+let shipping, billing;
 
-  try {
+try {
+  shipping = JSON.parse(metadata.shipping);
+  billing = JSON.parse(metadata.billing);
+
+  if (metadata.cart) {
     cartItems = JSON.parse(metadata.cart);
-    shipping = JSON.parse(metadata.shipping);
-    billing = JSON.parse(metadata.billing);
-  } catch (err) {
-    throw new Error('Invalid JSON in PaymentIntent metadata: ' + err.message);
   }
 
-  // Extract email from checkout form
-  const email = metadata.customer_email;
+  if (metadata.product) {
+    product = JSON.parse(metadata.product);
+    console.log('✅ Parsed single product:', product);
 
-  let totalWeight = 0;
-  const processedLineItems = [];
+    const variantId = product.variantId || product.variant_id;
 
-  for (const item of cartItems) {
-    const isCustom = !item.variant_id;
-
-    if (isCustom) {
-      processedLineItems.push({
-        title: item.title || 'Custom Product',
-        price: parseFloat(item.price?.toFixed?.(2)) || item.price || 0,
-        quantity: item.quantity,
-        custom: true,
-      });
-      continue;
+    if (!variantId || typeof variantId !== 'string') {
+      throw new Error('❌ Missing or invalid variant ID in single product metadata');
     }
 
-    const parsedVariantId = item.variant_id.replace('gid://shopify/ProductVariant/', '');
+    const parsedVariantId = variantId.replace('gid://shopify/ProductVariant/', '');
     const { weight: grams } = await fetchVariantWeight(parsedVariantId);
 
-    totalWeight += grams * item.quantity;
+    // Merge into a single product object with everything
+    product.variant_id = Number(parsedVariantId);
+    product.grams = grams;
 
-    processedLineItems.push({
-      variant_id: Number(parsedVariantId),
-      quantity: item.quantity,
-      grams,
-    })
+    // Add enriched product to cartItems
+    cartItems = [product];
   }
+} catch (err) {
+  throw new Error('Invalid JSON in PaymentIntent metadata: ' + err.message);
+}
+
+const email = metadata.customer_email;
+
+let totalWeight = 0;
+const processedLineItems = [];
+
+for (const item of cartItems) {
+  console.log('🧾 Line item received:', item);
+
+  let parsedVariantId;
+
+  if (typeof item.variant_id === 'number') {
+    parsedVariantId = item.variant_id;
+  } else if (typeof item.variant_id === 'string' && item.variant_id.includes('gid://')) {
+    parsedVariantId = Number(item.variant_id.replace('gid://shopify/ProductVariant/', ''));
+  } else if (typeof item.variantId === 'string' && item.variantId.includes('gid://')) {
+    parsedVariantId = Number(item.variantId.replace('gid://shopify/ProductVariant/', ''));
+  }
+
+  if (!parsedVariantId || isNaN(parsedVariantId)) {
+    console.log('⚠️ Marked as custom because no variant ID found');
+    processedLineItems.push({
+      title: item.title || 'Custom Product',
+      price: parseFloat(item.price?.toFixed?.(2)) || item.price || 0,
+      quantity: item.quantity,
+      custom: true,
+    });
+    continue;
+  }
+
+  const grams = item.grams ?? (await fetchVariantWeight(parsedVariantId)).weight;
+  totalWeight += grams * item.quantity;
+
+  processedLineItems.push({
+    variant_id: parsedVariantId,
+    quantity: item.quantity,
+    grams,
+  });
+}
 
   // Extract shipping_method from metadata
   let shippingMethod // shippingMethod is an array, use '[shippingMethod]' for debugging
@@ -204,15 +239,17 @@ export async function createShopifyOrder(paymentIntentId) {
     zip: billing.address.postal_code || '',
   }
 
-  // Note for Shopify Order
-  let note = cartToken
-    ? `cart-token: ${cartToken} |
+  let note = cartToken || productToken
+  ? `${cartToken ? `cart-token: ${cartToken}` : `product-token: ${productToken}`} |
 
-      Card: ${card?.brand?.toUpperCase() || 'Unknown'} | •••• ${card?.last4 || 'XXXX'} |
+    Card: ${card?.brand?.toUpperCase() || 'Unknown'} | •••• ${card?.last4 || 'XXXX'} |
 
-      Name on card: ${nameOnCard}
-      `
-    : '';
+    Name on card: ${nameOnCard}`
+  : `
+    Card: ${card?.brand?.toUpperCase() || 'Unknown'} | •••• ${card?.last4 || 'XXXX'} |
+
+    Name on card: ${nameOnCard}
+  `;
 
   let tags = [];
 
@@ -247,7 +284,7 @@ export async function createShopifyOrder(paymentIntentId) {
       payment_gateway_names: ["stripe"],
       transactions: [
         {
-          kind: "authorization", // or "sale" depending on status
+          kind: "sale",
           status: "success",
           amount: authorisedAmount,
           gateway: "manual",

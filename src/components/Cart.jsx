@@ -32,8 +32,6 @@ const Cart = ({ handleClose, sliderProducts }) => {
         variantName: item.variant || 'Default variant',
         image: item.image,
         productId: item.productId,
-        stripe_price_id: item.stripe_price_id,
-        stripe_discounted_price_id: item.stripe_discounted_price_id,
       }));
 
       setLoading(true);

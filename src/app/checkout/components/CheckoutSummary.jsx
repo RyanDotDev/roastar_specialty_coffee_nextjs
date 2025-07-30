@@ -101,7 +101,9 @@ const CheckoutSummary = ({
         ref={summaryRef} 
         className='checkout-summary' 
       >
-        {cart.map((item, index) => (
+        {cart.map((item, index) => {
+          if (!item) return null;
+          return (
           <div key={index} className='checkout-item'>
             <Badge
               badgeContent={item.quantity}
@@ -140,7 +142,8 @@ const CheckoutSummary = ({
               </div>
             </div>
           </div>
-        ))}
+          )
+        })}
         <div className='checkout-subtotal'>
           <p>Subtotal</p> 
           <p>£{subtotal.toFixed(2)}</p>

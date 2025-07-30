@@ -51,9 +51,10 @@ async function checkShopifyVariantInventory(variantId, requiredQuantity) {
 export async function createPaymentIntentSession(req, res) {
   const { 
     cart, 
-    cartToken,
-    email, 
     product, 
+    cartToken,
+    productToken,
+    email, 
     fulfillmentMethod, 
     shipping, 
     shippingMethod,
@@ -72,7 +73,7 @@ export async function createPaymentIntentSession(req, res) {
   try {
     // Inventory check
     await Promise.all(items.map(async (item) => {
-      const variantId = item.id;
+      const variantId = item.variantId || item.id;
       const quantity = item.quantity || 1;
 
       if (variantId) {
@@ -96,21 +97,38 @@ export async function createPaymentIntentSession(req, res) {
     // Final amount
     const amount = totalAmount + shippingAmount;
 
+    const cartMetadata = {}
+
+    cart.forEach((item, index) => {
+      cartMetadata[`cart_item_${index}`] = JSON.stringify({
+        title: item.title,
+        variant: item.variant,
+        variant_id: item.id, // assuming item.id is your variant ID
+        price: item.price,
+        quantity: item.quantity,
+        // omit image and handle to save space if needed
+      });
+    });
+
     const metadata = {
       ...(cartToken && { cart_token: cartToken }),
+      ...(productToken && { product_token: productToken }),
 
-      ...(cart && 
-        { cart: JSON.stringify(
-            cart.map(item => ({
-              title: item.title,
-              variant: item.variant,
-              variant_id: item.id,
-              image: item.image,
-              price: item.price,
-              quantity: item.quantity,
-              handle: item.handle,
-          }))) 
-        }),
+      ...cartMetadata,
+
+      ...(product && 
+        { product: JSON.stringify({
+            title: product.title,
+            variant: product.variant,
+            variant_id: product.variantId,
+            variantId: product.variantId,
+            image: product.image,
+            price: product.price,
+            quantity: product.quantity,
+            handle: product.handle,
+          })
+        }
+      ),
 
       ...(shipping && { shipping: JSON.stringify(req.body.shipping) }), 
       ...(billing && { billing: JSON.stringify(req.body.billing) }), 
