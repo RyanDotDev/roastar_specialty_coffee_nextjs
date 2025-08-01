@@ -105,11 +105,10 @@ export async function createPaymentIntentSession(req, res) {
           title: item.title,
           variant: item.variant,
           image: item.image,
-          variant_id: item.id, // assuming item.id is your variant ID
+          variant_id: item.id,
           price: item.price,
           quantity: item.quantity,
           handle: item.handle,
-          // omit image and handle to save space if needed
         });
       });
     };

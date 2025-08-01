@@ -3,6 +3,7 @@ import { fetchDeliveryMethods } from "./deliveryMethods";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+// Fetches weight of product for accurate shipping recording in Shopify
 async function fetchVariantWeight(variantId) {
   const res = await fetch(`${process.env.SHOPIFY_URL}/admin/api/2025-04/variants/${variantId}.json`, {
     headers: {
@@ -22,6 +23,7 @@ async function fetchVariantWeight(variantId) {
   };
 }
 
+// Main async function for creating a Shopify order
 export async function createShopifyOrder(paymentIntentId) {
   const intent = await stripe.paymentIntents.retrieve(paymentIntentId, {
     expand: ['charges']
@@ -45,6 +47,7 @@ export async function createShopifyOrder(paymentIntentId) {
   // Extract metadata as separate keys inside of hasCartItems variable to avoid Stripe 500 lines limit error
   const hasCartItems = Object.keys(metadata).some((key) => key.startsWith('cart_item_')); 
 
+  // To warn if metadata is missing from metadata object
   if ((!hasCartItems && !metadata.product) || !metadata.shipping || !metadata.customer_email) {
     throw new Error('Missing metadata from Payment Intent')
   }
@@ -60,8 +63,8 @@ export async function createShopifyOrder(paymentIntentId) {
       }
     });
 
-    const existingOrders = (await existingOrderRes.json())?.orders || [];
-    const orderExists = existingOrders.some(order => order.note?.includes(cartToken));
+    const existingOrders = (await existingOrderRes.json())?.orders || []; // Prevents duplicate orders 
+    const orderExists = existingOrders.some(order => order.note?.includes(cartToken)); // checks for existing order
 
     if (orderExists) {
       console.log(`⚠️ Shopify order already exists for cart_token: ${cartToken}`)
@@ -72,7 +75,7 @@ export async function createShopifyOrder(paymentIntentId) {
   // Checkout metadata extraction
   let cartItems = [];
   let product = null;
-  let shipping, billing;
+  let shipping, billing; // Addresses for shipping and billing
 
   try {
     shipping = JSON.parse(metadata.shipping);

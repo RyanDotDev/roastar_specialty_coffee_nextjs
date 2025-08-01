@@ -129,7 +129,7 @@ const NavbarContainer = ({ sliderProducts }) => {
                 }
               }}
             >
-              <button 
+              <button
                 disabled
                 className={`cart-btn ${colourOnScroll ? 'cart-white cart-black' : 'cart-white'}` }
                 onClick={() => cartOpen ? close() : open()}
