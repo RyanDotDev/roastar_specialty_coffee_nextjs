@@ -42,14 +42,15 @@ export async function createShopifyOrder(paymentIntentId) {
   const cardholderName = charge?.billing_details?.name;
   const nameOnCard = metadata.name_on_card;
 
-  const hasCartItems = Object.keys(metadata).some((key) => key.startsWith('cart_item_'));
+  // Extract metadata as separate keys inside of hasCartItems variable to avoid Stripe 500 lines limit error
+  const hasCartItems = Object.keys(metadata).some((key) => key.startsWith('cart_item_')); 
 
   if ((!hasCartItems && !metadata.product) || !metadata.shipping || !metadata.customer_email) {
     throw new Error('Missing metadata from Payment Intent')
   }
 
-  const cartToken = metadata.cart_token;
-  const productToken = metadata.product_token;
+  const cartToken = metadata.cart_token; // cart token checkout metadata 
+  const productToken = metadata.product_token; // single product checkout metadata
 
   if (cartToken && productToken) {
     const existingOrderRes = await fetch(`${process.env.SHOPIFY_URL}/admin/api/2025-04/orders.json?financial_status=paid&fields=id,note`, {
@@ -68,91 +69,92 @@ export async function createShopifyOrder(paymentIntentId) {
     }
   }
 
+  // Checkout metadata extraction
   let cartItems = [];
-let product = null;
-let shipping, billing;
+  let product = null;
+  let shipping, billing;
 
-try {
-  shipping = JSON.parse(metadata.shipping);
-  billing = JSON.parse(metadata.billing);
+  try {
+    shipping = JSON.parse(metadata.shipping);
+    billing = JSON.parse(metadata.billing);
 
-  const cartEntries = Object.entries(metadata).filter(([key]) => key.startsWith('cart_item_'));
+    const cartEntries = Object.entries(metadata).filter(([key]) => key.startsWith('cart_item_'));
 
-  // Cart checkout flow
-  if (cartEntries.length > 0) {
-    cartItems = cartEntries.map(([_, value]) => {
-      try {
-        return JSON.parse(value);
-      } catch (err) {
-        console.warn('❌ Failed to parse cart item:', value);
-        return null;
-      }
-    }).filter(Boolean);
-  }
-
-  // Single product checkout flow
-  if (metadata.product) {
-    product = JSON.parse(metadata.product);
-    console.log('✅ Parsed single product:', product);
-
-    const variantId = product.variantId || product.variant_id;
-
-    if (!variantId || typeof variantId !== 'string') {
-      throw new Error('❌ Missing or invalid variant ID in single product metadata');
+    // Cart (array) metadata for Shopify order creation
+    if (cartEntries.length > 0) {
+      cartItems = cartEntries.map(([_, value]) => {
+        try {
+          return JSON.parse(value);
+        } catch (err) {
+          console.warn('❌ Failed to parse cart item:', value);
+         return null;
+        }
+      }).filter(Boolean);
     }
 
-    const parsedVariantId = variantId.replace('gid://shopify/ProductVariant/', '');
-    const { weight: grams } = await fetchVariantWeight(parsedVariantId);
+    // Single product metadata for Shopify order creation
+    if (metadata.product) {
+      product = JSON.parse(metadata.product);
+      console.log('✅ Parsed single product:', product);
 
-    // Merge into a single product object with everything
-    product.variant_id = Number(parsedVariantId);
-    product.grams = grams;
+      const variantId = product.variantId || product.variant_id;
+
+      if (!variantId || typeof variantId !== 'string') {
+        throw new Error('❌ Missing or invalid variant ID in single product metadata');
+      }
+
+      const parsedVariantId = variantId.replace('gid://shopify/ProductVariant/', '');
+      const { weight: grams } = await fetchVariantWeight(parsedVariantId);
+  
+      // Merge into a single product object with everything
+      product.variant_id = Number(parsedVariantId);
+      product.grams = grams;
 
     // Add enriched product to cartItems
-    cartItems = [product];
-  }
-} catch (err) {
-  throw new Error('Invalid JSON in PaymentIntent metadata: ' + err.message);
-}
-
-const email = metadata.customer_email;
-
-let totalWeight = 0;
-const processedLineItems = [];
-
-for (const item of cartItems) {
-  console.log('🧾 Line item received:', item);
-
-  let parsedVariantId;
-
-  if (typeof item.variant_id === 'number') {
-    parsedVariantId = item.variant_id;
-  } else if (typeof item.variant_id === 'string' && item.variant_id.includes('gid://')) {
-    parsedVariantId = Number(item.variant_id.replace('gid://shopify/ProductVariant/', ''));
-  } else if (typeof item.variantId === 'string' && item.variantId.includes('gid://')) {
-    parsedVariantId = Number(item.variantId.replace('gid://shopify/ProductVariant/', ''));
+      cartItems = [product];
+    }
+  } catch (err) {
+    throw new Error('Invalid JSON in PaymentIntent metadata: ' + err.message);
   }
 
-  if (!parsedVariantId || isNaN(parsedVariantId)) {
-    console.log('⚠️ Marked as custom because no variant ID found');
+  const email = metadata.customer_email; // Extract email metadata
+
+  let totalWeight = 0;
+  const processedLineItems = [];
+
+  for (const item of cartItems) {
+    console.log('🧾 Line item received:', item);
+
+    let parsedVariantId;
+
+    if (typeof item.variant_id === 'number') {
+      parsedVariantId = item.variant_id;
+    } else if (typeof item.variant_id === 'string' && item.variant_id.includes('gid://')) {
+      parsedVariantId = Number(item.variant_id.replace('gid://shopify/ProductVariant/', ''));
+    } else if (typeof item.variantId === 'string' && item.variantId.includes('gid://')) {
+      parsedVariantId = Number(item.variantId.replace('gid://shopify/ProductVariant/', ''));
+    }
+
+    if (!parsedVariantId || isNaN(parsedVariantId)) {
+      console.log('⚠️ Marked as custom because no variant ID found');
+      processedLineItems.push({
+        title: item.title || 'Custom Product',
+        price: parseFloat(item.price?.toFixed?.(2)) || item.price || 0,
+        quantity: item.quantity,
+        custom: true,
+      });
+      continue;
+    }
+
+    const grams = item.grams ?? (await fetchVariantWeight(parsedVariantId)).weight;
+    totalWeight += grams * item.quantity;
+
     processedLineItems.push({
-      title: item.title || 'Custom Product',
-      price: parseFloat(item.price?.toFixed?.(2)) || item.price || 0,
+      variant_id: parsedVariantId,
       quantity: item.quantity,
-      custom: true,
+      grams,
     });
-    continue;
   }
-
-  const grams = item.grams ?? (await fetchVariantWeight(parsedVariantId)).weight;
-  totalWeight += grams * item.quantity;
-
-  processedLineItems.push({
-    variant_id: parsedVariantId,
-    quantity: item.quantity,
-    grams,
-  });
-}
 
   // Extract shipping_method from metadata
   let shippingMethod // shippingMethod is an array, use '[shippingMethod]' for debugging
@@ -215,8 +217,7 @@ for (const item of cartItems) {
     }
   }
 
-  // For pickup location
-  
+  // Metadata for pickup location
   const pickupLocation = metadata.pickup_location;
 
   let parsedPickupLocation;
@@ -230,6 +231,7 @@ for (const item of cartItems) {
   
   console.log('Parsed pickup location', pickupLocation)
 
+  // Final amount 
   const authorisedAmount = 
     parseFloat(((intent.amount_received || intent.amount || 0) / 100).toFixed(2)) 
     + parseFloat((shippingLine?.price || 0).toFixed(2));
@@ -304,9 +306,12 @@ for (const item of cartItems) {
           currency: intent.currency,
           processed_at: new Date(intent.created * 1000).toISOString(),
           receipt: {
-            card_last4: card?.last4 || '',
+            card_last4: `•••• •••• •••• ${card?.last4}` || '',
+            name_on_card: nameOnCard || '',
             cardholder_name: cardholderName || '',
-            card_brand: card?.brand || ''
+            card_brand: card?.brand || '',
+            payment_gateway: 'Stripe',
+            paid_amount: authorisedAmount,
           }
          }
       ],

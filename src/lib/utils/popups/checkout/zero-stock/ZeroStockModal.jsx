@@ -50,7 +50,7 @@ const ZeroStockModal = forwardRef(({ handleClose }, ref) => {
         ref={containerRef}
       >
         <div className='zero-stock-modal-content'>
-          <p>Sorry, this item is no longer available.</p>
+          <p>Sorry, one of your items is no longer available.</p>
           <Link href='/shop'>
             <button>
               BACK TO SHOP
